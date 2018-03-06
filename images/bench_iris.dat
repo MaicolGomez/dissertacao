@@ -1,0 +1,13 @@
+#app	opencl	openmp	err	name
+1	2.47	2.60	0	#Stream Compaction
+2	4.33	4.34	0	#longest spam
+3	3.41	4.01	0	#Polinomial Evaluation
+4	6.90	7.82	0	#Linear Recurrences
+5	2.64	2.65	0	#Random Number Generation
+6	3.75	3.69	0	#Upward Accumulation
+7	2.74	3.07	0	#Adding Big Integers
+8	2.54	2.54	0	#Divide an Array
+9	2.51	2.51	0	#Max Sum Non-0verlaping subarrays
+10	2.65	2.70	0	#subarray sum modulo m
+11	2.85	2.98	0	#Max integer in n ranges
+12	3.49	3.90	0	#Prime as sum of consecutive primes

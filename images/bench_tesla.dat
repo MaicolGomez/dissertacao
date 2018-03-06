@@ -1,0 +1,14 @@
+#app	cuda	opencl	openmp	err	name
+1	1.11	9.44	9.93	0	#Stream Compaction
+2	1.98	16.09	18.21	0	#longest spam
+3	NA	11.71	14.09	0	#Polinomial Evaluation
+4	NA	17.8	20.63	0	#Linear Recurrences
+5	1.07	9.21	9.50	0	#Random Number Generation
+6	0.97	10.92	11.57	0	#Upward Accumulation
+7	NA	8.53	10.08	0	#Adding Big Integers
+8	4.38	9.18	10.18	0	#Divide an Array
+9	4.18	9.41	9.89	0	#Max Sum Non-0verlaping subarrays
+10	4.57	9.27	10.28	0	#subarray sum modulo m
+11	0.87	8.54	9.32	0	#Max integer in n ranges
+12	4.98	10.81	11.41	0	#Prime as sum of consecutive primes
+

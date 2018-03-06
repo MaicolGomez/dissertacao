@@ -1,0 +1,12 @@
+*.lot
+*.lof
+*.log
+*.aux
+*.out
+*.toc
+*.blg
+*.bbl
+*.bkp*
+*.synctex.gz
+*~
+ic-tese-v3.pdf

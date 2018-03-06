@@ -1,0 +1,1648 @@
+% Escolha: Portugues ou Ingles ou Espanhol.
+% Para a versão final do texto, após a defesa acrescente Final:
+
+\documentclass[Ingles]{ic-tese-v1}
+%\documentclass[Portugues,Final]{ic-tese-v3}
+
+\usepackage[latin1,utf8]{inputenc}
+
+% Para acrescentar comentários ao PDF descomente:
+\usepackage
+%  [pdfauthor={nome do autor},
+%   pdftitle={titulo},
+%   pdfkeywords={palavra-chave, palavra-chave},
+%   pdfproducer={Latex with hyperref},
+%   pdfcreator={pdflatex}]
+{hyperref}
+
+\usepackage[cmex10]{amsmath}
+\usepackage[font=footnotesize,subrefformat=parens]{subfig}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{placeins}
+\usepackage{multirow}
+\usepackage{filecontents}
+\usepackage{url}
+%\usepackage[inline]{enumitem}
+\usepackage{adjustbox}
+\usepackage[cmex10]{amsmath}
+\usepackage{adjustbox}
+\usepackage{graphicx}
+\usepackage{pifont}
+\usepackage[justification=centering]{caption}
+\usepackage[font=footnotesize,subrefformat=parens]{subfig}
+\usepackage{listings}
+\usepackage{paralist}
+\usepackage{url}
+\usepackage{filecontents}
+\usepackage{multirow}
+\lstset{
+	language=C++,
+	keywordstyle=\color{black},
+	frame=single
+}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{mycolor}{rgb}{0.20,0.80,0}
+
+\lstdefinestyle{mystyle}{
+	morekeywords={foreach},
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\footnotesize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=t,
+ 	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2
+}
+\lstset{style=mystyle}
+
+\floatstyle{ruled}
+\newfloat{algoritmo}{thp}{loa}
+\floatname{algoritmo}{Algoritmo}
+
+% Colors on or off: Pick ONE
+\newcommand{\ifColorText}[2]{\textcolor{#1}{#2}}  % Colors ON
+%\renewcommand{\ifColorText}[2]{{#2}}                % Colors OFF
+
+\newcommand{\REM}[1]{}
+
+% To turn comments OFF simply comment out  the \Commentstrue line
+\newif\ifComments
+\Commentstrue
+
+\Commentstrue
+
+\ifComments
+\newcommand{\chek}[1]{\noindent\textcolor{red}{Check: {#1}}}
+\newcommand{\maicol}[1]{\noindent\textcolor{magenta}{Maicol: {#1}}}
+\newcommand{\xavier}[1]{\noindent\textcolor{violet}{Matt: {#1}}}
+\newcommand{\marcio}[1]{\textcolor{green}{ {#1}}}
+\newcommand{\guido}[1]{\noindent\textcolor{magenta}{Guido: {#1}}}
+\newcommand{\rem}[1]{\noindent\textcolor{gray}{Removed: {#1}}}
+\newcommand{\new}[1]{\noindent\textcolor{blue}{ {#1}}}
+\newcommand{\ed}[1]{\noindent\textcolor{red}{ {#1}}}
+\newcommand{\short}[1]{\noindent\textcolor{blue}{ {#1}}}
+\else
+\newcommand{\chek}[1]{}
+\newcommand{\maicol}[1]{}
+\newcommand{\xavier}[1]{}
+\newcommand{\marcio}[1]{}
+\newcommand{\guido}[1]{}
+\newcommand{\rem}[1]{}
+\newcommand{\new}[1]{#1}
+\newcommand{\ed}[1]{}
+\newcommand{\short}[1]{}
+\fi
+
+% Additional new commands
+\newcommand{\etal}{{\em et al. }}
+\newcommand{\cL}{{\cal L}}
+\newcommand{\map}{\texttt{map} }
+\newcommand{\unmap}{\texttt{unmap} }
+\newcommand{\rb}{\texttt{readBuffer} }
+\newcommand{\rcap}[1]{Chapter~\ref{cap:#1}}
+\newcommand{\rsec}[1]{Section~\ref{sec:#1}}
+\newcommand{\rsecs}[2]{Sections~\ref{sec:#1} --~\ref{sec:#2}}
+\newcommand{\rtab}[1]{Table~\ref{tab:#1}}
+\newcommand{\rfig}[1]{Figure~\ref{fig:#1}}
+\newcommand{\rfigs}[2]{Figures~\ref{fig:#1} --~\ref{fig:#2}}
+\newcommand{\req}[1]{Equation~\ref{eq:#1}}
+\newcommand{\reqs}[2]{Equations~\ref{eq:#1} --~\ref{eq:#2}}
+\newcommand{\ttt}[1]{{\texttt{#1}}}
+\newcommand{\tit}[1]{{\textit{#1}}}
+\newcommand{\rfign}[3]{Figures~\ref{fig:#1}, \ref{fig:#2} \& \ref{fig:#3}}
+\newcommand{\rlst}[1]{Listing~\ref{lst:#1}}
+\newcommand{\rlsts}[2]{Listing~\ref{lst:#1}{#2}}
+\newcommand{\rlstn}[3]{Listings~\ref{lst:#1}{#2}~--~\ref{lst:#1}{#3}}
+
+\newcommand{\mat}[1]{${#1}$}
+\newcommand{\bb}[1]{{\texttt{B#1}}}
+\newcommand{\R}{\texttt{R}}
+\newcommand{\W}{\texttt{W}}
+\newcommand{\RW}{\texttt{RW}}
+\newcommand{\X}{\texttt{X}}
+\newcommand{\RWX}{\texttt{[R,W,RW]}}
+\newcommand{\CPU}{\texttt{CPU}}
+\newcommand{\GPU}{\texttt{GPU}}
+\newcommand{\CG}{\texttt{[CPU,GPU,X]}}
+\newcommand{\atup}[1]{\texttt{({#1})}}
+\newcommand{\egen}[1]{$GEN[#1]$}
+\newcommand{\ekill}[1]{$KILL[#1]$}
+\newcommand{\ein}[1]{$IN[#1]$}
+\newcommand{\eout}[1]{$OUT[#1]$}
+\newcommand{\ca}[1]{\ttt{CA = #1}}
+\newcommand{\aclang}{\textit{ACLang}}
+
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+		\node[shape=circle,draw,inner sep=1pt] (char) {#1};}}
+\newcommand{\dc}{\underline{{ }{ }{ }} }
+
+\usepackage{MnSymbol}
+
+
+\begin{document}	
+% Escolha entre autor ou autora:
+\autor{Eder Maicol Gomez Zegarra}
+%\autora{Nome da Autora}
+
+% Sempre deve haver um título em português:
+\titulo{Suporte de Parallel Scan em OpenMP}
+
+% Se a língua for o inglês ou o espanhol defina:
+\title{Support for Parallel Scan in OpenMP}
+
+% Escolha entre orientador ou orientadora. Inclua os títulos acadêmicos:
+\orientador{Prof. Dr. Guido Costa Souza de Araujo}
+%\orientadora{Profa. Dra. Nome da Orientadora}
+
+% Escolha entre coorientador ou coorientadora, se houver.  Inclua os títulos acadêmicos:
+\coorientador{Dr. Marcio Machado Pereira}
+%\coorientadora{Prof. Dra. Eng. Lic. Nome da Co-Orientadora}
+
+% Escolha entre mestrado ou doutorado:
+\mestrado
+%\doutorado
+
+
+
+% Se houve cotutela, defina:
+%\cotutela{Universidade Nova de Plutão}
+
+\datadadefesa{10}{02}{2018}
+
+% Para a versão final defina:
+\avaliadorA{Prof. Dr. Guido Costa Souza de Araujo (Supervisor/\textit{Orientador})}{IC/UNICAMP}
+\avaliadorB{Prof. Dr. }{}
+\avaliadorC{Prof. Dr. }{}
+
+\finalversiontrue
+
+
+% Para incluir a ficha catalográfica em PDF na versão final, descomente e ajuste:
+%\fichacatalografica{Ficha-Catalografica-Protocolo-263947185.pdf}
+
+
+% Este comando deve ficar aqui:
+\paginasiniciais
+
+
+% Se houver dedicatória, descomente:
+%\prefacesection{Dedicatória}
+%A dedicatória deve ocupar uma única página.
+
+
+% Se houver epígrafe, descomente e edite:
+% \begin{epigrafe}
+% {\it
+% Vita brevis,\\
+% ars longa,\\
+% occasio praeceps,\\
+% experimentum periculosum,\\
+% iudicium difficile.}
+%
+% \hfill (Hippocrates)
+% \end{epigrafe}
+
+
+% Agradecimentos ou Acknowledgements ou Agradecimientos
+\prefacesection{Agradecimentos}
+
+
+
+% Sempre deve haver um resumo em português:
+\begin{resumo}
+  Abstract in Portuguese 
+\end{resumo}
+
+
+% Sempre deve haver um abstract:
+\begin{abstract}
+  Prefix Scan  (or simply scan) is  an operator that computes  all the
+  partial sums of a vector. A scan operation results in a vector where
+  each element  is the sum of  the preceding elements in  the original
+  vector up to the corresponding position.  Scan is a key operation in
+  many  relevant  problems  like  sorting,  lexical  analysis,  string
+  comparison,  image  filtering  among   others.  Although  there  are
+  libraries  that provide  hand-parallelized  implementations  of scan
+  in  CUDA and OpenCL,  no automatic parallelization solution exist 
+  to this operator in  OpenMP. This work proposes a new  clause
+  to OpenMP which  enables  the  automatic synthesis of 
+  parallel  scan.  By   using  the  proposed  clause   a  programmer  can
+  considerably  reduce   the  complexity   of  designing   scan  based
+  algorithms, thus allowing he/she to focus the attention on the problem
+  and not on  learning new  parallel  programming  models  or
+  languages.  Scan was designed  in AClang (\texttt{www.aclang.org}), 
+  an open-source LLVM/Clang compiler  framework     that  implements  the
+  recently released OpenMP 4.X Accelerator Programming Model.
+  AClang automatically converts OpenMP 4.X annotated program regions
+  to OpenCL. Experiments running a  set of typical scan  based  algorithms 
+  on NVIDIA, Intel and ARM GPUs reveal that  the performance  
+  of  the  proposed  OpenMP  clause  is equivalent to that achieved when using 
+  OpenCL library calls, with the advantage of  a 
+  simpler programming  complexity.
+\end{abstract}
+
+
+% Se houver um resumo em espanhol, descomente:
+%\begin{resumen}
+% A mesma regra aplica-se.
+%\end{resumen}
+
+
+% A lista de figuras é opcional:
+\listoffigures
+
+% A lista de tabelas é opcional:
+\listoftables
+
+% A lista de abreviações e siglas é opcional:
+% \prefacesection{Lista de Abreviações e Siglas}
+
+% A lista de símbolos é opcional:
+% \prefacesection{Lista de Símbolos}
+
+% Quem usa o pacote nomencl pode incluir:
+%\renewcommand{\nomname}{Lista de Abreviações e Siglas}
+%\printnomenclature[3cm]
+
+
+% O sumário vem aqui:
+\tableofcontents
+
+
+% E esta linha deve ficar bem aqui:
+\fimdaspaginasiniciais
+
+
+% O corpo da dissertação ou tese começa aqui:
+\chapter{Introduction}
+\label{cap:Introduction}
+
+Parallelizing loops  is a  well-known research  problem that  has been
+extensively  studied. The  most common  approach to  this problem  use
+DOALL~\cite{Lamport:1974} algorithms  to parallelize
+the iterations of  loops which do not  have loop-carried dependencies.
+Although  there  are   approaches  such  as  DOACROSS~\cite{doacross},
+DSWP~\cite{Rangan:2004} and  BDX~\cite{Cesar:2015} that
+can be  used to parallelize loop-carried dependent  loops, these algorithms
+can  not  be  directly  applied   to  loops  that  are  sequential  in
+nature. One  example of such loop  can found in the  implementation of
+the scan operation.
+
+Cumulative     sum,     inclusive     scan,     or     simply     {\it
+	scan}~\cite{ScanAsPrimitive} is  a key operation that  has for goal
+to compute  the partial  sums of  the elements of  a vector.  The scan
+operation results in a new vector where each element is the sum of the
+preceding  elements  of  the  input vector  up  to  its  corresponding
+position. Scan is a central operation in many  relevant  problems  like  sorting,  
+lexical  analysis,  string comparison,  image  filtering, stream compaction, 
+histogram construction as well as  in many data
+structure transformations~\cite{BlellochTR90}.
+
+Scan  is a very simple  operation  that can  be generalized  
+in two flavors (\textit{inclusive} and \textit{exclusive}) as follows.   
+Given  a binary  associative  operator\  $\oplus$ and  a
+vector of  n elements\ $x = [x_{0},  x_{1}, ...  ,x_{n-1}]$,
+an   {\em    inclusive   scan}    produces   the    vector
+$y =  [ x_{0}, x_{0}  \oplus x_{1},  ... ,x_{0} \oplus  x_{1} \oplus
+... \oplus x_{n-1}]$. 
+
+\begin{figure}[t]
+	\lstset{basicstyle=\scriptsize}
+	\begin{lstlisting}[label=lst:PrefixSum, caption={The prefix sum implementation}, escapeinside={(*}{*)}]
+	(a) Sequential implementation
+	
+	y[0] = 0;
+	for(int i = 1; i < n; i++)
+		y[i] = y[i-1] + x[i-1];
+	
+	(b) Parallel implementation using the new clause
+	
+	y[0] = 0;
+	#pragma omp parallel for scan(+: y)
+	for(int i = 1; i < n; i++)
+		y[i] = y[i-1] + x[i-1];
+	\end{lstlisting}
+	\vspace{-0.7cm}
+\end{figure}
+
+\begin{eqnarray}
+y[0] = 0\nonumber\\
+y[1] = x[0] \nonumber\\
+y[2] = x[0] + x[1] \nonumber\\
+y[3] = x[0] + x[1] + x[2] \nonumber\\
+\dots\nonumber\\
+y[i] = \sum_{j=0}^{i-1} x[j]
+\label{eq:scan}
+\end{eqnarray}
+
+Similarly,  the  {\em  exclusive  scan} operation  results  in  vector
+$y =  [ I, x_{0}, x_{0}  \oplus x_{1}, ... ,x_{0}  \oplus x_{1} \oplus
+... \oplus x_{n-2}]$, where $I$ is  the identity element in the binary
+associative operator  $\oplus$. The  parallel scan clause  proposed in
+this work  is based  on the  exclusive scan  operation which  will be
+called \textit{scan} from now on.   It is trivial to compute inclusive
+scan from  the result of its  exclusive version. This can  be done by:
+(i) computing the exclusive scan of $y$; (ii) shifting the elements of
+$y$    to    the   left;    and    (iii)    storing   the    operation
+$y[n-2] \oplus x[n-1]$ into $y[n-1]$.
+
+The scan of a sequence is trivial to compute using an $\mathcal{O}(n)$
+algorithm   that   sequentially   applies   the   recurrence   formula
+$y[i]  = y[i-1]  \oplus  x[i-1]$  to the  $n$  elements  of $x$.   For
+example,   when  the   binary  operator   $\oplus$  is   the  addition
+(\req{scan}), the  scan operation  stores in $y$  all partial  sums of
+array  $x$,  an algorithm  named  \textit{Prefix  Sum}.  As  shown  in
+\rlsts{PrefixSum}{a}, the  loop   that  implements   prefix  sum   is
+intrinsically  sequential due  to the  loop-carried dependence  on $y$
+which makes the  value of $y[i]$ depend on the  value of $y[i-1]$ from
+the previous  iteration. Hence,  the loop body  in \rlsts{PrefixSum}{a}
+forms a  single \textit{strongly  connected component} in  the program
+control-flow  graph~\cite{flowgraph} and  thus typical  DOACROSS based
+algorithms like~\cite{926166,344315} cannot  be used  to parallelize
+the loop iterations of prefix sum.
+
+There are many  other scan based operations that use various
+associative  binary  operators  like product,  maximum,  minimum,  and
+logical  \texttt{AND}, \texttt{OR},  and  \texttt{XOR} to  parallelize
+some                           very                           relevant
+algorithms~\cite{NEEDLEMAN1970443,Crow:1984:STT:800031.808600,minimum}.
+Given  the relevance  of  scan in  computing,  library based  parallel
+implementations    of    scan    have    been    proposed    in    the
+past~\cite{dataparallel,  ScanAsPrimitive}  and  designed  as  library
+calls   in  languages   like   OpenCL  and   CUDA~\cite{Sengupta:2007,
+	Capannini:2011}.   Unfortunately, most  of these  implementations are
+problem specific leaving the programmer with the task of mastering the
+complexity of OpenCL and CUDA in order  to handle the design of a scan
+based operation to a specific problem.
+
+This work proposes a new OpenMP \texttt{scan} clause that enables the
+automatic synthesis of parallel  scan.  The programmer can
+use the new  clause to  design algorithms in OpenMP C/C++ code
+thus eliminating the need to deal with  the complexity of OpenCL or CUDA.
+The  new   scan  clause   was  integrated  into   \textit{ACLang},  an
+open-source LLVM/Clang compiler framework (www.aclang.org) that
+implements  the  recently   released  \textit{OpenMP  4.X  Accelerator
+	Programming   Model}~\cite{MPereira2017}.     AClang   automatically
+converts OpenMP 4.X annotated program regions to OpenCL/SPIR kernels, 
+including those regions containing the new scan clause.
+
+
+A careful  reader might think that  such new scan clause  is a trivial
+extension of the  reduction clause already available in  OpenMP.  As a
+matter of fact, the reduction of the elements of a sequence $x$ can be
+obtained  by  computing  the  scan  of   $x$  into  $y$  as  shown  in
+\rlsts{PrefixSum}{b} and returning the value of $y[n-1] + x[n-1]$.  In
+other  words, reduction  is a  simpler version  of scan  in which  the
+values of all intermediate partial sums  are not exposed, and only the
+total  sum of  the  elements of  $x$ is  returned.   Reduction can  be
+performed    in    $\mathcal{O}(log\    n)$   complexity    using    a
+tree-based~\cite{tree-based}                    or                   a
+butterfly-based~\cite{butterfly-based} parallel  algorithm.  Moreover,
+both  reduction  and  scan  are operations  that  handle  loop-carried
+dependent  variables.   In  the  reduction  case,  a  single  variable
+accumulates the value from the  previous iterations, while in scan the
+accumulation  occurs for  all  elements of  $y[i]$  each depending  on
+elements from the previous  iterations.  This makes the implementation
+of parallel scan much harder than the implementation of reduction.
+
+The rest of the work is organized as follows.\rcap{background} details 
+some concepts of programming for GPU and AClang compiler. \rcap{Scan} 
+describes scan algorithm evolution until that is used to implement the
+new scan clause, in \rsec{AClang} gives an outline  of the structure of
+the AClang compiler  and   describes  the  details  of   the  implementation 
+and integration     of    the     clause    into     the    OpenMP
+library and in \rsec{ScanUse} describes some examples of scan use.
+In \rcap{RelatedWorks} discusses related work and 
+\rcap{Experiments} provides  performance numbers and analyzes
+the results  when programs  are compiled with  the new scan clause.
+Finally, \rcap{Conclusion} concludes the work.
+
+
+\chapter{Background}
+\label{cap:background}
+
+\section{Introduction to GPUs}
+\subsection{A Brief History of GPUs}
+In the early 1990s, users began purchasing
+2D display accelerators for their computers. These display accelerators
+offered hardware-assisted bitmap operations to assist in the display and usability
+of graphical operating systems.
+
+Around the same time, the company Silicon Graphics popularized the use
+of three-dimensional graphics. In 1992, Silicon Graphics opened the
+programming interface to its hardware by releasing the OpenGL library they wanted
+that OpenGL was used as a standardized.
+
+By the mid-1990s, the demand of applications that were using 3D graphics 
+increase considerably growing one stage of development. PC gaming was affected
+for those devices to create progressively more realistic 3D environments.
+At the same time, companies such as NVIDIA, ATI Technologies,
+and 3dfx Interactive began releasing graphics accelerators that were affordable 
+enough to attract widespread attention. These developments cemented 3D
+graphics as a technology that would figure prominently for years to come.
+
+In 1999 was created the first GPU GeForce 256 that was marketed as "the world's
+first GPU" or Graphic Processing Unit, enhancing the potential
+for even more visually interesting applications. Since transform and lighting were
+already integral parts of the OpenGL graphics pipeline, the GeForce 256 marked
+the beginning of a natural progression where increasingly more of the graphics
+pipeline would be implemented directly on the graphics processor.
+
+In 2001 was introduced the GeForce 3 that is the first programmable GPU that means
+for the first time, developers had some control over the exact computations
+that would be performed on their GPUs.
+
+\subsection{GPU Architecture Overview}
+
+\subsection{Programming for GPUs}
+
+In this section presents some important concepts of GPU programming
+that are used throughout the work 
+
+\begin{figure}[t]
+	\caption{CUDA parallel thread hierarchy}
+	\centering
+	\includegraphics[scale=0.60]{images/cuda_indexing.png}
+	\label{fig:cudaindex}
+\end{figure}
+
+\section{The AClang Compiler}
+\label{sec:AClang}
+
+Although OpenCL provides  a library that eases the  task of offloading
+kernels  to  devices,  its  function  calls  are  complex,  have  many
+parameters and  require the programmer  to have some knowledge  of the
+device architecture's  features (e.g. block size,  memory model, etc.)
+in order to enable a correct and effective usage of the device. Hence,
+OpenCL  can  still  be  considered a  somehow  low-level  language  for
+heterogeneous computing.
+
+Introduced  through   OpenMP  4.0  the  new   \tit{OpenMP  Accelerator
+	Model}~\cite{Liao2013}  proposes a  number of  new clauses  aimed at
+speeding up the task  of programming heterogeneous architectures. This
+model extends the concept of  offloading and enables the programmer to
+use  dedicated directives  to  define offloading  target regions  that
+control data movement between host  and devices.  Although most OpenMP
+directives used  for multicore  hosts can also  be used  inside target
+regions, the  new accelerator  model easies  the tasks  of identifying
+data-parallel computation.
+
+ACLang,  is an  open  source (\url{www.aclang.org})  LLVM/Clang
+based compiler that implements the  OpenMP Accelerator Model.  It adds
+an {\em  OpenCL runtime  library} to  LLVM/CLang that  supports OpenMP
+offloading to  accelerator devices  like GPUs  and FGPAs.   The kernel
+functions are extracted  from the OpenMP region and  are dispatched as
+OpenCL~\cite{opencl}  or  SPIR~\cite{spir}  code   to  be  loaded  and
+compiled by OpenCL  drivers, before being executed by  the device. This
+whole  process in  transparent  and does  not  require any  programmer
+intervention.
+
+\begin{figure}[t]
+	\caption{AClang compiler pipeline.}
+	\centering
+	\includegraphics[scale=0.25]{images/aclang_scan.pdf}
+	\label{fig:aclang}
+\end{figure}
+
+
+\rfig{aclang} shows  the AClang execution flow  pipeline with
+emphasis on the \textit{Parallel Scan Optimization} pass.  The
+LLVM IR generation phase handles the conversion of the AST
+nodes  generated   by  the  Semantic  phase   into  LLVM  Intermediate
+Representation\footnote{Historically,   this  was   referred  to   as
+	\textit{codegen}}.  In this phase, the annotated loops are extracted
+from     the      AST~\ding{182},     optimized~\ding{184},     and/or
+transformed~\ding{183}  into  OpenCL  kernels in  source  code  format~\ding{186} 
+(see~\rsec{ScanInAClang}   for  more   details   on  the   Parallel Scan
+optimization pass).   Kernels can also go  through the SPIR
+generation pass~\ding{187} to produce kernel bit codes in SPIR format.
+AClang's  transformation engine~\ding{185}  provides information
+to  the LLVM  IR generation  phase~\ding{188} to  produce intermediate
+code  that  calls  ACLang   runtime  library  functions.   These
+functions are used  to perform data offloading and  kernel dispatch to
+the  OpenCL  driver. 
+
+\chapter{The Parallel Scan}
+\label{cap:Scan}
+
+\section{The Scan algortihm}
+\label{sec:ScanAlg}
+
+During  the 80's  Hillis and  Steele~\cite{dataparallel} developed 
+approaches to parallelize many serial  algorithms. Although at that time
+these algorithms  seemed to have only  sequential solutions, by  using the
+\ttt{The  Connection Machine}  \cite{themachine} they  managed to achieve
+execution times in $\mathcal{O}(log\ n)$.  One of these algorithms was
+the sum of  the elements of an  array, also known as  reduction.  With a
+slight modification of reduction Hillis and Stelle proposed a solution
+to compute \textit{All Partial Sums} of an array,  a problem that
+is currently known as prefix sum or simply scan.
+
+The generalization that scan is an important  primitive
+for  parallel  computing  was  presented   by  Guy  E.   Blelloch  in
+~\cite{ScanAsPrimitive}. In  that work scan was  defined as a
+\textit{unit time}  primitive under the \texttt{PRAM  (Parallel Random
+	Access Machine)}  model and  Blelloch presented  a new  technique to
+perform  the scan  operator. That  technique was  implemented using  a
+binary balanced tree  and was explained in  \rsec{Scan}.  Scan 
+was  then used   to  parallelize   some  very  relevant   algorithms  like:
+Maximum-Flow, Maximal Independent Set, Minimum Spanning Tree, K-D Tree
+and Line  of Sight,  thus improving their  asymptotic running  time to
+$\mathcal{O}(log\ n)$.
+
+In~\cite{GPUGems2}  Horn  proposed  an  efficient
+implementation of  scan in GPUs.   That algorithm was based  in Hillis
+and Steele's work and was used  to solve the problem of extracting the
+undesired elements  of a set.  Scan  was used to
+determine  the undesired elements, and this was followed by a search
+and  gather   operation  to   compact the set.  This   problem  is   known  as
+\textit{Stream   Compaction},  and has a running  time   of
+$\mathcal{O}(n.log\ n)$. 
+
+In \cite{harris2007parallel} Mark Harris  et al.  implemented in GPUs the scan
+operator     based     on     the     the     work     of     Blelloch
+\cite{ScanAsPrimitive}. That  implementation proved to be  better than
+the solution  proposed by  Horn~\cite{GPUGems2}.  The  main difference
+between those two  approaches is the number of  operations executed to
+solve the problem. In the case of \cite{GPUGems2}, the total number of
+operations is $n.log\ n$, and in the case of \cite{harris2007parallel}
+the  total number  of operations  is $n$,  the same  number as  in the
+serial version.  
+
+Also  in~\cite{harris2007parallel},  Harris  presented a  solution  to
+treat large input vectors in GPUs.  It  is well known that the size of
+one GPU block  is limited and thus the computation  of scan for larger
+input sizes is  done in two scan  steps: (i) a first  step inside each
+block; and (ii) a second step among the blocks.  The approach proposed
+in  \rsec{ScanInAClang}  uses~\cite{harris2007parallel} to  deal  with
+large input vectors and the work in ~\cite{ScanAsPrimitive} to perform
+the individual scan steps.
+
+In   \cite{Sengupta:2008}  Sengupta   and  Harris   presented  several
+optimizations     for      the     implementation      proposed     in
+\cite{harris2007parallel}.   Those  optimizations   were  designed  to
+deliver  maximum  performance  for   regular  execution  paths  via  a
+\textit{Single-Instruction,  Multiple-Thread} (SIMT)  architecture and
+regular data access patterns through memory coalescing.  That work was
+the  base  for  the  widely  used  CUDPP  library~\cite{CUDPP},  which
+presents an easy and efficient but limited use of the scan operator.
+
+In  \cite{Nathan:2011} Bell  and  Hoberock designed  a library  called
+Thrust.   That library  resembles  the C++  Standard Template  Library
+(STL).   Thrust  parallel   template  library   allows  to   implement
+high-performance  applications with  minimal  programming effort.  The
+library offers an implementation of the scan operator that easies the task of 
+the programmer.  Thrust  was used  to implement  the CUDA version of the  
+benchmarks described in \rsec{Experiments}. 
+
+Shengen Yan et.  al.~\cite{Yan:2013}  implemented the scan operator in
+OpenCL based on \cite{harris2007parallel},  He improved the performance
+by  reducing the  number  of memory  accesses from  $3n$  to $2n$  and
+eliminating global barrier synchronization completely.
+
+In 2015, Wiefferink~\cite{ScanOpenCL} implemented other version of the
+scan operation in OpenCL.  This work improved the branch divergence of
+the  algorithm in  ~\cite{ScanAsPrimitive} ~\cite{harris2007parallel}.
+As  expected,  this  implementation  works   in  NVIDIA  and  AMD  GPU
+platforms, unlike  most previous versions  that just worked  in NVIDIA
+GPUs.
+
+This section describes the parallel  scan algorithm used in the design
+of the  proposed scan clause.  The algorithm is  based on the  work of
+Mark Harris et al.~\cite{Sengupta:2007} and  is currently known as the best
+approach to the parallel computation of scan.
+
+\begin{figure}[t]
+	\centering
+	\caption{Parallel scan in $\mathcal{O}(log\  n)$}
+	\subfloat[Up-sweep phase]{
+		\includegraphics[scale=0.35]{images/upsweep.pdf} \label{fig:upsweep}
+	}
+	\vfill
+	\subfloat[Down-sweep phase]{
+		\includegraphics[scale=0.35]{images/downsweep.pdf}\label{fig:downsweep}
+	}
+\end{figure}
+
+For the sake  of simplicity and without any loss  of generality please
+consider the loop  in \rlsts{Parscan}{a} (lines 3--10)  which contains a
+sequential   scan  operation   that  will  be
+parallelized  with the  scan clause.  Notice that  unlike the  code of
+\rlsts{PrefixSum}{a} (line 5) the current  example stores the result of
+the scan operation into the   array $x$ itself (line 8 of \rlsts{Parscan}{a}).
+
+The key  idea in~\cite{Sengupta:2007} is  to build a  balanced binary
+tree on the input data $x$ and  sweep it to and from the root, scanning
+at each phase half  of the elements of the array.  The  tree is not an
+actual  data structure,  but a  concept  used to  determine what  each
+thread does at each one of the  two phases of the traversal.  The tree
+representation is  shown in~\rfigs{upsweep}{downsweep} where  blue and
+black arrows  represent read  operations of the  elements of  $x$ that
+will be added, and orange arrows represent copy statements.
+
+As  shown  in \rlstn{Parscan}{b}{c},  the  algorithm  consists of  two
+phases:  \textit{up-sweep} and  \textit{down-sweep}.  In  the up-sweep
+phase,  described   in  ~\rlsts{Parscan}{b}  the  tree   is  traversed
+bottom-up computing the scan of half of the internal nodes of the tree
+in~\rfig{upsweep}.  As described in  ~\rlsts{Parscan}{b} at each level
+(iteration)  $d$  of   the  tree  neighbors  at   distance  $2^d$  are
+accumulated       into        the       elements        at       index
+$k + 2^{(d+1)} - 1, k = 0 \ldots \lceil n/2 \rceil$ of the array (line
+18). For  example, at  level $d  = 0$  of \rfig{upsweep}  neighbors at
+distance $2^{(0+1)}  - 1  = 1$  are accumulated  into the  elements at
+index $k  + 1$, at the  next level of  the tree.  The distance  of the
+neighbors  that  are   accumulated  doubles  as  the   tree  level  is
+incremented  (e.g.  the  distance is  2 at  level $d  = 1$)  until the
+partial sum  at $x[i-1]$  is computed.   This phase  is also  known as
+\textit{parallel reduction},  because after this phase,  the root node
+(the last node in the array) holds the sum of all nodes in the array.
+
+
+\begin{figure}[t]
+	\lstset{basicstyle=\scriptsize}
+	\begin{lstlisting}[label=lst:Parscan, caption={The parallel scan implementation}, escapeinside={(*}{*)}]
+	(a) Modified sequential implementation
+	
+	aux = x[0];
+	x[0] = 0;
+	#pragma omp parallel for scan(+: x)
+	for(int i = 1; i < n; i++) {
+		temp = x[i];
+		x[i] = x[i-1] + aux;
+		aux = temp;
+	}
+	
+	(b) Up-sweep phase of scan parallel implementation
+	
+	x[0] = 0;
+	for(d = n >> 1; d > 0; d >>= 1){
+		// We parallelize this section
+		for(k = 0 ; k < n ; k += (1<<(d+1)) ){
+			x[k + (1<<(d+1)) - 1] = x[k + (1<<d) -1] + 
+			x[k + (1<<(d+1)) - 1];
+		}
+	}
+	
+	(c) Down-sweep phase of scan parallel implementation
+	
+	x[n-1] = 0;
+	for(d = log2(n); d >= 0 ; d--){
+		// We parallelize this section
+		for(k = 0 ; k < n ; k += (1<<(d+1))){
+			t = x[k + (1<<d) - 1];
+			x[k + (1<<d) - 1] = x[k + (1<<(d+1)) - 1];
+			x[k + (1<<(d+1)) - 1] = t + x[k + (1<<(d+1)) - 1];
+		}
+	}
+	\end{lstlisting}
+\end{figure}
+
+In  the down-sweep  phase,  the  tree is  traversed  top-down and  the
+partial sums computed in the previous phase are propagated downward to
+accumulate  with the  entries which  did not  have their  partial sums
+computed  previously  in the  up-sweep  phase.   The phase  starts  by
+inserting zero at the  root of the tree. Then at  each step, each node
+at the current tree level will: (i)  sum its value to the former value
+of its left child and store the  result into its right child; and (ii)
+copy its own value to its  left child.  For example, consider the node
+at index $7$  level $d = 1$  of the tree in  \rfig{upsweep}. That node
+has two children, a left child at index $5$ and a right child at index
+$7$.  Hence,  during the down-sweep  phase two operations  will occur:
+(i) the value at  index $7$ is summed to the value  at index $5$ (left
+child of index  $7$) and is stored  into the right child  of index $7$
+(index $7$ itself); and (ii) the value at index $7$ is copied to index
+$5$ to be used  in the next level $d = 0$ (orange  arrow to left child
+of index $7$).
+
+\maicol{REVIEW 2: "complexity" and parallel compute time}
+The algorithm  performs $\mathcal{O}(n)$ operations in the first
+phase (\textit{up-sweep}) and for every level of this phase is computed in $\mathcal{O}(1)$ hence
+the total time is computed in $\mathcal{O}(log\ n)$, similarly for the second phase
+(\textit{down-sweep}) the total of operations is $\mathcal{O}(n)$ between adds ($n-1$)
+and swaps ($n-1$) moreover the computed time is $\mathcal{O}(log\ n)$.
+So the total number of operation of parallel scan
+is $\mathcal{O}(n)$ and computed time is
+$\mathcal{O}(log\ n)$ time.	
+
+
+\section{Scan clause implementation in AClang}
+\label{sec:ScanInAClang}
+
+\begin{figure}[t]
+	\centering
+	\caption{Algorithm to perform a block sum scan}
+	\includegraphics[scale=0.35]{images/phaseScan.pdf}
+	\label{fig:scheme}
+\end{figure}
+
+The Parallel Scan Optimization  pass~\ding{184} shown in \rfig{aclang}
+is responsible  for implementing the scan  clause. This implementation
+is    based   on    the   best    parallel   scan    algorithm   known
+today~\cite{Sengupta:2007}       and       is       detailed       in
+\rsec{ScanAlg}.  Nevertheless, the  effectiveness  of  that algorithm  is
+increased  when it  runs within  a thread  block within  which it  can
+leverage on data locality.
+
+In order to apply the  parallelized scan from~\rsec{ScanAlg} to data sets
+larger than  a single thread block,  an extended four step  method was
+proposed~\cite{harris2007parallel}  which   applies  twice   the  scan
+algorithm described in \rlstn{Parscan}{b}{c} to spread the scan of each
+block to all blocks  of the array.  Such method is  shown in the block
+diagram of \rfig{scheme} where each  number corresponds to one step of
+the method.   In the first  step, the  method divides the  large input
+array  into  blocks  that  are   scanned  each  by  a  single  thread
+block~\ding{182} using  the algorithm  from ~\rsec{ScanAlg}.   During the
+second step,  the total sum  of all elements  of each block  (i.e. the
+value in the  last element of the scanned block)  is transfered to the
+corresponding entry of  an auxiliary array ~\ding{183}.   In the third
+step, using again  the algorithm in~\rsec{ScanAlg}, the  method scans the
+auxiliary  array, and  writes the  output  at another  array of  block
+sums~\ding{184}.  At  the end  of this  third step  each entry  of the
+array of block  sums contains the partial sums of  all elements of the
+blocks up to that entry (inclusive).   Finally in the fourth step,
+for each block the method adds the previous block sums  to the elements of the current
+block~\ding{185}.
+
+\chapter{Using Scan}
+\label{sec:ScanUse}
+
+\section{Radix Sort}
+\label{sec:Quicksort}
+
+Sorting algorithm puts elements of a list in certain order.
+There are many sorting algorithms because this algorithm is used 
+in many problems, in this section is presented Radix Sort algorithm
+parallelized through of scan operator. It is well know how Radix Sort
+algorithm works for this reason the section focused into explain the 
+parallelized version.
+
+The basic idea of Radix sort is to considerer each element to be sorted digit
+by digit, from least to most significant. For every digit the elements will 
+be rearranged.
+
+Let's take a simple example of 4 elements with 4 binary digits in its 
+representation, in \rlst{radexample} is showed a visual representation that algorithm works.
+\begin{figure}[t]
+	\lstset{basicstyle=\scriptsize}
+	\begin{lstlisting}[label=lst:radexample, caption={Radix Sort
+	algorithm basic idea}, escapeinside={(*}{*)}]
+	1) Elements representation
+	Element #    1       2       3       4
+	Value:       7       14      4       1
+	Binary:      0111    1110    0100    0001
+	
+	2) At first step, Radix sort algorithm rearranges the elements by the values of
+	   the bit analized(bit 0):
+	Element #    2       3       1       4
+	Value:       14      4       7       1
+	Binary:      1110    0100    0111    0001
+	bit 0:       0       0       1       1
+	
+	3) Finalized the first step, it is neccesary analize the next bit (bit 1):
+	Element #    3       4       2       1
+	Value:       4       1       14      7
+	Binary:      0100    0001    1110    0111
+	bit 1:       0       0       1       1
+	
+	4) And so on (bit 2):
+	Element #    4       3       2       1
+	Value:       1       4       14      7
+	Binary:      0001    0100    1110    0111
+	bit 2:       0       1       1       1
+	
+	5) And move them again:
+	Element #    4       3       1       2
+	Value:       1       4       7       14
+	Binary:      0001    0100    0111    1110
+	bit 3:       0       0       0       1	
+	
+	\end{lstlisting}
+\end{figure}
+
+But, How can \rlst{radexample} do parallel?
+The next steps show how to do it.
+\begin{enumerate}
+\item Generate a vector of the list (bit in common, starting form the least significant bit)
+where every bit that is 0 in the new vector is 1 else the value is 0.
+\item Scan the vector, and record the sum of the predicate in the process. Notice, Scan
+algorithm works for arrays of arbitrary size instead of $2^{n}$ size, however as how was
+explained before the propose resolves for any arbitrary size.
+\item Flips bits of the predicate, and scan that.
+\item Move the values in the vector with the following rule:
+\begin{enumerate}
+\item For the $i^{th}$ element in the vector:
+\item If the $i^{th}$ predicate (vector generate in the step 1) is TRUE, move the $i^{th}$
+value to the index in the $i^{th}$ element of the predicate scan.
+\item Else, move the $i^{th}$ value to the index in the $i^{th}$ element of the opposite array 
+of the Predicate Scan plus the sum of the original Predicate.
+\end{enumerate}
+\item Move to next significant bit (NSB).
+\end{enumerate}
+
+
+\begin{figure}[t]
+	\lstset{basicstyle=\scriptsize}
+	\begin{lstlisting}[label=lst:radcode, caption={Fragment of Radix Sort
+	benchmark}, escapeinside={(*}{*)}]
+int main(){	
+	...
+	predicateTrueScan = ( unsigned int* )malloc( numElem * sizeof(unsigned int) );
+	predicateFalseScan = ( unsigned int* )malloc( numElem * sizeof(unsigned int) );
+	...
+	unsigned int max_bits = 31; //Unsigned int type
+	for (unsigned int bit = 0; bit < max_bits; bit++){
+		
+		nsb = 1<<bit;
+		for(int i = 0 ; i < N ; i++){
+			int r = ((inputVals[i] & nsb) == 0);
+			predicateTrueScan[i] = r;
+			predicateFalseScan[i] = predicate[i] = !r;
+		}
+		
+		
+		#pragma omp target device(GPU) map(tofrom:predicateTrueScan[:N])
+		#pragma omp parallel for scan(+:predicateTrueScan)
+		for(int i = 1 ; i < N ; i++)
+			predicateTrueScan[i] += predicateTrueScan[i-1];
+		...
+		#pragma omp target device(GPU) map(tofrom:predicateFalseScan[:N])
+		#pragma omp parallel for scan(+:predicateFalseScan)
+		for(int i = 1 ; i < N ; i++)
+			predicateFalseScan[i] += predicateFalseScan[i-1];
+		
+		for(int i = 0 ; i < N ; i++){
+			if ( predicate[i] == 1 ) 
+				newLoc = predicateFalseScan[i] + numPredicateTrueElements;
+			else
+				newLoc = predicateTrueScan[i];
+			outputVals[newLoc] = inputVals[i];
+		}
+		
+	}
+}
+	\end{lstlisting}
+\end{figure}
+
+In the code \rlst{radcode}, the line 7 indicates the analyze for every bit, depending of the
+type of variable could be 15, 31 or 63. The line 9 is an auxiliary variable to heps 
+to work the current bit. Next lines (10 -- 14) generated the vector mentioned above
+in the step 1 also generate the opposite vector of the first one. The following lines
+(17 -- 25) compute scan operator for the to vector mentioned before. The final lines
+(27 -- 32) move the elements in accordance of the vectors generated in the previous step.
+
+In \rlst{radkernel} is presented the kernel generated for the framework AClang,
+the kernel has 3 main components which were detailed before.
+
+\begin{figure}[t]
+	\lstset{basicstyle=\scriptsize}
+	\begin{lstlisting}[label=lst:radkernel, caption={Fragment of Radix Sort
+	kernel generated}, escapeinside={(*}{*)}]
+	__kernel void kernel_0 (__global unsigned int *input,
+	__global unsigned int *S,
+	const int n) {
+		...
+	}
+	
+	__kernel void kernel_1 (__global unsigned int *input,
+	const int n) {
+	
+		...
+	}
+	
+	__kernel void kernel_2(__global unsigned int *input,
+	__global unsigned int *S) {
+		...
+	}
+	\end{lstlisting}
+\end{figure}
+
+\section{Sequence alignment}
+
+Sequence alignment is an important tool for
+researchers in molecular biology in their efforts to relate
+the molecular structure and function to the underlying
+sequence. Biological sequence data mainly consists of
+DNA and protein sequences, which can be treated as
+strings over a fixed alphabet of characters. Usually,
+is considered the comparison of two biological sequences.
+This comparison is done by aligning the two sequences,
+which refers to stacking one sequence above the other
+with the intention of matching characters from the two
+sequences that lie in the same position. To deal with
+missing characters and extraneous characters, gaps may
+be inserted into either sequence. A scoring mechanism is
+designed for each possible alignment and the goal is to
+find an alignment with the best possible score.
+
+Let $m$ and $n$ be the lengths of the two sequences to be
+compared. Sequence alignment algorithms typically
+use dynamic programming in which a table, or multiple
+tables of size $(m+1)x(n+1)$ are filled.
+
+\begin{figure}[t]
+	\lstset{basicstyle=\scriptsize}
+	\begin{lstlisting}[label=lst:seqcod, caption={Fragment of Sequence alignment}, escapeinside={(*}{*)}]
+	
+	int main() {
+	int *h;
+	int *t;
+	
+	t = (int *)malloc(N * sizeof(int));
+	w = (int *)malloc(N * sizeof(int));
+	h = (int *)malloc(N * sizeof(int));
+	
+	...
+	
+	#pragma omp target device(GPU) map(from : t[:N]) map(to : h[:N])
+	#pragma omp parallel for scan(max : t)
+	for (int i = 1; i < N; i++)
+		t[i] = max(t[i - 1], h[i - 1]);
+	
+	\end{lstlisting}
+\end{figure}
+
+\begin{figure}[t]
+	\lstset{basicstyle=\scriptsize}
+	\begin{lstlisting}[label=lst:seqkernel, caption={Fragment of Radix Sort
+	kernel generated}, escapeinside={(*}{*)}]
+	__kernel void kernel_0 (__global unsigned int *input,
+	__global unsigned int *S,
+	const int n) {
+	...
+	}
+	
+	__kernel void kernel_1 (__global unsigned int *input,
+	const int n) {
+	
+	...
+	}
+	
+	__kernel void kernel_2(__global unsigned int *input,
+	__global unsigned int *S) {
+	...
+	}
+	\end{lstlisting}
+\end{figure}
+
+\section{Polynomial Evaluation}
+\label{sec:PolEval}
+
+Given a Polynomial $P$ with coefficients $a_{n}, a_{n-1} ... a_{0}$, the \textit{polynomial evaluation} $P_{(x)}$ is an operation 
+that performs the value of $P$ when $x$ takes some value. The use of polynomials 
+appears in settings ranging from basic chemistry and physics to economics and social science; they are used in calculus and numerical analysis to approximate other functions.
+
+
+\begin{equation}
+P(x) = a_{n}x^n + a_{n-1}x^{n-1} + a_{n-2}x^{n-2} + ... + a_{1}x + a_{0}
+\label{eq:pol}
+\end{equation}
+
+Polynomial evaluation is used in many problems as was mentioned above, this
+section shows how to use a non primitive variable (int, long, float, double, bool, char)
+using the scan clause to solve this problem, from the programmer perspective
+and how AClang works when is used the proposed. \rlst{pol} presents 
+a part of the code to perform the value of the polynomial. ~\req{pol} is the basic
+representation of a polynomial.
+
+Before of describe the code of for the problem, in this section is
+showed how can solve the problem using Scan operator.
+
+The trick to solve the problem is to replace each element (Coefficient) of the Polynomial to became a pair. In this case, was changed element $a_{i}$ to become the pair $(a_{i}, x)$ that
+created an array of pairs. To perform scan operator on the new array of pairs, the $\oplus$ operator defined as follows:
+
+\begin{equation}
+(p, y) \oplus (q, z) = (p z + q, y z)
+\label{eq:opepol}
+\end{equation}
+
+Where does it come from? It's a little difficult to understand at first, but
+each such pair is meant to summarize the essential knowledge needed for a
+segment of the array. This segment itself represents a polynomial. The first
+number in the pair is the value of the segment's polynomial evaluated for x,
+while the second is $x^{n}$, where $n$ is the length of the represented segment 
+of the polynomial.
+
+To use scan operator, it's necessary first confirm that the operator is indeed associative.
+\begin{equation}
+\begin{split}
+((a, x) \oplus (b, y)) \oplus (c, z) = (a y + b, x y) \oplus (c, z) \\
+((a, x) \oplus (b, y)) \oplus (c, z) = ((a y + b) z + c, x y z) = (a y z + b z + c, x y z)\\
+(a, x) \oplus ((b, y) \oplus (c, z)) = (a, x) \oplus (b z + c, y z) = (a y z + b z + c, x y z)
+\end{split}
+\label{eq:demos}
+\end{equation}
+
+In \req{demos} is demonstrated that the operator is associative. \\
+Now let's look at an example to see how it works. Suppose that it's necessary to evaluate the
+polynomial $x^{3} + x^{2} + 1$ when $x$ is 2. In this case, the coefficients of the
+polynomial can be represented using the array $<1, 1, 0, 1>$. The first step of the
+algorithm is to convert it into an array of pairs.
+
+$<$ $(1, 2), (1, 2), (0, 2), (1, 2)$ $>$\\
+
+Now, is possible to apply the $\oplus$ operator defined above to get the result.\\
+$(1, 2)\:\oplus\:(1, 2)\:\oplus\:(0, 2)\:\oplus\:(1, 2)\:=\:(1 . 2 + 1, 2 . 2)\:\oplus\:(0, 2)\: \oplus\:(1, 2)$\\
+$(1, 2)\:\oplus\:(1, 2)\:\oplus\:(0, 2)\:\oplus\:(1, 2)\:=\:(3, 4)\:\oplus\:(0, 2)\:\oplus\:(1, 2)$\\
+$(1, 2)\:\oplus\:(1, 2)\:\oplus\:(0, 2)\:\oplus\:(1, 2)\:=\:(3. 2 + 0, 4 . 2)\:\oplus\:(1, 2)\:=\:(6, 8)\:\oplus\:(1, 2)$\\
+$(1, 2)\:\oplus\:(1, 2)\:\oplus\:(0, 2)\:\oplus\:(1, 2)\:=\:(6 . 2 + 1, 8 . 2) \:=\:(13, 16)$\\\\
+So the result of the operation is $(13, 16)$, which has the desire value to compute $13$
+as its first element: $2^{3} + 2^{2} + 1 = 13$ of the pair.
+In the computation above, we proceeded in left-to-right order as would be
+done on a single processor. In fact, parallel scan algorithm would
+combine the first two elements and last two elements in parallel:\\
+$(1, 2) \:\oplus\: (1, 2) \:=\: (1 . 2 + 1, 2 . 2) \:=\: (3, 4)$\\
+$(0, 2) \:\oplus\: (1, 2) \:=\: (0 . 2 + 1, 2 . 2) \:=\: (1, 4)$\\
+And then it would combine these two results to get the final result $(3 . 4 + 1, 4 . 4)$
+= $(13, 16)$.
+\\\\
+Now in the code, the \ttt{target} clause (lines 27--28 in~\rlst{pol}) defines the part of the code
+that will  be  executed by  the device  (lines
+31--32).  The \ttt{map} clauses control the direction  of the data flow
+between the host and the target device. All definitions of data structures
+or functions  that can be used  by the \ttt{scan} clause,  i.e., the
+\ttt{Polynomial} data  structure and the \ttt{Operator}  multiply function
+(operator$*$),  must   be  enclosed  in  the   \ttt{declare  target}
+directives. This is done by lines 1--13 in \rlst{pol}.
+Attention, in this example is presented the use of the operator overloading 
+construct that it's necessary to solve the problem. 
+
+\begin{figure}[t]
+	\lstset{basicstyle=\scriptsize}
+	\begin{lstlisting}[label=lst:pol, caption={Fragment of the Polynomial
+	Evaluation benchmark}, escapeinside={(*}{*)}]
+	#pragma omp declare target
+	typedef struct tag_my_struct {
+		int x;
+		int y;
+	} Pair;
+	
+	Pair op(Pair A, Pair C) {
+		Pair ans;
+		ans.x = A.x * C.y + C.x;
+		ans.y = A.y * C.y;
+		return ans;
+	}
+	#pragma omp end declare target
+	
+	#pragma omp declare scan(op                           \
+	: Pair                                               \
+	: omp_out = op(omp_out, omp_in))                      \
+	initializer(omp_priv = (Pair){0, 1})
+	
+	int main() {
+	Pair *h;
+	Pair *t;
+	
+	t = (Pair *)malloc(N * sizeof(Pair));
+	h = (Pair *)malloc(N * sizeof(Pair));
+	...
+	#pragma omp target device(GPU) map(from : t[:N]) map(to : h[:N])
+	#pragma omp parallel for scan(op : t)
+	for (int i = 1; i < N; i++)
+		t[i] = op(t[i - 1], h[i - 1]);
+		
+	\end{lstlisting}
+\end{figure}
+
+\rlst{polkernel} shows the header and signatures of the kernel
+functions  generated  by  the  compiler  for  the  example  showed  at
+\rlst{pol} (Polynomial evaluation).\\
+As  shown in~\rlst{polkernel}, the first lines (1 -- 11) is the information
+about the structure and operator used.
+The lines (16 -- 20) kernel\_0 represented the first part of the algorithm who applies 
+scan operator of the whole problem into blocks,
+The lines (22 -- 25) kernel\_1 represented the second who applies scan operator 
+over the vector filled in the previous step to get the cumulative sums 
+for all the blocks.
+The lines (27 -- 31) kernel\_2 is the final step who fixes cumulative sums
+for every element to get the final vector.
+
+
+\begin{figure}[t]
+	\lstset{basicstyle=\scriptsize}
+	\begin{lstlisting}[label=lst:polkernel, caption={Fragment of Polynomial
+	Evaluation kernel generated}, escapeinside={(*}{*)}]
+	struct Pair{
+		int x;
+		int y;
+	};
+	
+	Point op(Pair A, Pair C) {
+		Point ans;
+		ans.x = A.x * C.y + C.x;
+		ans.y = A.y * C.y;
+		return ans;
+	}
+	
+	
+	#define omp_priv (Pair){ 0, 1 }
+	
+	__kernel void kernel_0 (__global Pair *input,
+	__global Pair *S,
+	const int n) {
+		...
+	}
+	
+	__kernel void kernel_1 (__global Pair *input,
+	const int n) {
+		...
+	}
+	
+	__kernel void kernel_2(__global Pair *output,
+	__global Pair *input,
+	__global Pair *S) {
+		...
+	}
+	\end{lstlisting}
+\end{figure}
+
+\section{Parallelizing matrix exponentiation}
+\label{sec:fibonacci}
+
+Given a square matrix $A$ the \textit{Matrix Exponentiation} $A^k$ is an operation 
+that performs the iterative multiplication of $A$ $k$ times. $A^k$ is a central 
+operation in many scientific problems like finding multiple recurrent sequences, 
+solving dynamic programming with fixed linear transitions, finding strings under 
+constraints, among others~\cite{doi:10}. 
+
+\begin{equation}
+\begin{bmatrix}1 & 1 \\ 1 & 0\end{bmatrix}^{n}
+= \begin{bmatrix}fib_{n+1} & fib_{n}\\fib_{n} &
+fib_{n-1}\end{bmatrix}
+\label{eq:fib}
+\end{equation}
+
+Among all problems solved though matrix exponentiation, finding the first $n$
+numbers of the Fibonacci sequence is the most well-known~\cite{fibonacci}.
+This section shows, from the programmer perspective,    how AClang works   when 
+using the proposed scan clause to solve this problem. \rlst{fib}  presents a
+fragment from  the calculation  of the  Fibonacci series  using matrix
+exponentiation\footnote{Note  that  in   real  applications,  this  is
+	counted in terms of the  number of \textit{bigint} arithmetic operations, not
+	primitive  fixed-width  operations.}. The algorithm  is  based  on~\req{fib}, 
+which can be proven by mathematical induction.  
+
+The \ttt{target} clause (lines 28--29 in~\rlst{fib}) defines the portion of the
+program  that will  be  executed by  the  accelerator device  (lines
+30--32).  The \ttt{map}  clauses control the direction  of the data flow
+between the host and the  target. All definitions of data structures
+or functions  that can be used  by the \ttt{scan} clause,  i.e., the
+\ttt{Matrix} data  structure and the \ttt{Matrix}  multiply function
+(operator$*$),  must   be  enclosed  in  the   \ttt{declare  target}
+directives. This is done by lines 1--18 in the example.  The \ttt{declare  target} 
+construct  will result in  the extraction of  the appropriate
+code to be stored inside the kernel.  
+
+Notice that the implementation
+of the  scan clause  proposed in  this work  is powerful  enough to
+handle  the operator  overloading  construct  already available  in
+OpenMP (lines  20--22). This construct was  previously defined in
+OpenMP for the \ttt{reduction} clause  and was extend in the AClang
+compiler  to enable  the usage  in  the \ttt{scan}  clause as  well.
+\rlst{fib} shows how a  programmer can use the \ttt{scan}
+clause   with  the   user-defined  matrix   multiplication  operator
+(\ttt{*}).   This  operator  and  its neutral  value  (the  identity
+matrix,  in  this  case)  are  defined  by  the  \ttt{declare  scan}
+directive   (lines  20--22).    The  AClang   transformation  engine
+(see~\rfig{aclang}~\ding{185}) gathers  this piece  of information
+and through pattern matching techniques  builds the kernel that will
+be  dispatched to  the  target  device so  as  to  perform the  scan
+operation.
+
+\begin{figure}[t]
+	\lstset{basicstyle=\scriptsize}
+	\begin{lstlisting}[label=lst:fib, caption={Fragment of the Fibonacci
+	series benchmark}, escapeinside={(*}{*)}]
+	#pragma omp declare target
+	struct Matrix {
+	long x00, x01, x10, x11;
+	// default constructor:
+	Matrix() { x00 = 1; x01 = 1; x10 = 1; x11 = 0; }
+	// constructor:
+	Matrix(long x00_, long x01_, long x10_, long x11_) {
+		x00 = x00_; x01 = x01_; x10 = x10_; x11 = x11_;
+	}
+	};
+	
+	Matrix operator*(Matrix A, Matrix C) {
+	return Matrix(A.x00 * C.x00 + A.x01 * C.x10,
+		A.x00 * C.x01 + A.x01 * C.x11,
+		A.x10 * C.x00 + A.x11 * C.x10,
+		A.x10 * C.x01 + A.x11 * C.x11);
+	};
+	#pragma omp end declare target
+	
+	#pragma omp declare scan( * : Matrix:                     \ 
+	omp_out = omp_out * omp_in)  \
+	initializer(omp_priv = Matrix(1,0,0,1))
+	
+	int main() {
+	Matrix *x = new Matrix[N];
+	Matrix *y = new Matrix[N];
+	...
+	#pragma omp target device(GPU) map(tofrom: y[:N]) map(to: x[:N])
+	#pragma omp parallel for scan( * : y)
+	for (int i = 1; i < N; i++)
+		y[i] = y[i - 1] * x[i - 1]);
+		...
+	}
+	\end{lstlisting}
+\end{figure}
+
+\rlst{kernel} shows the header and signatures of the kernel
+functions  generated  by  the  compiler  for  the  example  showed  at
+\rlst{fib} (Fibonacci  series). Notice that this
+example uses the new OpenCL 2.2 for which  the kernel language is a
+static subset of the C++14 standard  which includes classes, templates,
+lambda  expressions,  function  overload, etc.  The  OpenCL  kernel
+language of any version older than  2.2 is an extended subset of
+C99,  which does not feature  operator overloading.  
+
+As  shown in~\rlst{kernel},  the  data  type  and  the
+user-defined functions  in~\rlst{fib} are passed to  the kernel file
+as is, and the \ttt{omp\_priv} variable that represents the identity
+matrix  in  the   example  (neutral  element)  is   transformed  to  a
+\ttt{\#define}.  The size ($N$) of  the input matrix $x$ is divided,
+according to the target device  capacity in $nt$ threads and $nb$
+blocks.  The \ttt{kernel\_0} function  (lines 18--22) is responsible
+for executing the  up-sweep and down-sweep phases for  each block of
+the input array $x$, and to store into the auxiliary matrix $sb$ (scan
+block) the  cumulative user-defined  operation (matrix  multiply) of
+each  block.    The  \ttt{kernel\_1}  function  (lines   24--27)  is
+responsible for executing the up-sweep  and down-sweep phases of the
+auxiliary matrix  $sb$  that was generated  in  the  \ttt{kernel\_0}
+function.   Finally, \ttt{kernel\_2}  (lines 29--33)  is responsible
+for applying the user-defined operation (matrix multiply) of element
+$i$ of  the scanned block  $sb$ (\ttt{kernel\_1}) to  all values  of the
+scanned block $i+1$  of the input array $x$, thus  producing  as result the
+output matrix $y$.
+
+
+\begin{figure}[t]
+	\lstset{basicstyle=\scriptsize}
+	\begin{lstlisting}[label=lst:kernel, caption={Fragment of Fibonacci
+	Series kernel generated}, escapeinside={(*}{*)}]
+	struct Matrix {
+	long x00, x01, x10, x11;
+	Matrix() { x00 = 1; x01 = 1; x10 = 1; x11 = 0; }
+	Matrix(long x00_, long x01_, long x10_, long x11_) {
+		x00 = x00_; x01 = x01_; x10 = x10_; x11 = x11_;
+	}
+	};
+	
+	Matrix operator*(Matrix A, Matrix C) {
+		return Matrix(A.x00 * C.x00 + A.x01 * C.x10,
+		A.x00 * C.x01 + A.x01 * C.x11,
+		A.x10 * C.x00 + A.x11 * C.x10,
+		A.x10 * C.x01 + A.x11 * C.x11);
+	};
+	
+	#define omp_priv Matrix(1, 0, 0, 1)
+	
+	__kernel void kernel_0 (__global Matrix *x,
+	__global Matrix *sb,
+	const int nt) {
+	...
+	}
+	
+	__kernel void kernel_1 (__global Matrix *sb,
+	const int nb) {
+	...
+	}
+	
+	__kernel void kernel_2(__global Matrix *y,
+	__global Matrix *x,
+	__global Matrix *sb) {
+	...
+	}
+	\end{lstlisting}
+\end{figure}
+
+The current offloading  mechanism in AClang implements  the OpenMP 4.X
+\ttt{target data},  \ttt{target} and \ttt{declare  target} constructs. This is 
+done through the \textit{AClang runtime library} which  has two main functionalities:
+\begin{inparaenum}[(i)\upshape]
+	\item it hides the complexity of OpenCL code from the compiler; and
+	\item it provides a mapping from  OpenMP directives to the OpenCL API,
+	thus avoiding  the need for  device manufacturers to  build specific
+	OpenMP drivers for their accelerator devices.
+\end{inparaenum}
+
+The AClang compiler generates calls to  the AClang runtime library whenever a
+\ttt{target data}  or \ttt{target}  directive is encountered.   As shown  in  the Fibonacci  
+Series example (\rlst{fib}),  the \ttt{declare  target}
+construct will result in the extraction  of the appropriate code to be
+stored  inside  the  kernel.  Also,  the  AClang  runtime  library  is
+responsible to initialize the data  structures that handle the devices
+and the context  and command queues for each device.   In addition, it
+creates the  necessary data structures  to store the handlers  for the
+kernels and the buffers and to offload data to the accelerator device
+memory.  In AClang, it is responsibility of the compiler to generate
+the  code needed  to manage  all the  phases required by  the scan  algorithm.
+Therefore, no changes were made to the runtime library.
+
+\chapter{Related Works}
+\label{cap:RelatedWorks}
+During  the 80's  Hillis and  Steele~\cite{dataparallel} developed 
+approaches to parallelize many serial  algorithms. Although at that time
+these algorithms  seemed to have only  sequential solutions, by  using the
+\ttt{The  Connection Machine}  \cite{themachine} they  managed to achieve
+execution times in $\mathcal{O}(log\ n)$.  One of these algorithms was
+the sum of  the elements of an  array, also known as  reduction.  With a
+slight modification of reduction Hillis and Stelle proposed a solution
+to compute \textit{All Partial Sums} of an array,  a problem that
+is currently known as prefix sum or simply scan.
+
+The generalization that scan is an important  primitive
+for  parallel  computing  was  presented   by  Guy  E.   Blelloch  in
+~\cite{ScanAsPrimitive}. In  that work scan was  defined as a
+\textit{unit time}  primitive under the \texttt{PRAM  (Parallel Random
+	Access Machine)}  model and  Blelloch presented  a new  technique to
+perform  the scan  operator. That  technique was  implemented using  a
+binary balanced tree  and was explained in  \rsec{Scan}.  Scan 
+was  then used   to  parallelize   some  very  relevant   algorithms  like:
+Maximum-Flow, Maximal Independent Set, Minimum Spanning Tree, K-D Tree
+and Line  of Sight,  thus improving their  asymptotic running  time to
+$\mathcal{O}(log\ n)$.
+
+In~\cite{GPUGems2}  Horn  proposed  an  efficient
+implementation of  scan in GPUs.   That algorithm was based  in Hillis
+and Steele's work and was used  to solve the problem of extracting the
+undesired elements  of a set.  Scan  was used to
+determine  the undesired elements, and this was followed by a search
+and  gather   operation  to   compact the set.  This   problem  is   known  as
+\textit{Stream   Compaction},  and has a running  time   of
+$\mathcal{O}(n.log\ n)$. 
+
+In \cite{harris2007parallel} Mark Harris  et al.  implemented in GPUs the scan
+operator     based     on     the     the     work     of     Blelloch
+\cite{ScanAsPrimitive}. That  implementation proved to be  better than
+the solution  proposed by  Horn~\cite{GPUGems2}.  The  main difference
+between those two  approaches is the number of  operations executed to
+solve the problem. In the case of \cite{GPUGems2}, the total number of
+operations is $n.log\ n$, and in the case of \cite{harris2007parallel}
+the  total number  of operations  is $n$,  the same  number as  in the
+serial version.  
+
+Also  in~\cite{harris2007parallel},  Harris  presented a  solution  to
+treat large input vectors in GPUs.  It  is well known that the size of
+one GPU block  is limited and thus the computation  of scan for larger
+input sizes is  done in two scan  steps: (i) a first  step inside each
+block; and (ii) a second step among the blocks.  The approach proposed
+in  \rsec{ScanInAClang}  uses~\cite{harris2007parallel} to  deal  with
+large input vectors and the work in ~\cite{ScanAsPrimitive} to perform
+the individual scan steps.
+
+In   \cite{Sengupta:2008}  Sengupta   and  Harris   presented  several
+optimizations     for      the     implementation      proposed     in
+\cite{harris2007parallel}.   Those  optimizations   were  designed  to
+deliver  maximum  performance  for   regular  execution  paths  via  a
+\textit{Single-Instruction,  Multiple-Thread} (SIMT)  architecture and
+regular data access patterns through memory coalescing.  That work was
+the  base  for  the  widely  used  CUDPP  library~\cite{CUDPP},  which
+presents an easy and efficient but limited use of the scan operator.
+
+In  \cite{Nathan:2011} Bell  and  Hoberock designed  a library  called
+Thrust.   That library  resembles  the C++  Standard Template  Library
+(STL).   Thrust  parallel   template  library   allows  to   implement
+high-performance  applications with  minimal  programming effort.  The
+library offers an implementation of the scan operator that easies the task of 
+the programmer.  Thrust  was used  to implement  the CUDA version of the  
+benchmarks described in \rsec{Experiments}. 
+
+Shengen Yan et.  al.~\cite{Yan:2013}  implemented the scan operator in
+OpenCL based on \cite{harris2007parallel},  He improved the performance
+by  reducing the  number  of memory  accesses from  $3n$  to $2n$  and
+eliminating global barrier synchronization completely.
+
+In 2015, Wiefferink~\cite{ScanOpenCL} implemented other version of the
+scan operation in OpenCL.  This work improved the branch divergence of
+the  algorithm in  ~\cite{ScanAsPrimitive} ~\cite{harris2007parallel}.
+As  expected,  this  implementation  works   in  NVIDIA  and  AMD  GPU
+platforms, unlike  most previous versions  that just worked  in NVIDIA
+GPUs.
+
+
+\chapter{Experimental Evaluation}
+\label{cap:Experiments}
+
+This  section presents  an experimental  evaluation using  a prototype
+implementation of  the OpenMP scan  clause in the AClang compiler.
+The  experiments in this section  use  three   heterogeneous  CPU-GPU
+architectures:
+\begin{inparaenum}[(i)\upshape]
+	\item a desktop with 2.1 GHz 32 cores Intel Xeon CPU E5-2620,
+	NVIDIA Tesla K40c GPU with 12GB and 2880 CUDA cores  running
+	Linux Fedora  release 23;
+	\item  a  laptop  with  2.4  GHz dual-core  Intel  Core  i5  processor
+	integrated with an Intel Iris GPU containing 40 execution units, and
+	running MacOS Sierra 10.12.4; and
+	\item a mobile  Exynos 8890 Octa-core  CPU (4x2.3 GHz Mongoose  \& 4x1.6
+	GHz Cortex-A53)  integrated with an  ARM Mali-T880 MP12  GPU (12x650
+	Mhz), and running Android OS, v6.0 (Marshmallow)
+\end{inparaenum}
+
+The experiments were carried out by a set of micro-benchmarks 
+shown on  Table~\ref{tab:benchmark} that were specially selected to  evaluate 
+the  proposed scan clause  and to  provide significant
+insight on the strengths and weaknesses of its  implementation in OpenMP.
+This set of  micro-benchmarks was designed to  enable the exploration
+of  the  parallel scan  algorithms  of  representative applications  in
+scientific computing.  For each micro-benchmark  used  in   the  evaluation  
+three  versions  were developed:
+\begin{inparaenum}[(i)\upshape]
+	\item a CUDA based version, using the Trust C++ template library~\cite{trust}.
+	Thrust provides a  rich collection of data  parallel primitives such
+	as scan,  sort, and reduce,  allowing the implementation of  high performance
+	parallel  applications with  minimal  programming  effort through  a
+	high-level  interface   that  is   fully  interoperable   with  CUDA
+	C. However, the parallel scan  implementation only allows vectors of
+	primitive  data  types, i,e.   it  does  not  allow the  use  of
+	structures (compound data types);
+	\item an  OpenCL version using the same algorithms used in the
+	implementation of the OpenMP scan clause in AClang; and,
+	\item a C/C++ version using the proposed OpenMP parallel scan clause
+	which enables a  higher level of abstraction when compared to the OpenCL and
+	CUDA versions.
+\end{inparaenum}
+
+The results presented  in all experiments of this  section are average
+over  ten  executions. Variance  is  negligible;  hence, we  will  not
+provide error intervals. 
+
+% \begin{table}[!t]
+% \centering
+% \caption{Performance difference between OpenCL scan and 
+% OpenMP annotated with the new scan clause.}
+% \begin{adjustbox}{max width=\textwidth}
+% \begin{tabular}{||c|c|c|c||c|c|c||}
+% \hline
+% \multirow{2}{*}{App.}  &
+% \multicolumn{3}{c||}{Intel/Iris} &
+% \multicolumn{3}{c|}{ARM/Mali}  \\ \cline{2-7}
+%           & OpenCL & OpenMP & Diff  & OpenCL & OpenMP  & Diff. \\ 
+% ($n.$) & (ms) & (ms) & (\%) &  (ms) & (ms) & (\%) \\ \hline
+%  1  & 2.47 & 2.60 & 5.26 & 3.79 & 4.47 & 17.94\\
+%  2  & 4.33 & 4.34 & 0.23 & 6.37 & 6.96 & 9.26\\ 
+%  3  & 3.41 & 4.01 & 17.60 & 5.96 & 6.79 & 14.08 \\
+%  4  & 6.90 & 7.82 & 13.33 & 11.26 & 12.14 & 7.80\\
+%  5  & 2.64 & 2.65 & 0.38  & 3.78 & 3.99 & 5.83\\
+%  6  & 3.75 & 3.69 & -1.60 & 5.49 & 5.59 & 1.97\\
+%  7  & 2.74 & 3.17 & 15.69 & 3.97 & 4.62 & 16.43\\
+%  8  & 2.54 & 2.54 & 0.00 & 3.72 & 3.94 & 5.96\\
+%  9  & 2.51 & 2.51 & 0.00 & 3.90 & 3.98 & 2.01\\
+% 10 & 2.65 & 2.70 & 1.89 & 3.75 & 3.95 & 5.42\\
+% 11 & 2.85 & 2.98 & 4.56 & 3.85 & 3.98 & 3.64\\
+% 12 & 3.49 & 3.90 & 11.75 & 5.46 & 5.59 & 2.43\\
+% \hline
+% \end{tabular}
+% \end{adjustbox}
+% \label{tab:diff}
+% \end{table}
+
+\begin{figure}[!h]
+	\caption{Analysis of parallel scan using a set of micro-benchmarks}
+	\subfloat[The execution on Intel Xeon CPU E5-2620 with NVIDIA Tesla K40c]{
+		\includegraphics[scale=0.36]{images/bench_tesla.pdf}\label{fig:bench_tesla}
+	}
+	\vfill
+	\subfloat[The execution  on Intel Core i5 with Intel Iris GPU]{
+		\includegraphics[scale=0.36]{images/bench_iris.pdf}\label{fig:bench_iris}
+	}
+	\vfill
+	\subfloat[The execution  on Exynos 8890 Octa-core with ARM/Mali-T880]{
+		\includegraphics[scale=0.36]{images/bench_mali.pdf}\label{fig:bench_mali}
+	}
+\end{figure}
+
+To evaluate the  performance of the implementation of the
+proposed  OpenMP  scan clause,  three experiments  were performed.
+In first  hardware  platform (NVIDIA Tesla) three    versions  of
+parallel scan were tested for each benchmark program: (i) CUDA; (ii) OpenCL; and
+(iii)  OpenMP. The other two  hardware platforms (Intel Iris and ARM Mali) do not 
+support (CUDA) and thus only the OpenCL    and    OpenMP    implementations   were    
+used.
+
+The  graphs  in~\rfign{bench_tesla}{bench_iris}{bench_mali}  display
+the results.  The horizontal axis of the graphs denote the number of
+the  benchmark as  in  \rtab{benchmark} and  the  vertical axis  the
+execution time.   In order to  provide a  minimum fair load  for the
+GPUs and  to minimize the  influence of the data  offloading latency
+appropriate  data sizes  were used  for  each input  data. In  other
+words,  input  sizes of  $1M$  elements  were  used for  the  NVIDIA
+platform and inputs  of $512K$ elements were used for  the other two
+(smaller) hardware platforms (Intel and ARM) .
+
+The  graph  in~\rfig{bench_tesla}  do  not  show  the
+results  for  the  CUDA  version  of  experiments  3  (Polynomial
+Evaluation), 4 (Linear Recurrences) and 7 (Adding Big Integers) due to
+the lack of support to structured inputs in the CUDA Thrust library.
+
+As  shown in~\rfig{bench_tesla}  for all  programs the
+CUDA   version   performed  much better   than   the   OpenCL  and   OpenMP
+versions. This is expected, given  that the Trust library is optimized
+and specialized  to NVIDIA devices.  On the  other hand, the  focus of
+this work is to enable a generic scan implementation that could run on
+a  broad range  of  heterogeneous  devices  and  not only  NVIDIA  devices.  
+For this  reason,  our implementation synthesizes generic OpenCL. 
+Of course this does not preclude us from synthesizing CUDA in the future.
+
+In order to better compare the performance of the proposed OpenMP scan
+clause to the performance of OpenCL code, we measured their percentage
+difference in all three hardware platforms. The experiments revealed a
+maximum  20.3\%,  an average  6.2\%,  and  a standard  deviation  7.4\%
+difference in  performance. This  strongly suggests that  the proposed
+clause  can  result   in  a  similar  performance   as  when  directly
+programming  in OpenCL  with the  advantage of  a smaller  programming
+complexity.
+
+\begin{figure}[!t]
+	\caption{Analysis of the  performance difference between  the OpenCL
+		and OpenMP implementations} 
+	\label{fig:analysis}
+	\includegraphics[scale=0.35]{images/analysis.pdf}
+\end{figure}
+
+Although small, the performance difference between the OpenCL code and
+the new OpenMP  scan clause is puzzling given that  they use the exact
+same   algorithm.  After a thorough analysis, we observed that the performance
+difference was likely due by  the AClang runtime library.  To evaluate
+that, a  new set of  experiments with profile enabled  was performed.
+Figure~\ref{fig:analysis}  shows the  total  execution  time for  some
+micro-benchmarks.  On the x-axis of  the figure are benchmark programs
+identified by their numbers as  listed in \rtab{benchmark} followed by
+a label  OCL (OpenCL)  or OMP (OpenMP)  to indicate  the corresponding
+implementation. On the  y-axis are program execution  times.  Each bar
+in  the  figure  is  broken  down according  to  the  following  tasks
+performed  during program  execution: (i)  kernel computation  (Kernel
+bar);  (ii) kernel  data offloading  (Offloading bar)  and (iii)  runtime
+tasks like context creation, queue management, kernel objects creation
+and GPU dispatch  (Managment bar).  The analysis reveals  that 80\% to
+90\% of  the slowdown over  the OpenCL  implementation are due  to the
+AClang  runtime  library, not  the  algorithm  itself.  In  fact,  the
+runtime library  does not  have specific routines  to handle  the scan
+operation  data management.   This was  implemented using  existent
+offload and dispatch operations in the library.  We believe that it is
+possible  to  reduce  this  performance  difference  significantly  by
+slightly adapting the runtime library  to provide routines specific to
+the new scan clause.
+
+\maicol{REVIEW 3: Scalability}
+About large inputs, the algorithm computes  of scan operator
+in accordance of user's resources, it means that the algorithm will
+divide the input size in slices of total threads available in the GPU,
+for example if the threads available are 1M and the size of the input 
+is 10M, the algorithm will run 10 times slices of 1M and then will
+merge the partials slices to obtain the final answer.
+
+\chapter{Conclusions and Future Works}
+\label{cap:Conclusion}
+
+The scan operation is a simple  and powerful parallel primitive with a
+broad  range  of  applications.   This  work  presented  an  efficient
+implementation of a new scan clause in OpenMP which exhibts
+a similar performance as direct programming in OpenCL at a much
+smaller design effort. The main findings are:
+
+\begin{itemize}
+	\item It is possible to improve  the performance of the scan clause by
+	providing specific routines to handle scan (and reduction) operations 
+	into the AClang  runtime  library.
+	\item Based on the evaluated benchmarks, and after investigating the
+	reasons for the differences in performance between the OpenMP and
+	OpenCL versions, it is concluded that the use of the scan clause is
+	perfectly acceptable due to the ease of programming given the high
+	level of abstraction of OpenMP when compared to CUDA and OpenCL. 
+\end{itemize}
+
+	
+
+
+% As referências:
+\bibliographystyle{plain}
+\bibliography{IEEEabrv,scan}
+
+\end{document}
