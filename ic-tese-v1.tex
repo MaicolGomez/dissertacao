@@ -768,13 +768,13 @@ of index $7$).
 	Q = dyn_cast<ArrayType>(Q.getTypePtr())->getElementType();
 	OpenMPScanClauseOperator op = cast<OMPScanClause>(*I)->getOperator();
 
-	Status = EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_create_read_write(), Size);
-	Status = EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_create_program(), FileStrScan);
+	EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_create_read_write(), Size);
+	EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_create_program(), FileStrScan);
 
-	Status = EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_create_kernel(), FunctionKernel_0);
-	Status = EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_create_kernel(), FunctionKernel_1);
-	Status = EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_create_kernel(), FunctionKernel_2);
-	Status = EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_release_buffer(), Aux);
+	EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_create_kernel(), FunctionKernel_0);
+	EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_create_kernel(), FunctionKernel_1);
+	EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_create_kernel(), FunctionKernel_2);
+	EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_release_buffer(), Aux);
 
 	(d) Customing the scan generator
 
@@ -860,7 +860,7 @@ leverage on data locality.
 
 In order to apply the  parallelized scan from~\rsec{ScanAlg} to data sets
 larger than  a single thread block,  an extended four step  method was
-proposed~\cite{harris2007parallel}  which   applies  twice   the  scan
+proposed~\cite{harris2007parallel}. This method applies twice the  scan
 algorithm described in \rlstn{Parscan}{b}{c} to spread the scan of each
 block to all blocks  of the array.  Such method is  shown in the block
 diagram of \rfig{scheme} where each  number corresponds to one step of
@@ -878,9 +878,13 @@ blocks up to that entry (inclusive).   Finally in the fourth step,
 for each block the method adds the previous block sums  to the elements of the current
 block~\ding{185}.
 
-In more detail, we show how aclang implements the scan algorithm, so we will explain
-a resumed code of the process. Just to remind, this process prepare an intern OpenCL
-environment and fill the template with the needs of the programmer (variable type, operation type, output vector).
+\marcio{Reescreva este paragrafo com o que vc pretendia dizer. Evite os termos
+In more detail, Just to remind. Coloque sempre na terceira pessoa. Veja o
+próximo parágrafo que estou propondo, como exemplo} In more detail, we show how
+aclang implements the scan algorithm, so we will explain a resumed code of the
+process. Just to remind, this process prepare an intern OpenCL environment and
+fill the template with the needs of the programmer (variable type, operation
+type, output vector).
 
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
@@ -903,11 +907,19 @@ environment and fill the template with the needs of the programmer (variable typ
 	\end{lstlisting}
 \end{figure}
 
-Our first step that we need to do is about get the information from the omp scan clause
-as we detail in \rlst{ClangScan}{a} from the line $3$ to $20$.\\
-In the line $3$ and $4$, from all clauses, we obtained the kind of clause the it represents.
-From line $5$ to $7$, is ensured that was found a Scan clause, so in this case
-we get all the information from this clause(data and needs of the programmer).\\
+\new{In the first step, the algorithm obtains the pieces of information of the
+omp scan clause, as detailed in \rlst{ClangScan}{a}, lines 3 through
+20.}\rem{Our first step that we need to do is about get the information from
+the omp scan clause as we detail in \rlst{ClangScan}{a} from the line $3$ to
+$20$.\\}
+
+\new{Lines 3 to 7 gets the list of variables and the kind of operation
+  associated with the scan clause} \rem{In the line $3$ and $4$, from all
+  clauses, we obtained the kind of clause the it represents.  From line $5$ to
+  $7$, is ensured that was found a Scan clause, so in this case we get all the
+information from this clause(data and needs of the programmer).\\}
+
+\marcio{Reescrever. Está muito confuso.}
 In the part \rlst{ClangScan}{b}, is processed how the programmer used the clause,
 it means, as we can see in \rlstn{ScanKind}{a}{b} was defined two ways to write the scan clause, the first one is a standard, using 3 components, one of them is the input data, the second refers to the accumulate sum until one position before that we are analyzing at the moment from the accumulate vector and the third component is the currently position which is filled. For the second way to write the scan clause, it is not necessary the use of one auxiliary vector of the accumulate, we can modified the input vector to convert it in the result vector, in this case to don't lose information from
 the input date that will be used, it's necessary save some information as we can see
