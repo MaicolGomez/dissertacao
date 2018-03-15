@@ -99,7 +99,7 @@
 \newcommand{\chek}[1]{\noindent\textcolor{red}{Check: {#1}}}
 \newcommand{\maicol}[1]{\noindent\textcolor{magenta}{Maicol: {#1}}}
 \newcommand{\xavier}[1]{\noindent\textcolor{violet}{Matt: {#1}}}
-\newcommand{\marcio}[1]{\textcolor{green}{ {#1}}}
+\newcommand{\marcio}[1]{\textcolor{red}{ {#1}}}
 \newcommand{\guido}[1]{\noindent\textcolor{magenta}{Guido: {#1}}}
 \newcommand{\rem}[1]{\noindent\textcolor{gray}{Removed: {#1}}}
 \newcommand{\new}[1]{\noindent\textcolor{blue}{ {#1}}}
@@ -880,11 +880,9 @@ block~\ding{185}.
 
 \marcio{Reescreva este paragrafo com o que vc pretendia dizer. Evite os termos
 In more detail, Just to remind. Coloque sempre na terceira pessoa. Veja o
-próximo parágrafo que estou propondo, como exemplo} In more detail, we show how
-aclang implements the scan algorithm, so we will explain a resumed code of the
-process. Just to remind, this process prepare an intern OpenCL environment and
-fill the template with the needs of the programmer (variable type, operation
-type, output vector).
+próximo parágrafo que estou propondo, como exemplo} Thoroughly, It's presented how
+AClang implements the parallel scan algorithm, so it will be explained a resumed code of the process. Remainder, this process prepares an intern OpenCL environment and
+fills the template to execute the scan algorithm with the needs of the programmer (variable type, operation type, output vector).
 
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
@@ -920,19 +918,15 @@ $20$.\\}
 information from this clause(data and needs of the programmer).\\}
 
 \marcio{Reescrever. Está muito confuso.}
-In the part \rlst{ClangScan}{b}, is processed how the programmer used the clause,
-it means, as we can see in \rlstn{ScanKind}{a}{b} was defined two ways to write the scan clause, the first one is a standard, using 3 components, one of them is the input data, the second refers to the accumulate sum until one position before that we are analyzing at the moment from the accumulate vector and the third component is the currently position which is filled. For the second way to write the scan clause, it is not necessary the use of one auxiliary vector of the accumulate, we can modified the input vector to convert it in the result vector, in this case to don't lose information from
-the input date that will be used, it's necessary save some information as we can see
-in the \rlst{ScanKind}{b}.\\
-From the line $24$ to $33$ is prepared the scan parameters and the OpenCL environment.
-The line $24$ computes the number of threads per block and the number of blocks than we will use to call the functions of the parallel scan algorithm, this step is important because as was mentioned before, the algorithm just work if the size of the input data is a power of two it means some like ($2^{k}$) so when the size is not a power of two we can't solve the problem, to solve this, we find the closest higher number that is a product of two number power of two, for the number of blocks ($B$) and the number threads ($T$) per block, for example if the size of input is $12$, the closest number with that properties is $16$ where we found more of one solution $B$ : 1 - $T$ : 16, $B$ : 2 - $T$ : 8, $B$ : 4 - $T$ : 4 and so on. Attention, in some cases we can find some solution with $T$ bigger than the threads provides for our architecture so, we limited $T$ according the computer programmer features, same way for $B$, thus the maximum size to compute the scan algorithm is limited for the resources provided, later in \ref{cap:Conclusion} it will show a proposal to extend the limit.\\
-In line $25$ is found the type of variable with which the programmer is working, could be $int$, $double$, $float$ and so on, nevertheless remember that we provide the possibility to define a new type of variable as a struct.\\
-For the next line $26$ is found the operator that the programmer defined to use in the scan algorithm, attention with this, as mentioned before this operator should be a binary associative operator, the more common are: ($+$, $*$, $\&$, $||$, $max$, $min$) besides of these operator usually for primitive variables we can define our binary associative operator if we are working with other variably type. \\
+In \rlst{ClangScan}{b}, it's recovered the buffer where the result of the scan algorithm will be written, it means, as it's shown in \rlstn{ScanKind}{a}{b}, it was defined two ways to write the scan clause, the first, is a standard(using 3 components), one of them is the input data, the second and third refer to the accumulate vector. The second way to write the scan clause, it's not necessary to use the vector of the accumulates, it's possible modifies the input vector to converts it into the result vector, it's necessary to manage of some variables to use this second way, a trivial example is showed in \rlst{ScanKind}{b}.\\
+From the line $24$ to $33$ is recovered the scan parameters and prepared the OpenCL environment. The line $24$ computes the number of threads per block and the number of blocks that will be used to call the sub-functions of the parallel scan algorithm, this is an important step because as was mentioned before, the algorithm works if the size of the input data is a power of two it means some like ($2^{k}$), so when the size is not a power of two, It's impossible to solve the problem, thus to fix this, it's founded the closest higher number that is a product of two powers of two, let's represent the number of blocks as $B$ and the number threads as per block $T$, for example if the size of input is $12$, the closest number with the properties mentioned before is $16$ where we found more of one solution such as ($B$:1 - $T$:16), ($B$:2 - $T$:8), ($B$:4 - $T$:4) and so on. Attention, in some cases it's possible to find some solution with $T$ bigger than the threads provides for the architecture used, thus, $T$ is limited according of the architecture programmer features, similarly for $B$. Therefore, the maximum size to compute the scan algorithm is limited for the resources provided in the architecture, later in \ref{cap:Conclusion} it will show a proposal to extend that limit.\\
+The $25$ recovers the type of variable with which the programmer is working, could be of type $int$, $double$, $float$ and so on, nevertheless, remember that it's provided the possibility to define a new type of variable as a new structure\\
+For the next line $26$, it's founded the operator that the programmer defined to use in the scan algorithm, attention, as was mentioned before, this operator should be a binary associative operator to could use the scan algorithm, the most common are: ($+$, $*$, $\&$, $||$, $max$, $min$) besides of these operators it's possible to define a new operator according of the new variably type that was defined.\\
 
-From the line $28$ to $34$ is customized the OpenCL environment to execute the scan parallel algorithm, for example to execute the algorithm is necessary create a auxiliary buffer as we can see in \ref{fig:scheme} ~\ding{183}, the creation of the buffer is made in the line $28$. Attention, Aclang provides a class CGM that has functions to facilitate the use of OpenCL, those function have as structure $get.MPtoGPURuntime()."operation"$ those functionalities allow a friendlier use of OpenCL code. The line $29$ sets the initial parameter for the OpenCL program only the standard process.
+From the line $28$ to $34$ is customized the OpenCL environment to execute the scan parallel algorithm, for example, one additional step to execute the algorithm is to create an auxiliary buffer that is possible see the representation in \ref{fig:scheme} ~\ding{183}, the creation of the buffer is made in the line $28$. Attention, Aclang provides a class $CodeGenModule$ that has functions to facilitate the use of OpenCL, those function have the following structure $CGM.operation1.MPtoGPURuntime().operation2$ those functionalities allow a friendlier handling of OpenCL code. The line $29$ does a standard step for an OpenCL program.
 
-From the line $31$ to $33$ are executed the kernels necessaries to compute the scan algorithm, for example in the line $31$ is computed the scan for every single block thread independently we can see this in \ref{fig:scheme} ~\ding{182}, for the next line $32$ is execute the second kernel in charge to computed the sum of accumulates from the auxiliary vector about himself as we can see in \ref{fig:scheme} ~\ding{184} and for the line $33$ is executed that distributes the corresponding accumulates to all the positions of the solution vector \ref{fig:scheme} ~\ding{185}.\\
-Finally, the line $34$ sends the solution vector to the desired vector of the programmer, as we mentioned before, the programmer has two options to get the answer, he could create a new vector o replace the input data to convert in a result vector.\\
+From the line $31$ to $33$ are executed the necessaries kernels to compute the scan algorithm, for example in the line $31$ is computed the scan for every single block thread independently that it's possible see in \ref{fig:scheme} ~\ding{182}, for the next line $32$ is executed the second kernel that is in charge to computed the sum of accumulates from the auxiliary vector as seen in \ref{fig:scheme} ~\ding{184}, the line $33$ is in charge to distribute the corresponding accumulates to the positions on the result vector \ref{fig:scheme} ~\ding{185}.\\
+Finally, the line $34$ transfers the solution vector data to the programmer desired vector, as we mentioned before, the programmer has two options to receive the result vector, one of them is to create a new vector and second one is to replace the input vector into a result vector.\\
 
 \subsection{The Template}
 \label{sec:template}
