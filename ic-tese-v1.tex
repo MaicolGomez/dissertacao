@@ -276,7 +276,7 @@
 \listoffigures
 
 % A lista de tabelas é opcional:
-\listoftables
+%\listoftables
 
 % A lista de abreviações e siglas é opcional:
 % \prefacesection{Lista de Abreviações e Siglas}
@@ -429,18 +429,28 @@ accumulation  occurs for  all  elements of  $y[i]$  each depending  on
 elements from the previous  iterations.  This makes the implementation
 of parallel scan much harder than the implementation of reduction.
 
-The rest of the work is organized as follows.\rcap{background} details
+\rem{The rest of the work is organized as follows.\rcap{background} details
 some concepts of programming for GPU and AClang compiler. \rcap{Scan}
 describes scan algorithm evolution until that is used to implement the
 new scan clause, in \rsec{AClang} gives an outline  of the structure of
 the AClang compiler  and   describes  the  details  of   the  implementation
 and integration     of    the     clause    into     the    OpenMP
-library and in \rsec{ScanUse} describes some examples of scan use.
+library and in \rcap{ScanUse} describes some examples of scan use.
 \rcap{RelatedWorks} discusses related work and
 \rcap{Experiments} provides  performance numbers and analyzes
 the results  when programs  are compiled with  the new scan clause.
-Finally, \rcap{Conclusion} concludes the work.
+Finally, \rcap{Conclusion} concludes the work.}
 
+\new{The rest of the work is organized as follows. \rcap{background} details
+some concepts of programming to GPU, and the AClang compiler. \rcap{Scan}
+describes the state-of-art of the scan algorithm used to design and implement
+the new OpenMP scan clause. Also, this Chapter gives an outline of the
+structure of the AClang compiler and describes the details of the
+implementation of the OpenMP scan clause into the AClang Compiler.
+\rcap{ScanUse} describes some examples of the use of the scan clause.
+\rcap{RelatedWorks} discusses related work, and \rcap{Experiments} provides
+performance numbers and analyzes the results when programs are compiled with
+the new scan clause. Finally, \rcap{Conclusion} concludes the work.}
 
 \chapter{Background}
 \label{cap:background}
@@ -554,7 +564,7 @@ the  OpenCL  driver.
 
 During  the 80's  Hillis and  Steele~\cite{dataparallel} developed
 approaches to parallelize many serial  algorithms. Although at that time
-these algorithms  seemed to have only  sequential solutions, by  using 
+these algorithms  seemed to have only  sequential solutions, by  using
 \ttt{The  Connection Machine}  \cite{themachine} they  managed to achieve
 execution times in $\mathcal{O}(log\ n)$.  One of these algorithms was
 the sum of  the elements of an  array, also known as  reduction.  With a
@@ -878,11 +888,16 @@ blocks up to that entry (inclusive).   Finally in the fourth step,
 for each block the method adds the previous block sums  to the elements of the current
 block~\ding{185}.
 
-\marcio{Reescreva este paragrafo com o que vc pretendia dizer. Evite os termos
-In more detail, Just to remind. Coloque sempre na terceira pessoa. Veja o
-próximo parágrafo que estou propondo, como exemplo} Thoroughly, It's presented how
-AClang implements the parallel scan algorithm, so it will be explained a resumed code of the process. Remainder, this process prepares an intern OpenCL environment and
-fills the template to execute the scan algorithm with the needs of the programmer (variable type, operation type, output vector).
+\marcio{Reescrevi o paragrafo abaixo com o que eu entendi que vc pretendia dizer.}
+\rem{Thoroughly, It's presented how AClang implements the parallel scan
+algorithm, so it will be explained a resumed code of the process. Remainder,
+this process prepares an intern OpenCL environment and fills the template to
+execute the scan algorithm with the needs of the programmer (variable type,
+operation type, output vector).} \new{The following paragraph describes how
+ACLang implements the parallel scanning algorithm. This process makes the
+necessary calls to the AClang runtime library and populates a template that
+will execute the scan algorithm with the program data (e.g., type of data to be
+carried out the scan, the scan operation, the output vector).}
 
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
@@ -917,16 +932,83 @@ $20$.\\}
   $7$, is ensured that was found a Scan clause, so in this case we get all the
 information from this clause(data and needs of the programmer).\\}
 
-\marcio{Reescrever. Está muito confuso.}
-In \rlst{ClangScan}{b}, it's recovered the buffer where the result of the scan algorithm will be written, it means, as it's shown in \rlstn{ScanKind}{a}{b}, it was defined two ways to write the scan clause, the first, is a standard(using 3 components), one of them is the input data, the second and third refer to the accumulate vector. The second way to write the scan clause, it's not necessary to use the vector of the accumulates, it's possible modifies the input vector to converts it into the result vector, it's necessary to manage of some variables to use this second way, a trivial example is showed in \rlst{ScanKind}{b}.\\
-From the line $24$ to $33$ is recovered the scan parameters and prepared the OpenCL environment. The line $24$ computes the number of threads per block and the number of blocks that will be used to call the sub-functions of the parallel scan algorithm, this is an important step because as was mentioned before, the algorithm works if the size of the input data is a power of two it means some like ($2^{k}$), so when the size is not a power of two, It's impossible to solve the problem, thus to fix this, it's founded the closest higher number that is a product of two powers of two, let's represent the number of blocks as $B$ and the number threads as per block $T$, for example if the size of input is $12$, the closest number with the properties mentioned before is $16$ where we found more of one solution such as ($B$:1 - $T$:16), ($B$:2 - $T$:8), ($B$:4 - $T$:4) and so on. Attention, in some cases it's possible to find some solution with $T$ bigger than the threads provides for the architecture used, thus, $T$ is limited according of the architecture programmer features, similarly for $B$. Therefore, the maximum size to compute the scan algorithm is limited for the resources provided in the architecture, later in \ref{cap:Conclusion} it will show a proposal to extend that limit.\\
-The $25$ recovers the type of variable with which the programmer is working, could be of type $int$, $double$, $float$ and so on, nevertheless, remember that it's provided the possibility to define a new type of variable as a new structure\\
-For the next line $26$, it's founded the operator that the programmer defined to use in the scan algorithm, attention, as was mentioned before, this operator should be a binary associative operator to could use the scan algorithm, the most common are: ($+$, $*$, $\&$, $||$, $max$, $min$) besides of these operators it's possible to define a new operator according of the new variably type that was defined.\\
+\marcio{Ainda está muito confuso. Preste atençao ao estilo. Não se escreve "The
+Line", somente "Line". Veja no exemplo abaixo, "From the line 24 to 33" deve
+ser escrito "Lines 24 to 33". Há muitas virgulas separando sentenças quando
+deveria ser ponto. Uma sugestão: Escreva na sua lingua nativa, o melhor que
+puder. Depois use o tradutor google para o inglês e vá ajustando o mesmo,
+tomando cuidado com a gramática. Use o plugin grammarly no chrome.}
 
-From the line $28$ to $34$ is customized the OpenCL environment to execute the scan parallel algorithm, for example, one additional step to execute the algorithm is to create an auxiliary buffer that is possible see the representation in \ref{fig:scheme} ~\ding{183}, the creation of the buffer is made in the line $28$. Attention, Aclang provides a class $CodeGenModule$ that has functions to facilitate the use of OpenCL, those function have the following structure $CGM.operation1.MPtoGPURuntime().operation2$ those functionalities allow a friendlier handling of OpenCL code. The line $29$ does a standard step for an OpenCL program.
+In \rlst{ClangScan}{b}, it's recovered the buffer where the result of the scan
+algorithm will be written, it means, as it's shown in \rlstn{ScanKind}{a}{b},
+it was defined two ways to write the scan clause, the first, is a
+standard(using 3 components), one of them is the input data, the second and
+third refer to the accumulate vector. The second way to write the scan clause,
+it's not necessary to use the vector of the accumulates, it's possible modifies
+the input vector to converts it into the result vector, it's necessary to
+manage of some variables to use this second way, a trivial example is showed in
+\rlst{ScanKind}{b}.
 
-From the line $31$ to $33$ are executed the necessaries kernels to compute the scan algorithm, for example in the line $31$ is computed the scan for every single block thread independently that it's possible see in \ref{fig:scheme} ~\ding{182}, for the next line $32$ is executed the second kernel that is in charge to computed the sum of accumulates from the auxiliary vector as seen in \ref{fig:scheme} ~\ding{184}, the line $33$ is in charge to distribute the corresponding accumulates to the positions on the result vector \ref{fig:scheme} ~\ding{185}.\\
-Finally, the line $34$ transfers the solution vector data to the programmer desired vector, as we mentioned before, the programmer has two options to receive the result vector, one of them is to create a new vector and second one is to replace the input vector into a result vector.\\
+\rem{From the line 24 to 33 is recovered}\new{Lines 24 to 34 retrieve} the
+scan parameters and prepare the OpenCL environment\marcio{OpenCL
+environment??}.  The line $24$ computes the number of threads per block and the
+number of blocks that will be used to call the sub-functions of the parallel
+scan algorithm, \marcio{Aqui por exemplo usa-se ponto e não virgula, percebe?
+Eu não alterei. Deixei para vc reescrever todo o parágrafo.} this is an
+important step because as was mentioned before, the algorithm works if the size
+of the input data is a power of two it means some like ($2^{k}$), so when the
+size is not a power of two, It's impossible to solve the problem, thus to fix
+this, it's founded the closest higher number that is a product of two powers of
+two, let's represent the number of blocks as $B$ and the number threads as per
+block $T$, for example if the size of input is $12$, the closest number with
+the properties mentioned before is $16$ where we found more of one solution
+such as ($B$:1 - $T$:16), ($B$:2 - $T$:8), ($B$:4 - $T$:4) and so on.
+Attention, in some cases it's possible to find some solution with $T$ bigger
+than the threads provides for the architecture used, thus, $T$ is limited
+according of the architecture programmer features, similarly for $B$.
+Therefore, the maximum size to compute the scan algorithm is limited for the
+resources provided in the architecture, later in \ref{cap:Conclusion} it will
+show a proposal to extend that limit.
+
+\rem{The $25$ recovers the type of variable with which the programmer is
+working, could be of type $int$, $double$, $float$ and so on, nevertheless,
+remember that it's provided the possibility to define a new type of variable as
+a new structure.} \new{Line 25 retrieves the type of variable in which the
+program is performing the scan operation. This variable can be of type int,
+double, float, but can also be a new user-defined type. In this case, it is
+mandatory for this new type to be defined within the "omp declare target"
+clauses (see example in \rlst{pol}).}
+
+ For the next
+ line $26$, it's founded the operator that the programmer defined to use in the
+ scan algorithm, attention, as was mentioned before, this operator should be a
+ binary associative operator to could use the scan algorithm, the most common
+ are: ($+$, $*$, $\&$, $||$, $max$, $min$) besides of these operators it's
+ possible to define a new operator according of the new variably type that was
+ defined.
+
+From the line $28$ to $34$ is customized the OpenCL environment to execute the
+scan parallel algorithm, for example, one additional step to execute the
+algorithm is to create an auxiliary buffer that is possible see the
+representation in \ref{fig:scheme} ~\ding{183}, the creation of the buffer is
+made in the line $28$. Attention, Aclang provides a class $CodeGenModule$ that
+has functions to facilitate the use of OpenCL, those function have the
+following structure $CGM.operation1.MPtoGPURuntime().operation2$ those
+functionalities allow a friendlier handling of OpenCL code. The line $29$ does
+a standard step for an OpenCL program.
+
+From the line $31$ to $33$ are executed the necessaries kernels to compute the
+scan algorithm, for example in the line $31$ is computed the scan for every
+single block thread independently that it's possible see in \ref{fig:scheme}
+~\ding{182}, for the next line $32$ is executed the second kernel that is in
+charge to computed the sum of accumulates from the auxiliary vector as seen in
+\ref{fig:scheme} ~\ding{184}, the line $33$ is in charge to distribute the
+corresponding accumulates to the positions on the result vector
+\ref{fig:scheme} ~\ding{185}.\\ Finally, the line $34$ transfers the solution
+vector data to the programmer desired vector, as we mentioned before, the
+programmer has two options to receive the result vector, one of them is to
+create a new vector and second one is to replace the input vector into a result
+vector.\\
 
 \subsection{The Template}
 \label{sec:template}
@@ -941,11 +1023,11 @@ In \rlst{TemplateScan}{b} is defined how the algorithm performs the operations, 
 
 Finally, the last main component of the template \rlst{TemplateScan}{c} refers to where the programmer wants to save the result vector, the line $16$ represents that the programmer needs a new vector to save the result of the computed in the algorithm, in the second case, line $17$ refers to the programmer wants the result vector in input data vector.\\
 Now, returning to \rlst{ClangScan}{d}, the line $38$ is only filling a standard header, from the line $39$ to $42$ is analyzed if previously the programmer defined a new type of variable with its operator, in the case it's true, that information is placed immediately after the header mentioned before.\\From the line $43$ to $52$ is defined the neutral value according of the operation, a neutral value is defined by the operation ($a$ = $a$ $\oplus$ $neutralValue$) where $a$ is any variable $\oplus$ is an operator, as we can see, when we operate any variable with the neutral, the result is the same variable, in the case of the sum, this neutral value is $0$, for the multiplication is $1$ and so on. This information is necessary because the scan algorithm need of this information, when we are working with a basic operation, for default this neutral is initialized internally however when the programmer defined a new type of variable, he has to defined its neutral value to send this information.\\
-The line $54$ is defined the word $dataType$ that represents what type of variable is using the programmer, and finally the line $55$ closes the file that will perform the scan parallel algorithm, these is a very summarized code of the total process, the aims to explain this code is to show the mainly components to understand the process to pass from the omp clause to OpenCL version, many informations have been left aside because is not relevant information. For more details that how is generated this template could be seen in \rsec{ScanUse}.
+The line $54$ is defined the word $dataType$ that represents what type of variable is using the programmer, and finally the line $55$ closes the file that will perform the scan parallel algorithm, these is a very summarized code of the total process, the aims to explain this code is to show the mainly components to understand the process to pass from the omp clause to OpenCL version, many informations have been left aside because is not relevant information. For more details that how is generated this template could be seen in \rcap{ScanUse}.
 
 
 \chapter{Using Scan}
-\label{sec:ScanUse}
+\label{cap:ScanUse}
 
 \section{Radix Sort}
 \label{sec:Quicksort}
