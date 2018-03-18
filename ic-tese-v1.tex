@@ -4,8 +4,8 @@
 \documentclass[Ingles]{ic-tese-v1}
 %\documentclass[Portugues,Final]{ic-tese-v3}
 
-\usepackage[latin1,utf8]{inputenc}
-
+%\usepackage[latin1,utf8]{inputenc}
+\usepackage[utf8]{inputenc}
 % Para acrescentar comentários ao PDF descomente:
 \usepackage
 %  [pdfauthor={nome do autor},
@@ -14,6 +14,7 @@
 %   pdfproducer={Latex with hyperref},
 %   pdfcreator={pdflatex}]
 {hyperref}
+
 
 \usepackage[cmex10]{amsmath}
 \usepackage[font=footnotesize,subrefformat=parens]{subfig}
@@ -34,13 +35,11 @@
 \usepackage{graphicx}
 \usepackage{pifont}
 \usepackage[justification=centering]{caption}
-\usepackage[font=footnotesize,subrefformat=parens]{subfig}
 \usepackage{listings}
 \usepackage{paralist}
 \usepackage{url}
 \usepackage{filecontents}
 \usepackage{multirow}
-\usepackage[utf8]{inputenc}
 
 \usepackage{listings}
 \usepackage{color}
@@ -195,8 +194,8 @@
 
 % Para a versão final defina:
 \avaliadorA{Prof. Dr. Guido Costa Souza de Araujo (Supervisor/\textit{Orientador})}{IC/UNICAMP}
-\avaliadorB{Prof. Dr. }{}
-\avaliadorC{Prof. Dr. }{}
+\avaliadorB{Prof. Dr. Renato Ant\^{o}nio Celso Ferreira}{Universidade Federal de Minas Gerais (UFMG)}
+\avaliadorC{Prof. Dr. Guilherme Pimentel Telles}{Institute of Computing - UNICAMP}
 
 \finalversiontrue
 
@@ -230,11 +229,9 @@
 % Agradecimentos ou Acknowledgements ou Agradecimientos
 \prefacesection{Agradecimentos}
 
-
-
 % Sempre deve haver um resumo em português:
 \begin{resumo}
-  Abstract in Portuguese
+
 \end{resumo}
 
 
@@ -940,32 +937,23 @@ puder. Depois use o tradutor google para o inglês e vá ajustando o mesmo,
 tomando cuidado com a gramática. Use o plugin grammarly no chrome.}
 
 In \rlst{ClangScan}{b}, it's recovered the buffer where the result of the scan
-algorithm will be written, it means, as it's shown in \rlstn{ScanKind}{a}{b},
-it was defined two ways to write the scan clause, the first, is a
-standard(using 3 components), one of them is the input data, the second and
-third refer to the accumulate vector. The second way to write the scan clause,
-it's not necessary to use the vector of the accumulates, it's possible modifies
-the input vector to converts it into the result vector, it's necessary to
-manage of some variables to use this second way, a trivial example is showed in
-\rlst{ScanKind}{b}.
+algorithm will be written, as can be seen in \rlstn{ScanKind}{a}{b}.
+In \rlstn{ScanKind}{a} is a standard way to write scan algorithm (input and output vectors). In \rlstn{ScanKind}{b} is showed a second way to write scan algorithm,
+in this case it's necessary just an input data and auxiliary variables.
 
 \rem{From the line 24 to 33 is recovered}\new{Lines 24 to 34 retrieve} the
-scan parameters and prepare the OpenCL environment\marcio{OpenCL
-environment??}.  The line $24$ computes the number of threads per block and the
-number of blocks that will be used to call the sub-functions of the parallel
-scan algorithm, \marcio{Aqui por exemplo usa-se ponto e não virgula, percebe?
-Eu não alterei. Deixei para vc reescrever todo o parágrafo.} this is an
-important step because as was mentioned before, the algorithm works if the size
-of the input data is a power of two it means some like ($2^{k}$), so when the
-size is not a power of two, It's impossible to solve the problem, thus to fix
-this, it's founded the closest higher number that is a product of two powers of
-two, let's represent the number of blocks as $B$ and the number threads as per
-block $T$, for example if the size of input is $12$, the closest number with
-the properties mentioned before is $16$ where we found more of one solution
+scan parameters and and makes an initial configuration of OpenCL\marcio{OpenCL
+environment??}. Line $24$ computes the number of threads per block and the
+number of blocks. That will be used to call the sub-routines of the parallel scan algorithm. \marcio{Aqui por exemplo usa-se ponto e não virgula, percebe?
+Eu não alterei. Deixei para vc reescrever todo o parágrafo.} This is a very important step because as mentioned before, the algorithm only works for input sizes that are powers of 2 ($2^{k}$). So when the
+size is not a power of two, It's impossible to solve the problem. Hereby, to fix
+it, it's founded the closest higher number that is a product of two powers of
+two. Let's represent the number of blocks as $B$ and the number of threads per
+block as $T$.\\ For example, if the size of the input data is $12$, the closest number with the properties mentioned before is $16$, where we found more of one solution
 such as ($B$:1 - $T$:16), ($B$:2 - $T$:8), ($B$:4 - $T$:4) and so on.
 Attention, in some cases it's possible to find some solution with $T$ bigger
-than the threads provides for the architecture used, thus, $T$ is limited
-according of the architecture programmer features, similarly for $B$.
+than the threads provides for the architecture used. Thus, $T$ is limited
+according of the architecture programmer features, similarly for $B$.\\
 Therefore, the maximum size to compute the scan algorithm is limited for the
 resources provided in the architecture, later in \ref{cap:Conclusion} it will
 show a proposal to extend that limit.
@@ -979,51 +967,43 @@ double, float, but can also be a new user-defined type. In this case, it is
 mandatory for this new type to be defined within the "omp declare target"
 clauses (see example in \rlst{pol}).}
 
- For the next
- line $26$, it's founded the operator that the programmer defined to use in the
- scan algorithm, attention, as was mentioned before, this operator should be a
+ Line $26$ find the operator that the programmer defined to use in the
+ scan algorithm. Attention, this operator should be a
  binary associative operator to could use the scan algorithm, the most common
- are: ($+$, $*$, $\&$, $||$, $max$, $min$) besides of these operators it's
- possible to define a new operator according of the new variably type that was
- defined.
+ are: ($+$, $*$, $\&$, $||$, $max$, $min$). In the case that a new variable was defined
+ it is mandatory define an operator for this variable (See example in \rlst{pol}).
 
-From the line $28$ to $34$ is customized the OpenCL environment to execute the
-scan parallel algorithm, for example, one additional step to execute the
-algorithm is to create an auxiliary buffer that is possible see the
-representation in \ref{fig:scheme} ~\ding{183}, the creation of the buffer is
-made in the line $28$. Attention, Aclang provides a class $CodeGenModule$ that
-has functions to facilitate the use of OpenCL, those function have the
-following structure $CGM.operation1.MPtoGPURuntime().operation2$ those
-functionalities allow a friendlier handling of OpenCL code. The line $29$ does
+Lines $28$ to $34$ customize the OpenCL to execute the
+scan parallel algorithm. For example, Line $28$ does a needed step to execute the
+scan algorithm, it created an auxiliary buffer (as can see in \ref{fig:scheme} ~\ding{183}).
+Attention, Aclang provides the class $CodeGenModule$ which has functions to facilitate the use of OpenCL. Those functions have the following structure $CGM.operation1.MPtoGPURuntime().operation2$, those
+functionalities allow a friendly use of OpenCL.\\ Line $29$ does
 a standard step for an OpenCL program.
 
-From the line $31$ to $33$ are executed the necessaries kernels to compute the
-scan algorithm, for example in the line $31$ is computed the scan for every
-single block thread independently that it's possible see in \ref{fig:scheme}
-~\ding{182}, for the next line $32$ is executed the second kernel that is in
-charge to computed the sum of accumulates from the auxiliary vector as seen in
-\ref{fig:scheme} ~\ding{184}, the line $33$ is in charge to distribute the
-corresponding accumulates to the positions on the result vector
-\ref{fig:scheme} ~\ding{185}.\\ Finally, the line $34$ transfers the solution
+Lines $31$ to $33$ execute the necessaries kernels to compute the
+scan algorithm. Line $31$ computes the scan for every
+single block thread independently (as can see in \ref{fig:scheme}
+~\ding{182}). Line $32$ executes the second kernel that is in
+charge to computed the sum of accumulates from the auxiliary vector (as seen in
+\ref{fig:scheme} ~\ding{184}). Line $33$ executes the kernel in charge to distributes the
+corresponding accumulates to the positions on the result vector (as can see in
+\ref{fig:scheme} ~\ding{185}).\\ Finally, line $34$ transfers the solution
 vector data to the programmer desired vector, as we mentioned before, the
-programmer has two options to receive the result vector, one of them is to
-create a new vector and second one is to replace the input vector into a result
-vector.\\
+programmer has two options to receive the result vector.
 
 \subsection{The Template}
 \label{sec:template}
 
-This section aims to explain how we build the parallel scan algorithm, as
-the first step we have to remember that the algorithm is based on the best
-algorithm known today~\cite{Sengupta:2007}.\\
-To summarize this section, we can say that the algorithm only has three parameters that could be changed for different applications, the first is about type of variable, the second is the operator used for that variable and the third case is when the programmer needs to use another struct as a variable, so he has to define the new variable and its operator. Additionally, the programmer has the option to choose if he needs a new vector for the results or he can convert the input data into a result. Thereby, as we mentioned before, all this information is recovered in the compilation phase and is used to generate the final kernel to execute the parallel scan algorithm when the programmer executes the program.\\
-In \rlst{TemplateScan}{a} is defined the header for every kernel, in this example, we show the header of the first kernel, we can see that we need to define the variable $dataType$, and as was mentioned before, that information is extracted from the clause scan. As expected, every kernel or for every operation that involves creation or the use of the variable type we have to replace $dataType$ for the real variable type.
+This section aims to explain how it is built the code of the parallel scan algorithm.
+Remember that the algorithm is based on the best algorithm known today~\cite{Sengupta:2007}.\\
+To summarize this section, it can be said that the algorithm has only three parameters, those parameters could be different according to the applications. The first one is the  type of variable, the second one is the operator defined for the variable used. Finally the third one refers to the need of the programmer, exactly refers to the use of new types of variables and operators. Additionally, the programmer has two options to recover the result vector. Thereby, as was mentioned before, all the information is recovered in the compilation phase to be used to generate the kernel to execute the parallel scan algorithm.\\
+In \rlst{TemplateScan}{a} is defined the header for each kernel, in this example, it is showed the header of the first kernel. It can be appreciated that it is necessary to define the variable $dataType$. As was mentioned before, that information was extracted from the clause scan. As expected, every kernel that involves the use of the variable type, it was replaced $dataType$ for the real variable type.
 
-In \rlst{TemplateScan}{b} is defined how the algorithm performs the operations, it means if the programmer is using a overloaded operation of the programming language is possible to operate two variable in a simple way, for example for two variables $x$ and $y$ of type $int$ we will use the line $10$ to compute the result, remember that we need to replace the word "operation" for the operation that the programmer is using, and that information was extracted from the scan clause.\\On other hand, when the programmer defined defined another type of variable, he must define also its binary associative operator to be able to use the scan algorithm, so in this case, the operation can't be computed in a simple way, for example for integer variables ($a$ = $b$ + $c$), that operation has to be overloaded for the programmer and its information is recovered from the scan clause, thereby the way to use this new operation was defined in the line $11$.
+In \rlst{TemplateScan}{b} is defined how the program will perform the calculations between two variables. It refers to use a new operation defined for a new variable type. Is possible to operate two variable in a simple way for a primitive variables, for example for two variables $x$ and $y$ of type $int$ we will use the line $10$ to compute the result. \\On other hand, when the programmer defined a new type of variable, he must define also its binary associative operator to be able to use the scan algorithm. In this case, the operation can't be computed in a simple way, the operation has to be defined in the section "omp declare target" for the programmer. That information is recovered from the scan clause as a function and the way to use this new operation was specified in the line $11$.
 
-Finally, the last main component of the template \rlst{TemplateScan}{c} refers to where the programmer wants to save the result vector, the line $16$ represents that the programmer needs a new vector to save the result of the computed in the algorithm, in the second case, line $17$ refers to the programmer wants the result vector in input data vector.\\
-Now, returning to \rlst{ClangScan}{d}, the line $38$ is only filling a standard header, from the line $39$ to $42$ is analyzed if previously the programmer defined a new type of variable with its operator, in the case it's true, that information is placed immediately after the header mentioned before.\\From the line $43$ to $52$ is defined the neutral value according of the operation, a neutral value is defined by the operation ($a$ = $a$ $\oplus$ $neutralValue$) where $a$ is any variable $\oplus$ is an operator, as we can see, when we operate any variable with the neutral, the result is the same variable, in the case of the sum, this neutral value is $0$, for the multiplication is $1$ and so on. This information is necessary because the scan algorithm need of this information, when we are working with a basic operation, for default this neutral is initialized internally however when the programmer defined a new type of variable, he has to defined its neutral value to send this information.\\
-The line $54$ is defined the word $dataType$ that represents what type of variable is using the programmer, and finally the line $55$ closes the file that will perform the scan parallel algorithm, these is a very summarized code of the total process, the aims to explain this code is to show the mainly components to understand the process to pass from the omp clause to OpenCL version, many informations have been left aside because is not relevant information. For more details that how is generated this template could be seen in \rcap{ScanUse}.
+Finally, the last component of the template \rlst{TemplateScan}{c} refers to where the programmer wants to save the result vector, Line $16$ represents when the programmer needs a new vector to save the result. Line $17$ refers to the programmer wants to save the result vector in input data vector.\\
+Back to \rlst{ClangScan}{d}, Line $38$ is filling a standard header. Lines $39$ to $42$ analyze if the programmer defined a new type of variable with its respective operator. If is true, that information is placed immediately after the header mentioned before.\\ Lines $43$ to $52$ define the neutral value according to the operation, a neutral value is defined by the operation ($a$ = $a$ $\oplus$ $neutralValue$) where $a$ is any variable $\oplus$ is an operator, as we can see, when we operate any variable with the neutral. For example, for the sum operation, the neutral value is $0$, for the multiplication is $1$ and so on. This information is necessary because the scan algorithm needs it. When it is worked with a basic operation, for default this neutral is defined internally, however when the programmer defined a new type of variable, it is mandatory define the neutral value in the section "omp declare target"\\
+Line $54$ defines the word $dataType$, it represents the type of variable that is used for the programmer. Finally, line $55$ closes the file that will perform the scan parallel algorithm. Remember, the explained is a very summarized code of the total process. The aims to explain that code is to show the mainly components to understand the process to how pass from the omp clause to OpenCL code. Many informations have been left aside for reasons of priority. To see a final version of the template for one example. see \rcap{ScanUse}.
 
 
 \chapter{Using Scan}
