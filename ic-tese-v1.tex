@@ -91,7 +91,6 @@
 
 % To turn comments OFF simply comment out  the \Commentstrue line
 \newif\ifComments
-\Commentstrue
 
 \Commentstrue
 
@@ -191,7 +190,7 @@
 % Se houve cotutela, defina:
 %\cotutela{Universidade Nova de Plutão}
 
-\datadadefesa{10}{02}{2018}
+\datadadefesa{24}{04}{2018}
 
 % Para a versão final defina:
 \avaliadorA{Prof. Dr. Guido Costa Souza de Araujo (Supervisor/\textit{Orientador})}{IC/UNICAMP}
@@ -443,20 +442,7 @@ accumulates the value from the  previous iterations, while in scan the
 accumulation  occurs for  all  elements of  $y[i]$  each depending  on
 elements from the previous  iterations.  This makes the implementation
 of parallel scan much harder than the implementation of reduction.
-
-\rem{The rest of the work is organized as follows.\rcap{background} details
-some concepts of programming for GPU and AClang compiler. \rcap{Scan}
-describes scan algorithm evolution until that is used to implement the
-new scan clause, in \rsec{AClang} gives an outline  of the structure of
-the AClang compiler  and   describes  the  details  of   the  implementation
-and integration     of    the     clause    into     the    OpenMP
-library and in \rcap{ScanUse} describes some examples of scan use.
-\rcap{RelatedWorks} discusses related work and
-\rcap{Experiments} provides  performance numbers and analyzes
-the results  when programs  are compiled with  the new scan clause.
-Finally, \rcap{Conclusion} concludes the work.}
-
-\new{The rest of the work is organized as follows. \rcap{background} details
+The rest of the work is organized as follows. \rcap{background} details
 some concepts of programming to GPU, and the AClang compiler. \rcap{Scan}
 describes the state-of-art of the scan algorithm used to design and implement
 the new OpenMP scan clause. Also, this Chapter gives an outline of the
@@ -465,7 +451,7 @@ implementation of the OpenMP scan clause into the AClang Compiler.
 \rcap{ScanUse} describes some examples of the use of the scan clause.
 \rcap{RelatedWorks} discusses related work, and \rcap{Experiments} provides
 performance numbers and analyzes the results when programs are compiled with
-the new scan clause. Finally, \rcap{Conclusion} concludes the work.}
+the new scan clause. Finally, \rcap{Conclusion} concludes the work.
 
 \chapter{Background}
 \label{cap:background}
@@ -501,12 +487,54 @@ In 2001 was introduced the GeForce 3 that is the first programmable GPU that mea
 for the first time, developers had some control over the exact computations
 that would be performed on their GPUs.
 
-\subsection{GPU Architecture Overview}
+\subsection{GPU Overview}
+Graphics processor units were designed to allow to handle massive computations
+that is required to render the graphics that are create and displayed by a computer.
+Commonly, this requires the execution of the perform of the same operation on a large data set. Insomuch as that processing should be in real time. it mus be completed as
+fast as can be done. The GPU was the answer to how to do this. A GPU consists of many cores. These all cores are capable of executing a thread.
+Generally each thread performs a operation on a sample data. This allows that the large data can be operated in parallel.
+GPU was designed to graphics processing in mind this was the main application for GPUs
+for a ling time. Lately, researcher and programmers discovered a opportunity the ability of the GPUs for high levels of parallelization. This is become an opportunity to increase the performance for many general purpose programs.
+That is how started what is known as general purpose graphics processor unit programming or GPGPU programming. With the steady growth interest in GPGPUs programming, GPU vendors started creating GPUs for different applications in mind,thus, toolkit was created to allow program in the GPUs. This toolkit is known as CUDA, that allows to the programmer creates applications to can run on the GPU, a big advantage is the extremely similar language between CUDA and C.
+This allows the implementation of many applications as well could increased the number of parallel algorithms taking advantage of the potentially of the GPU. As was mentioned before, GPUs have the ability to execute a program in parallel. The downside to using GPU is the fact that a CPU is necessary mandatory. The GPU by itself can't be a standalone unit. To be able to operate on a GPU, the presence of the CPU is necessary to manage the execution of the program. The CPU is responsible for determining which portions of the application are completed by the GPU and what the parameters will be used in this operation. Also, an important function of the CPU is responsible for the memory management of the GPU. Thereby the operations are performed in the GPU, the data must be copied from the CPU memory. In the same way, when the GPU finished its work, it is necessary pass the data from the GPU to the CPU. This is a very expensive operation that often limits the programmers to be able to use the GPU.
+In addition to the above explained the use of the GPU has several other disadvantages.
+Similarly to the digital signal processor (DSP). The GPU has a slower clock speed than the CPU. It also does not have the same size of the cache. It does not implement branch prediction or any of that type of optimization. For this reason a GPU cannot keep up with the CPU in serial execution. 
+For these reasons it is very important to define what portions of the program can be done serially and executed on the CPU meanwhile what portions could be parallelized and executed on the GPU. If the proportion to be executed in the GPU compensates in time with all the disadvantages mentioned above and it is more faster that its serial version, worth the use of the GPU.
+Many studies have been done about GPUs in recent years as researchers look into how a wide range of applications fare on the GPU. The new ease of use has also contributed to an increase in the number of people wanting to conduct research into the viability of a GPU implementation for their application. Studies also look at the various ways that the GPU can be utilized to improve performance. In these days, a very common situation, it is that of many people waiting for some research that makes the use of the GPU lets viable the GPU use in their application.\\
+An example is study ~\cite{Trancoso2005} which looks at a very simple application as implemented on a GPU, a low end CPU, and a high end CPU. It discusses the application’s performance on the GPU relative to the CPU and also looks at several of the different variables that can be changed to improve the GPU’s performance. It also looks at what factors make a program more likely to be better suited for a GPU than a CPU. Another study ~\cite{Owens2008}, is more an example of a study that just looks at how the GPU can handle applications that were previously implemented on a CPU. This study looks at the GPU design and discusses the possible performance improvements offered for the GPU. It then looks at how the GPU did for some specific applications such as in-game, physics and computational biophysics.
+As CUDA was mentioned, it is also important to mention OpenCL. The OpenCL standard is the first open, royalty-free, unified programming model for accelerating algorithms on heterogeneous systems. OpenCL allows the use of a C-based programming language for developing code across different platforms, such as CPUs, GPUs, DSPs, and field-programmable gate arrays (FPGAs).
+OpenCL is a programming model for software engineers and a methodology for system architects. It is based on standard ANSI C (C99) with extensions to extract parallelism. OpenCL also includes an application program interface (API) for the host to communicate with the hardware accelerator (mainly GPU), traditionally over PCI Express, or one kernel to communicate with another without host interaction.
+In the OpenCL model, the user schedules tasks to command queues, of which there is at least one for each device. The OpenCL run-time then breaks the data-parallel tasks into pieces and sends them to the processing elements in the device. This is the method for a host to communicate with any hardware accelerator. It is up to the individual hardware accelerator vendors to abstract away the vendor-specific implementation. 
+Summing up what was said before, OpenCL is an framework that allows the use of several devices from different vendors. So many developers agree that CUDA has a better performance than OpenCL in Nvidia devices however, no all the costumers have Nvidia card therefore in several times is preferred OpenCL instead of CUDA. Clearly if Nvidia card is a option, CUDA will always be chosen.
+
+\subsection{GPU hardware}
+\label{sec:gpugardware}
+Before going into programming of GPUs \ref{sec:gpuprogramming}, it is important to have some background.
+The GPU programming model exposed by CUDA very much mirrors the underlying
+hardware. Some of the details that make GPU programming hard are more apparent
+when looking at the underlying hardware.
+A CUDA GPU is built around a single kind of processor (as opposed to the different
+kinds of processors found in earlier GPUs). The processors in the GPU (called
+MPs, MultiProcessors) all contain a number of cores called SPs (Streaming Processors).
+Each MP also contains local memory, called shared memory since it can be
+accessed by all of the SPs in that MP. The number of MPs varies over the available
+GPUs; cheaper GPUs have as few as one MP, and as you go up in price the number
+of MPs increases.
+Each MP of the GPU can manage a large number of threads; on today’s GPUs
+up to 2048 threads can run on a single MP. The GPU schedules threads in groups
+of 32, called Warps, that are executed in lock-step (SIMD style execution). Threads are also divided into Blocks; the threads within a block can communicate using the
+shared memory. The maximum number of threads per block is 1024 ~\cite{NvidiaGuide2018}. Threads within
+a warp can communicate via the shared memory without using any synchronisation
+primitive. However, if communication takes place across warps synchronisation is
+necessary. A barrier synchronisation mechanism exists to ensure that all threads
+within a block have reached the same position in the code. Blocks are also grouped
+into a grid that is the collection of blocks executing the same program.
 
 \subsection{Programming for GPUs}
+\label{sec:gpuprogramming}
+The GPGPU programming landscape has rapidly evolved over the past several years, so that now there are several approaches to programming GPUs. For this section, CUDA language will be taken as an example.
 
-This section presents some important concepts of GPU programming
-that will be used throughout the work.
+
 
 \begin{figure}[t]
 	\caption{CUDA parallel thread hierarchy}
@@ -851,8 +879,6 @@ of index $7$).
 \end{figure}
 
 
-
-\maicol{REVIEW 2: "complexity" and parallel compute time}
 The algorithm  performs $\mathcal{O}(n)$ operations in the first
 phase (\textit{up-sweep}) and for every level of this phase is computed in $\mathcal{O}(1)$ hence
 the total time is computed in $\mathcal{O}(log\ n)$, similarly for the second phase
@@ -903,16 +929,7 @@ blocks up to that entry (inclusive).   Finally in the fourth step,
 for each block the method adds the previous block sums  to the elements of the current
 block~\ding{185}.
 
-\marcio{Reescrevi o paragrafo abaixo com o que eu entendi que vc pretendia dizer.}
-\rem{Thoroughly, It's presented how AClang implements the parallel scan
-algorithm, so it will be explained a resumed code of the process. Remainder,
-this process prepares an intern OpenCL environment and fills the template to
-execute the scan algorithm with the needs of the programmer (variable type,
-operation type, output vector).} \new{The following paragraph describes how
-ACLang implements the parallel scanning algorithm. This process makes the
-necessary calls to the AClang runtime library and populates a template that
-will execute the scan algorithm with the program data (e.g., type of data to be
-carried out the scan, the scan operation, the output vector).}
+The following paragraph describes how ACLang implements the parallel scanning algorithm. This process makes the necessary calls to the AClang runtime library and populates a template that will execute the scan algorithm with the program data (e.g., type of data to be carried out the scan, the scan operation, the output vector).
 
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
@@ -935,35 +952,21 @@ carried out the scan, the scan operation, the output vector).}
 	\end{lstlisting}
 \end{figure}
 
-\new{In the first step, the algorithm obtains the pieces of information of the
+In the first step, the algorithm obtains the pieces of information of the
 omp scan clause, as detailed in \rlst{ClangScan}{a}, lines 3 through
-20.}\rem{Our first step that we need to do is about get the information from
-the omp scan clause as we detail in \rlst{ClangScan}{a} from the line $3$ to
-$20$.\\}
+20.
 
-\new{Lines 3 to 7 gets the list of variables and the kind of operation
-  associated with the scan clause} \rem{In the line $3$ and $4$, from all
-  clauses, we obtained the kind of clause the it represents.  From line $5$ to
-  $7$, is ensured that was found a Scan clause, so in this case we get all the
-information from this clause(data and needs of the programmer).\\}
-
-\marcio{Ainda está muito confuso. Preste atençao ao estilo. Não se escreve "The
-Line", somente "Line". Veja no exemplo abaixo, "From the line 24 to 33" deve
-ser escrito "Lines 24 to 33". Há muitas virgulas separando sentenças quando
-deveria ser ponto. Uma sugestão: Escreva na sua lingua nativa, o melhor que
-puder. Depois use o tradutor google para o inglês e vá ajustando o mesmo,
-tomando cuidado com a gramática. Use o plugin grammarly no chrome.}
+Lines 3 to 7 gets the list of variables and the kind of operation
+  associated with the scan clause.
 
 In \rlst{ClangScan}{b}, it's recovered the buffer where the result of the scan
 algorithm will be written, as can be seen in \rlstn{ScanKind}{a}{b}.
 In \rlstn{ScanKind}{a} is a standard way to write scan algorithm (input and output vectors). In \rlstn{ScanKind}{b} is showed a second way to write scan algorithm,
 in this case it's necessary just an input data and auxiliary variables.
 
-\rem{From the line 24 to 33 is recovered}\new{Lines 24 to 34 retrieve} the
-scan parameters and and makes an initial configuration of OpenCL\marcio{OpenCL
-environment??}. Line $24$ computes the number of threads per block and the
-number of blocks. That will be used to call the sub-routines of the parallel scan algorithm. \marcio{Aqui por exemplo usa-se ponto e não virgula, percebe?
-Eu não alterei. Deixei para vc reescrever todo o parágrafo.} This is a very important step because as mentioned before, the algorithm only works for input sizes that are powers of 2 ($2^{k}$). So when the
+Lines 24 to 34 retrieve the
+scan parameters and and makes an initial configuration of OpenCL. Line $24$ computes the number of threads per block and the
+number of blocks. That will be used to call the sub-routines of the parallel scan algorithm. This is a very important step because as mentioned before, the algorithm only works for input sizes that are powers of 2 ($2^{k}$). So when the
 size is not a power of two, It's impossible to solve the problem. Hereby, to fix
 it, it's founded the closest higher number that is a product of two powers of
 two. Let's represent the number of blocks as $B$ and the number of threads per
@@ -975,15 +978,11 @@ according of the architecture programmer features, similarly for $B$.\\
 Therefore, the maximum size to compute the scan algorithm is limited for the
 resources provided in the architecture, later in \ref{cap:Conclusion} it will
 show a proposal to extend that limit.
-
-\rem{The $25$ recovers the type of variable with which the programmer is
-working, could be of type $int$, $double$, $float$ and so on, nevertheless,
-remember that it's provided the possibility to define a new type of variable as
-a new structure.} \new{Line 25 retrieves the type of variable in which the
+Line 25 retrieves the type of variable in which the
 program is performing the scan operation. This variable can be of type int,
 double, float, but can also be a new user-defined type. In this case, it is
 mandatory for this new type to be defined within the "omp declare target"
-clauses (see example in \rlst{pol}).}
+clauses (see example in \rlst{pol}).
 
 Line $26$ find the operator that the programmer defined to use in the scan
 algorithm. Attention, this operator should be a binary associative operator to
@@ -991,21 +990,14 @@ could use the scan algorithm, the most common are: ($+$, $*$, $\&$, $||$,
 $max$, $min$). In the case that a new variable was defined it is mandatory
 define an operator for this variable (See example in \rlst{pol}).
 
-\rem{Lines $28$ to $34$ customize the OpenCL to execute the scan parallel
- algorithm.  For example, Line $28$ does a needed step to execute the scan
- algorithm, it created an auxiliary buffer (as can see in \ref{fig:scheme}
- ~\ding{183}).  Attention, AClang provides the class $CodeGenModule$ which has
- functions to facilitate the use of OpenCL. Those functions have the following
-structure $CGM.operation1.MPtoGPURuntime().operation2$, those functionalities
-allow a friendly use of OpenCL.\\ Line $29$ does a standard step for an OpenCL
-program.} \new{Line $28$ does a needed step to execute the scan algorithm, it
+Line $28$ does a needed step to execute the scan algorithm, it
 created an auxiliary buffer (as can see in \ref{fig:scheme} ~\ding{183}).
 Aclang provides a series of methods in the {\it CodeGenModule} class for
 calling the runtime library responsible for interfacing with the OpenCL
 drivers. Those functions have the following structure:
 $CGM.operation1.MPtoGPURuntime().operation2$.  Lines $29$ to $33$ generate code
 for the runtime library to call the OpenCL driver to compile the kernels and
-dispatch then for execution.}
+dispatch then for execution.
 
 Lines $31$ to $33$ execute the necessaries kernels to compute the scan
 algorithm. Line $31$ computes the scan for every single block thread
@@ -1906,7 +1898,6 @@ possible  to  reduce  this  performance  difference  significantly  by
 slightly adapting the runtime library  to provide routines specific to
 the new scan clause.
 
-\maicol{REVIEW 3: Scalability}
 About large inputs, the algorithm computes  of scan operator
 in accordance of user's resources, it means that the algorithm will
 divide the input size in slices of total threads available in the GPU,
