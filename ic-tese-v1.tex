@@ -700,6 +700,20 @@ the  OpenCL  driver.
 \section{The Scan algortihm}
 \label{sec:ScanAlg}
 
+In the 80's was developed an approach to solve scan algorithm in parallel.
+Hillis and Stelle~\cite{dataparallel} presented the following algorithm.
+
+\begin{figure}[t]
+	\centering
+	\caption{Parallel scan in $\mathcal{O}(nlog\  n)$}
+	\subfloat[Hillis and  Steele algorithm ~\cite{harris2007parallel} ]{
+		\includegraphics[scale=1.0]{images/hillis.jpg}
+		\label{fig:hillis}
+	}
+\end{figure}
+
+wh
+
 During  the 80's  Hillis and  Steele~\cite{dataparallel} developed
 approaches to parallelize many serial  algorithms. Although at that time
 these algorithms  seemed to have only  sequential solutions, by  using
@@ -787,11 +801,11 @@ approach to the parallel computation of scan.
 \begin{figure}[t]
 	\centering
 	\caption{Parallel scan in $\mathcal{O}(log\  n)$}
-	\subfloat[Up-sweep phase]{
+	\subfloat[Up-sweep phase~\cite{harris2007parallel}]{
 		\includegraphics[scale=0.35]{images/upsweep.pdf} \label{fig:upsweep}
 	}
 	\vfill
-	\subfloat[Down-sweep phase]{
+	\subfloat[Down-sweep phase~\cite{harris2007parallel}]{
 		\includegraphics[scale=0.35]{images/downsweep.pdf}\label{fig:downsweep}
 	}
 \end{figure}
