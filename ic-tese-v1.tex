@@ -41,9 +41,14 @@
 \usepackage{url}
 \usepackage{filecontents}
 \usepackage{multirow}
-
+\usepackage{array}
+\usepackage{tabulary}
 \usepackage{listings}
 \usepackage{color}
+
+\usepackage{footnote}
+\makesavenoteenv{tabular}
+\makesavenoteenv{table}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -532,9 +537,58 @@ into a grid that is the collection of blocks executing the same program.
 
 \subsection{Programming for GPUs}
 \label{sec:gpuprogramming}
-The GPGPU programming landscape has rapidly evolved over the past several years, so that now there are several approaches to programming GPUs. For this section, CUDA language will be taken as an example.
+The GPGPU programming landscape has rapidly evolved over the past several years. This allowed that in these days there are several approaches to programming GPUs. For this section, CUDA language will be taken as a reference.
+
+CUDA is a parallel computing platform and programming model developed by NVIDIA designed for GPU computing.
+CUDA computing system has two parts: The host and device.
+The host part is one or many traditional CPU(s) like Intel or AMD CPUs. The
+device part is consist of one or several GPU(s), which is used as a co-processor. Since
+GPU can involve a lot of parallelism, CUDA devices could help to accelerate those applications that have a lot of data to  parallelize. Thus, parallelism is the key factor to decide if the application is appropriate for a CPU-GPU system.
+
+\subsubsection{CUDA Function Declaration}
+\label{CUDAfunction}
+
+As stated above, a complete CUDA Program is a mixed code with both GPU and CPU
+code. Function declaration keywords is designed to support this kind of mix coding. As
+shown in Fig.4.1, functions in CUDA is declared as global, host and device. A kernel
+function is the function that will generate a large number threads and it is declared as
+global. During the compilation, the NVCC compiler will generate thousands threads for
+the kernel function and map them to the GPU. device is used to declare a CUDA device
+functions that can only be executed on GPU. In addition, a CUDA device function can
+only be called in a kernel function. The last keyword host is design for declaration for a
+host function which is run on CPU. host and device can be used to together to instruct
+the compiler to generate two versions for both GPU and CPU.
 
 
+\begin{center}
+	\begin{tabular}{ | c | >{\centering\arraybackslash}p{2cm} | >{\centering\arraybackslash}p{3cm} |}
+		\hline
+		 & Executed on the: & Only callable from the: \\ \hline
+		{\color{blue} \_device\_} int DeviceFunction() & device & device \\ \hline
+		{\color{blue} \_global\_} void KernelFunction()& host & device \\ \hline
+		{\color{blue} \_host\_} int HostFunction() & host & host\\
+		\hline
+	\end{tabular}
+\end{center}
+
+\subsubsection{CUDA Thread Organization}
+\label{CUDA Thread Organization}
+When a kernel is executed, the execution is distributed over a grid of thread
+blocks as illustrated below in \ref{fig:threadsblocks}. Since all the threads are executed in the kernel function, there should be some mechanisms to help to distinguish themselves and know what area of data they should work on. In CUDA, all threads are organized in two-level hierarchy-block and grid, as shown in \ref{fig:threadorganization}. A number of threads compose a block and use threadIdx to index them in a block. A grid is organized in the same way and use blockIdx to index each block in a grid. Both threadIdx and blockIdx are pre-defined variables of CUDA. In addition, there are another two pre-defined variables blockDim and gridDim, which are used to indicate the dimension block and grid by number of threads in a block and number of blocks in a grid, an example is showed in \ref{fig:cudaindex}.
+
+\begin{figure}[t]
+	\centering
+	\caption{A two-dimensional arrangement of 8 thread blocks within a grid.}
+	\includegraphics[scale=0.70]{images/threadsblock.png}
+	\label{fig:threadsblocks}
+\end{figure}
+
+\begin{figure}[t]
+	\centering
+	\caption{CUDA Thread Organization}
+	\includegraphics[scale=0.70]{images/thread_organization.png}
+	\label{fig:threadorganization}
+\end{figure}
 
 \begin{figure}[t]
 	\caption{CUDA parallel thread hierarchy}
@@ -542,6 +596,47 @@ The GPGPU programming landscape has rapidly evolved over the past several years,
 	\includegraphics[scale=0.60]{images/cuda_indexing.png}
 	\label{fig:cudaindex}
 \end{figure}
+
+\subsubsection{CUDA Device Memory}
+\label{CUDA Device Memory}
+Memory hierarchy is one of the main factors in a system. \ref{fig:cudamemory} shows the overview of the CUDA memory hierarchy. Exists four kinds of memory in CUDA: global
+memory, constant memory, shared memory and register. In Fig. \ref{fig:cudamemory}, can be seen that the global memory and constant memory are used to communicate with the host device.\\
+
+\begin{figure}[t]
+	\caption{CUDA Memory Hierarchy}
+	\centering
+	\includegraphics[scale=0.70]{images/cuda_memory.png}
+	\label{fig:cudamemory}
+\end{figure}
+
+Global memory can be read and write in a kernel while constant memory can only be
+read. However access to the constant memory is much faster than the global memory because it can be cached. Shared memory is designed for the data communication for
+threads in a block. This is fast but very limited. Each thread has several privates registers and is the fastest memory in GPU device. It is used for the most frequently used in the program. Since memory access contribute a lot in the computation time of the program, developers should take advantage of different kinds of memory. The key rule is that registers and share memory should be used as much as possible and the data that are not modified in the execution should be stored in the constant memory to have faster access.
+
+\subsubsection{OpenCL}
+
+After the release of CUDA, an alternative open standard general-purpose programming
+API was released under the name OpenCL (Open Computing Language) ~\cite{Kirk:2012}.
+Initially Developed by Apple and subsequently the Khronos Group, OpenCL allows
+developers to harness the GPU and multi-core CPUs for general-purpose parallel
+computation. However unlike CUDA, OpenCL has multi-vendor and multiplatform
+support thus allowing parallel code to be executed on AMD and NVIDIA GPUs
+as well as x86 CPUs. This gives OpenCL the advantage of portability between
+platforms. However as Kirk and Hwu ~\cite{Kirk:2012} note, OpenCL programs can be inherently more complex if they choose to accommodate multiple platforms and vendors.
+Developers must use different features from each platform to maximise performance
+and so multiple execution paths dependent on the platform and vendor must be
+included. This can result in each platform achieving a different execution time
+depending on the input algorithm, mapping and usage of platform specific APIs
+that may give an advantage to that specific platform. Kirk and Hwu also note
+that the design of OpenCL is influenced heavily by that of CUDA and as a result
+working with OpenCL can be very similar to CUDA. As with CUDA, regions of
+the application that execute in parallel are encapsulated in kernels. OpenCL also
+has a similar concept of CUDA blocks and threads which have been renamed to
+Work group and Work item respectively. The current index of the block within the
+grid of all blocks has also been renamed as the NDRange. To facilitate support for
+multiple devices across platforms and vendors, OpenCL introduces the concept of
+an OpenCL context. Each device is assigned to a context and work is scheduled
+for execution in a queue for that context ~\cite{Kirk:2012}. For additional information regarding OpenCL, we direct the reader to the Khronos Group OpenCL specification ~\cite{opencl}.
 
 \section{The AClang Compiler}
 \label{sec:AClang}
