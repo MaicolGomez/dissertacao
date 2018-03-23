@@ -239,7 +239,7 @@
 Prefix Scan (ou simplesmente scan) é um operador que computa todas as somas
 parciais de um vetor. A operação scan retorna um vetor onde cada elemento é a
 soma de todos os elementos precedentes até a posição correspondente. Scan é uma
-operação principal para muitos problemas relevantes, tais como: algoritmos de
+operação fundamental para muitos problemas relevantes, tais como: algoritmos de
 ordenação, análises léxicas, comparação de cadeias de caracteres, filtragem de
 imagens, entre outros. Embora existam bibliotecas que fornecem versões
 paralelizadas de scan em CUDA e OpenCL, não existe uma implementação paralela
@@ -470,16 +470,16 @@ of graphical operating systems.
 
 Around the same time, the company Silicon Graphics popularized the use
 of three-dimensional graphics. In 1992, Silicon Graphics opened the
-programming interface to its hardware by releasing the OpenGL library they wanted
-that OpenGL was used as a standardized.
+programming interface \rem{to}\new{for} its hardware\rem{ by releasing the OpenGL library they wanted
+that OpenGL was used as a standardized.}\new{, launching the OpenGL library, so that it became a de facto standard.}
 
 By the mid-1990s, the demand for applications that were using 3D graphics
-increases considerably growing one stage of development. PC gaming was affected
-by those devices to create progressively more realistic 3D environments.
+increases considerably, growing one stage of development. PC gaming was affected
+by those devices \rem{to create}\new{creating} progressively, more realistic 3D environments.
 At the same time, companies such as NVIDIA, ATI Technologies,
-and 3dfx Interactive began releasing graphics accelerators that were affordable
+and 3dfx Interactive, began releasing graphics accelerators that were affordable
 enough to attract widespread attention. These developments cemented 3D
-graphics as a technology that would figure prominently for years to come.
+graphics as a technology that would \rem{figure}\new{become} prominent\rem{ly} for years to come.
 
 In 1999 was created the first GPU GeForce 256 that was marketed as "the world's
 first GPU" or Graphic Processing Unit, enhancing the potential
@@ -502,7 +502,7 @@ GPU was designed for graphics processing in mind, and this was the main applicat
 for a long time. Lately, researcher and programmers discovered a opportunity the ability of the GPUs for high levels of parallelization. This is becomes an opportunity to increase the performance of many general purpose programs.
 That is how started what is known as general purpose graphics processing unit programming or GPGPU programming. With the steady growth interest in GPGPUs programming, GPU vendors started creating GPUs for different applications in mind, thus, the toolkit was created to allow programming in the GPUs. This toolkit, known as CUDA, allows the programmer to create applications that can run on GPUs. A major advantage of CUDA is its similarity with the C language. This allows the implementation of many applications as well as the increase in the number of parallel algorithms to harness the potential of the GPU. As was mentioned before, GPUs have the ability to execute a program in parallel. The downside to using GPU is the fact that a CPU is necessary mandatory. The GPU by itself can't be a standalone unit. To be able to operate on a GPU, the presence of the CPU is necessary to manage the execution of the program. The CPU is responsible for determining which portions of the application are completed by the GPU and what the parameters will be used in this operation. Also, an important function of the CPU is responsible for the memory management of the GPU. Thereby the operations are performed in the GPU, the data must be copied from the CPU memory. In the same way, when the GPU finished its work, it is necessary pass the data from the GPU to the CPU. This is a very expensive operation that often limits the programmers to be able to use the GPU.
 In addition to the above explained the use of the GPU has several other disadvantages.
-Similarly to the digital signal processor (DSP). The GPU has a slower clock speed than the CPU. It also does not have the same size of the cache. It does not implement branch prediction or any of that type of optimization. For this reason a GPU cannot keep up with the CPU in serial execution. 
+Similarly to the digital signal processor (DSP), the GPU has a slower clock speed than the CPU. It also does not have the same size of the cache. It does not implement branch prediction or any of that type of optimization. For this reason a GPU cannot keep up with the CPU in serial execution.
 For these reasons, it is very important to define what portions of the program can be done serially and executed on the CPU, meanwhile what portions could be parallelized and executed on the GPU. If the proportion to be executed in the GPU compensates in time with all the disadvantages mentioned above and it is faster than its serial version, worth the use of the GPU.
 There have been done many studies on the GPU and how is possible to use the GPU in several research areas. The new ease of use has also contributed to an increase in the number of people wanting to conduct research into the viability of a GPU implementation for their application. Studies also look at the various ways that the GPU can be utilized to improve performance. A very common situation nowadays is the waiting of many people for some research that makes possible the use of GPUs in their applications.
 As an example, Trancoso \etal~\cite{Trancoso2005} analysed a very simple application as implemented on a GPU, a low-end CPU, and a high-end CPU. They discussed the application’s performance on the GPU relative to the CPU and also looked at several of the different variables that can be changed to improve the GPU’s performance. They also looked at what factors make a program more likely to be better suited for a GPU than a CPU.
@@ -510,12 +510,12 @@ Another example, Owens \etal~\cite{Owens2008}, they studied how the GPU can hand
 
 As CUDA was mentioned, it is also important to mention OpenCL. The OpenCL standard is the first open, royalty-free, unified programming model for accelerating algorithms on heterogeneous systems. OpenCL allows the use of a C-based programming language for developing code across different platforms, such as CPUs, GPUs, DSPs, and field-programmable gate arrays (FPGAs).
 OpenCL is a programming model for software engineers and a methodology for system architects. It is based on standard ANSI C (C99) with extensions to extract parallelism. OpenCL also includes an application program interface (API) for the host to communicate with the hardware accelerator (mainly GPU), traditionally over PCI Express, or one kernel to communicate with another without host interaction.
-In the OpenCL model, the user schedules tasks to command queues, of which there is at least one for each device. The OpenCL run-time then breaks the data-parallel tasks into pieces and sends them to the processing elements in the device. This is the method for a host to communicate with any hardware accelerator. It is up to the individual hardware accelerator vendors to abstract away the vendor-specific implementation. 
+In the OpenCL model, the user schedules tasks to command queues, of which there is at least one for each device. The OpenCL run-time then breaks the data-parallel tasks into pieces and sends them to the processing elements in the device. This is the method for a host to communicate with any hardware accelerator. It is up to the individual hardware accelerator vendors to abstract away the vendor-specific implementation.
 Summing up what was said before, OpenCL is an framework that allows the use of several devices from different vendors. So many developers agree that CUDA has a better performance than OpenCL in Nvidia devices however, no all the costumers have Nvidia card therefore in several times is preferred OpenCL instead of CUDA. Clearly if Nvidia card is a option, CUDA will always be chosen.
 
 \subsection{GPU hardware}
 \label{sec:gpugardware}
-Before going into programming of GPUs (see~\rsec{gpuprogramming}), it is important to have some background about GPU architecture.
+Before going into the programming of GPUs (see~\rsec{gpuprogramming}), it is important to have some background \rem{about}\new{in} GPU architecture.
 The GPU programming model exposed by CUDA very much mirrors the underlying
 hardware. Some of the details that make GPU programming hard are more apparent
 when looking at the underlying hardware.
@@ -531,10 +531,10 @@ up to 2048 threads can run on a single MP. The GPU schedules threads in groups
 of 32, called Warps, that are executed in lock-step (SIMD style execution). Threads are also divided into Blocks; the threads within a block can communicate using the
 shared memory. The maximum number of threads per block is 1024 ~\cite{NvidiaGuide2018}. Threads within
 a warp can communicate via the shared memory without using any synchronisation
-primitive. However, if communication takes place across warps synchronisation is
-necessary. A barrier synchronisation mechanism exists to ensure that all threads
+primitive. However, if communication takes place across warps synchronization is
+necessary. A barrier synchronization mechanism exists to ensure that all threads
 within a block have reached the same position in the code. Blocks are also grouped
-into a grid that is the collection of blocks executing the same program.
+into a grid, that is the collection of blocks executing the same program.
 
 \subsection{Programming for GPUs}
 \label{sec:gpuprogramming}
@@ -543,22 +543,22 @@ The GPGPU programming landscape has rapidly evolved over the past several years.
 CUDA is a parallel computing platform and programming model developed by NVIDIA designed for GPU computing.
 CUDA computing system has two parts: The host and device.
 The host part is one or many traditional CPU(s) like Intel or AMD CPUs. The
-device part is consist of one or several GPU(s), which is used as a co-processor. Since
-GPU can involve a lot of parallelism, CUDA devices could help to accelerate those applications that have a lot of data to  parallelize. Thus, parallelism is the key factor to decide if the application is appropriate for a CPU-GPU system.
+device part is consist of one or several GPU(s), which is used as co-processors. Since
+GPU can involve a lot of parallelisms, CUDA devices could help to accelerate those applications that have a lot of data to  parallelize. Thus, parallelism is the key factor to decide if the application is appropriate for a CPU-GPU system.
 
 \subsubsection{CUDA Function Declaration}
 \label{CUDAfunction}
 
 As stated above, a complete CUDA Program is a mixed code with both GPU and CPU
 code. Function declaration keywords is designed to support this kind of mix coding. As
-shown in Fig.4.1, functions in CUDA is declared as global, host and device. A kernel
+shown in \marcio{Não seria Table ??} \rem{Fig.4.1, functions in CUDA is declared as global, host and device.}\new{functions in CUDA can be declared as global, host or device.} A kernel
 function is the function that will generate a large number threads and it is declared as
-global. During the compilation, the NVCC compiler will generate thousands threads for
-the kernel function and map them to the GPU. device is used to declare a CUDA device
+global. During the compilation, the NVCC compiler will generate thousands \new{of} threads for
+the kernel function and map them to the GPU. \new{The keyword} device is used to declare a CUDA device
 functions that can only be executed on GPU. In addition, a CUDA device function can
-only be called in a kernel function. The last keyword host is design for declaration for a
-host function which is run on CPU. host and device can be used to together to instruct
-the compiler to generate two versions for both GPU and CPU.
+only be called in a kernel function. The last keyword, host, is design for declaration for a
+host function which is run on CPU. \new{The keywords} host and device can be used \rem{to} together to instruct
+the compiler to generate two versions \rem{for both GPU and CPU.}\new{of the kernel, one to running on CPU and another for the GPU.}
 
 
 \begin{center}
@@ -575,7 +575,7 @@ the compiler to generate two versions for both GPU and CPU.
 \subsubsection{CUDA Thread Organization}
 \label{CUDA Thread Organization}
 When a kernel is executed, the execution is distributed over a grid of thread
-blocks as illustrated below in \ref{fig:threadsblocks}. Since all the threads are executed in the kernel function, there should be some mechanisms to help to distinguish themselves and know what area of data they should work on. In CUDA, all threads are organized in two-level hierarchy-block and grid, as shown in \ref{fig:threadorganization}. A number of threads compose a block and use threadIdx to index them in a block. A grid is organized in the same way and use blockIdx to index each block in a grid. Both threadIdx and blockIdx are pre-defined variables of CUDA. In addition, there are another two pre-defined variables blockDim and gridDim, which are used to indicate the dimension block and grid by number of threads in a block and number of blocks in a grid, an example is showed in \ref{fig:cudaindex}.
+blocks as \rem{illustrated below}\new{shown} in \rfig{threadsblocks}. Since all \rem{the} threads are executed in the kernel function, \rem{there should be some mechanisms to help to distinguish themselves and know what area of data they should work on.}\new{some mechanisms are necessary to define in which data area the threads must work.} In CUDA, all threads are organized in two-level hierarchy-block and grid, as shown in \rfig{threadorganization}. A number of threads compose a block and uses the threadIdx to index them in a block. A grid is organized in the same way and uses blockIdx to index each block in a grid. Both threadIdx and blockIdx are pre-defined variables of CUDA. In addition, there are another two pre-defined variables blockDim and gridDim, which are used to indicate the dimension block and grid by number of threads in a block and number of blocks in a grid. An example is showed in \ref{fig:cudaindex}.
 
 \begin{figure}[t]
 	\centering
@@ -600,8 +600,8 @@ blocks as illustrated below in \ref{fig:threadsblocks}. Since all the threads ar
 
 \subsubsection{CUDA Device Memory}
 \label{CUDA Device Memory}
-Memory hierarchy is one of the main factors in a system. \ref{fig:cudamemory} shows the overview of the CUDA memory hierarchy. Exists four kinds of memory in CUDA: global
-memory, constant memory, shared memory and register. In Fig. \ref{fig:cudamemory}, can be seen that the global memory and constant memory are used to communicate with the host device.\\
+Memory hierarchy is one of the main factors in a system. \rfig{cudamemory} shows the overview of the CUDA memory hierarchy. Exists four kinds of memory in CUDA: global
+memory, constant memory, shared memory and register. \rem{In Fig.}\new{As show in} \rfig{cudamemory}, \rem{can be seen that} the global memory and constant memory are used to communicate with the host device.\\
 
 \begin{figure}[t]
 	\caption{CUDA Memory Hierarchy}
@@ -611,8 +611,8 @@ memory, constant memory, shared memory and register. In Fig. \ref{fig:cudamemory
 \end{figure}
 
 Global memory can be read and write in a kernel while constant memory can only be
-read. However access to the constant memory is much faster than the global memory because it can be cached. Shared memory is designed for the data communication for
-threads in a block. This is fast but very limited. Each thread has several privates registers and is the fastest memory in GPU device. It is used for the most frequently used in the program. Since memory access contribute a lot in the computation time of the program, developers should take advantage of different kinds of memory. The key rule is that registers and share memory should be used as much as possible and the data that are not modified in the execution should be stored in the constant memory to have faster access.
+read. However, access to the constant memory is much faster than the global memory because it can be cached. Shared memory is designed for the data communication for
+threads in a block. This is fast but very limited. Each thread has several privates registers and is the fastest memory in GPU device. \marcio{Não entendi a frase seguinte??}\ed{It is used for the most frequently used in the program.} Since memory access contributes a lot in the computation time of the program, developers should take advantage of different kinds of memory. The key rule is that registers and share memory should be used as much as possible and the data that are not modified in the execution should be stored in the constant memory to have faster access.
 
 \subsubsection{OpenCL}
 
@@ -620,14 +620,14 @@ After the release of CUDA, an alternative open standard general-purpose programm
 API was released under the name OpenCL (Open Computing Language) ~\cite{Kirk:2012}.
 Initially Developed by Apple and subsequently the Khronos Group, OpenCL allows
 developers to harness the GPU and multi-core CPUs for general-purpose parallel
-computation. However unlike CUDA, OpenCL has multi-vendor and multiplatform
+computation. However, unlike CUDA, OpenCL has multi-vendor and multiplatform
 support thus allowing parallel code to be executed on AMD and NVIDIA GPUs
 as well as x86 CPUs. This gives OpenCL the advantage of portability between
-platforms. However as Kirk and Hwu ~\cite{Kirk:2012} note, OpenCL programs can be inherently more complex if they choose to accommodate multiple platforms and vendors.
-Developers must use different features from each platform to maximise performance
+platforms. However, as Kirk and Hwu~\cite{Kirk:2012} noted, OpenCL programs can be inherently more complex if they choose to accommodate multiple platforms and vendors.
+Developers must use different features from each platform to maximize performance
 and so multiple execution paths dependent on the platform and vendor must be
 included. This can result in each platform achieving a different execution time
-depending on the input algorithm, mapping and usage of platform specific APIs
+depending on the input algorithm, mapping, and usage of platform-specific APIs
 that may give an advantage to that specific platform. Kirk and Hwu also note
 that the design of OpenCL is influenced heavily by that of CUDA and as a result
 working with OpenCL can be very similar to CUDA. As with CUDA, regions of
@@ -637,7 +637,7 @@ Work group and Work item respectively. The current index of the block within the
 grid of all blocks has also been renamed as the NDRange. To facilitate support for
 multiple devices across platforms and vendors, OpenCL introduces the concept of
 an OpenCL context. Each device is assigned to a context and work is scheduled
-for execution in a queue for that context ~\cite{Kirk:2012}. For additional information regarding OpenCL, we direct the reader to the Khronos Group OpenCL specification ~\cite{opencl}.
+for execution in a queue for that context~\cite{Kirk:2012}. For additional information regarding OpenCL, we direct the reader to the Khronos Group OpenCL specification~\cite{opencl}.
 
 \section{The AClang Compiler}
 \label{sec:AClang}
@@ -701,9 +701,9 @@ the  OpenCL  driver.
 \section{The Scan algortihm}
 \label{sec:ScanAlg}
 
-In the 80's Hillis and Stelle~\cite{dataparallel} presented several algorithms 
+In the 80's Hillis and Stelle~\cite{dataparallel} presented several algorithms
 parallelized. To execute these algorithms, it was used on the Connection Machine System~\cite{themachine}. Thus, a very important observation of these algorithms
-is that Hillis considered a unlimited number of processors, so they did not worry about that. The algorithms was tested with 65536 elements (maximum number of processors of The Connection Machine~\cite{themachine}). 
+is that Hillis considered a unlimited number of processors, so they did not worry about that. The algorithms was tested with 65536 elements (maximum number of processors of The Connection Machine~\cite{themachine}).
 One algorithm presented in the work mentioned aboves performs a sum of an array of numbers (see Figure \ref{fig:reductionhillis}). In this days this problem is known as $reduction$.\\
 The main idea to solve the problems is to organize the addends at the leaves of a
 binary tree and performing the sums at each level of the tree in parallel. Exist several ways to organize an array into a binary tree. Figure \ref{fig:reductionhillis} illustrates the method chosen by them. As an example, it is presented an array of 8 elements named $x_{0}$ through $x_{7}$. In this algorithm, for purposes of simplicity, the number of elements to be summed is assumed to be an integral power of two. There are as many processors as elements, and the line $4$ (in~\rlsts{HillisAlgorithms}{a}) causes all processors to execute the lines $5$ and $6$ (~\rlsts{HillisAlgorithms}{a}) in synchrony, but the variable k has a different value for each processor, namely, the index of that processor within the array. At the end of the process, $x_{n-1}$ contains the sum of the n elements.\\
@@ -773,23 +773,23 @@ phase (\textit{up-sweep}) and for every level of this phase ($log\ n $ levels) i
 	\lstset{basicstyle=\scriptsize}
 	\begin{lstlisting}[label=lst:HillisAlgorithms, caption={The parallel scan and reduction implementation proposed Hillis and Steele}, escapeinside={(*}{*)}]
 	(a) Parallel Reduction
-		
+
 		for(int d = 1; d <= log2(n); d++)
 			for(int k = 0 ; k < n ; k++){ //In parallel
 				if( (k+1)%2^d == 0 ){
 					x[k] = x[k - 2^(d-1)] + x[k];
 				}
 			}
-		
+
 	(b) Parallel Scan
-		
+
 		for(int d = 1; d <= log2(n); d++)
 			for(int k = 0 ; k < n ; k++){ //In parallel
 				if( k >= 2^d ){
 					x[k] = x[k - 2^(d-1)] + x[k];
 				}
 		}
-	
+
 	\end{lstlisting}
 \end{figure}
 
@@ -798,7 +798,7 @@ phase (\textit{up-sweep}) and for every level of this phase ($log\ n $ levels) i
 	\caption{Hillis and  Steele scan algorithm}
 	\includegraphics[scale=0.5]{images/hillisscan.png}
 	\label{fig:scanhillis}
-	
+
 \end{figure}
 
 In 2005, Horn~\cite{GPUGems2} proposed a first version of scan parallel for GPUs, this proposal was based in~\cite{dataparallel}, this implementation is more realist and limited. As was mentioned before for the work of~\cite{dataparallel}, they did not worry about the number of processor. They considered that it is possible to have a number of processors equal to the size of the input (not real situation in these days).
