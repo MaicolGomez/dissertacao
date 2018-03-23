@@ -470,16 +470,15 @@ of graphical operating systems.
 
 Around the same time, the company Silicon Graphics popularized the use
 of three-dimensional graphics. In 1992, Silicon Graphics opened the
-programming interface \rem{to}\new{for} its hardware\rem{ by releasing the OpenGL library they wanted
-that OpenGL was used as a standardized.}\new{, launching the OpenGL library, so that it became a de facto standard.}
+programming interface for its hardware, launching the OpenGL library, so that it became a de facto standard.
 
 By the mid-1990s, the demand for applications that were using 3D graphics
 increases considerably, growing one stage of development. PC gaming was affected
-by those devices \rem{to create}\new{creating} progressively, more realistic 3D environments.
+by those devices creating progressively, more realistic 3D environments.
 At the same time, companies such as NVIDIA, ATI Technologies,
 and 3dfx Interactive, began releasing graphics accelerators that were affordable
 enough to attract widespread attention. These developments cemented 3D
-graphics as a technology that would \rem{figure}\new{become} prominent\rem{ly} for years to come.
+graphics as a technology that would become prominently for years to come.
 
 In 1999 was created the first GPU GeForce 256 that was marketed as "the world's
 first GPU" or Graphic Processing Unit, enhancing the potential
@@ -515,7 +514,7 @@ Summing up what was said before, OpenCL is an framework that allows the use of s
 
 \subsection{GPU hardware}
 \label{sec:gpugardware}
-Before going into the programming of GPUs (see~\rsec{gpuprogramming}), it is important to have some background \rem{about}\new{in} GPU architecture.
+Before going into the programming of GPUs (see~\rsec{gpuprogramming}), it is important to have some background in GPU architecture.
 The GPU programming model exposed by CUDA very much mirrors the underlying
 hardware. Some of the details that make GPU programming hard are more apparent
 when looking at the underlying hardware.
@@ -551,16 +550,16 @@ GPU can involve a lot of parallelisms, CUDA devices could help to accelerate tho
 
 As stated above, a complete CUDA Program is a mixed code with both GPU and CPU
 code. Function declaration keywords is designed to support this kind of mix coding. As
-shown in \marcio{Não seria Table ??} \rem{Fig.4.1, functions in CUDA is declared as global, host and device.}\new{functions in CUDA can be declared as global, host or device.} A kernel
+shown in Table~\ref{tab:cudaFunction} functions in CUDA can be declared as global, host or device. A kernel
 function is the function that will generate a large number threads and it is declared as
-global. During the compilation, the NVCC compiler will generate thousands \new{of} threads for
-the kernel function and map them to the GPU. \new{The keyword} device is used to declare a CUDA device
+global. During the compilation, the NVCC compiler will generate thousands of threads for
+the kernel function and map them to the GPU. The keyword device is used to declare a CUDA device
 functions that can only be executed on GPU. In addition, a CUDA device function can
 only be called in a kernel function. The last keyword, host, is design for declaration for a
-host function which is run on CPU. \new{The keywords} host and device can be used \rem{to} together to instruct
-the compiler to generate two versions \rem{for both GPU and CPU.}\new{of the kernel, one to running on CPU and another for the GPU.}
+host function which is run on CPU. The keywords host and device can be used  together to instruct the compiler to generate two versions of the kernel, one to running on CPU and another for the GPU.
 
-
+\begin{table*}[!t]
+	\caption[small]{Kind of CUDA functions}
 \begin{center}
 	\begin{tabular}{ | c | >{\centering\arraybackslash}p{2cm} | >{\centering\arraybackslash}p{3cm} |}
 		\hline
@@ -571,11 +570,13 @@ the compiler to generate two versions \rem{for both GPU and CPU.}\new{of the ker
 		\hline
 	\end{tabular}
 \end{center}
+\label{tab:cudaFunction}
+\end{table*}
 
 \subsubsection{CUDA Thread Organization}
 \label{CUDA Thread Organization}
 When a kernel is executed, the execution is distributed over a grid of thread
-blocks as \rem{illustrated below}\new{shown} in \rfig{threadsblocks}. Since all \rem{the} threads are executed in the kernel function, \rem{there should be some mechanisms to help to distinguish themselves and know what area of data they should work on.}\new{some mechanisms are necessary to define in which data area the threads must work.} In CUDA, all threads are organized in two-level hierarchy-block and grid, as shown in \rfig{threadorganization}. A number of threads compose a block and uses the threadIdx to index them in a block. A grid is organized in the same way and uses blockIdx to index each block in a grid. Both threadIdx and blockIdx are pre-defined variables of CUDA. In addition, there are another two pre-defined variables blockDim and gridDim, which are used to indicate the dimension block and grid by number of threads in a block and number of blocks in a grid. An example is showed in \ref{fig:cudaindex}.
+blocks as shown in \rfig{threadsblocks}. Since all threads are executed in the kernel function, some mechanisms are necessary to define in which data area the threads must work. In CUDA, all threads are organized in two-level hierarchy-block and grid, as shown in \rfig{threadorganization}. A number of threads compose a block and uses the threadIdx to index them in a block. A grid is organized in the same way and uses blockIdx to index each block in a grid. Both threadIdx and blockIdx are pre-defined variables of CUDA. In addition, there are another two pre-defined variables blockDim and gridDim, which are used to indicate the dimension block and grid by number of threads in a block and number of blocks in a grid. An example is showed in \ref{fig:cudaindex}.
 
 \begin{figure}[t]
 	\centering
@@ -601,7 +602,7 @@ blocks as \rem{illustrated below}\new{shown} in \rfig{threadsblocks}. Since all 
 \subsubsection{CUDA Device Memory}
 \label{CUDA Device Memory}
 Memory hierarchy is one of the main factors in a system. \rfig{cudamemory} shows the overview of the CUDA memory hierarchy. Exists four kinds of memory in CUDA: global
-memory, constant memory, shared memory and register. \rem{In Fig.}\new{As show in} \rfig{cudamemory}, \rem{can be seen that} the global memory and constant memory are used to communicate with the host device.\\
+memory, constant memory, shared memory and register. As show in \rfig{cudamemory}, the global memory and constant memory are used to communicate with the host device.\\
 
 \begin{figure}[t]
 	\caption{CUDA Memory Hierarchy}
@@ -612,7 +613,7 @@ memory, constant memory, shared memory and register. \rem{In Fig.}\new{As show i
 
 Global memory can be read and write in a kernel while constant memory can only be
 read. However, access to the constant memory is much faster than the global memory because it can be cached. Shared memory is designed for the data communication for
-threads in a block. This is fast but very limited. Each thread has several privates registers and is the fastest memory in GPU device. \marcio{Não entendi a frase seguinte??}\ed{It is used for the most frequently used in the program.} Since memory access contributes a lot in the computation time of the program, developers should take advantage of different kinds of memory. The key rule is that registers and share memory should be used as much as possible and the data that are not modified in the execution should be stored in the constant memory to have faster access.
+threads in a block. This is fast but very limited. Each thread has several privates registers and is the fastest memory in GPU device and usually these registers are used  most frequently in the program. Since memory access contributes a lot in the computation time of the program, developers should take advantage of different kinds of memory. The key rule is that registers and share memory should be used as much as possible and the data that are not modified in the execution should be stored in the constant memory to have faster access.
 
 \subsubsection{OpenCL}
 
@@ -1867,6 +1868,7 @@ GPUs.
 	\end{adjustbox}
 	\label{tab:benchmark}
 \end{table*}
+
 
 
 \chapter{Experimental Evaluation}
