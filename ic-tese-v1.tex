@@ -711,7 +711,7 @@ As described in~\rlsts{HillisAlgorithms}{a} at each level
 (iteration) $d$ of the tree, if the processor $k$ that meets the property of the line $5$
 stored the sum of the neighbors at distance $2^{d-1}$ on his own position.
 For  example, at  level $d  = 1$  of \rfig{reductionhillis} the processor $k = 1$ stored the sum of the neighbors at distance $2^{1-1} = 1$ (elements of $1$ and $0$) into the element at index $k = 1$, at the  next level of  the tree $d = 2$. The distance of the
-neighbors will be $2^{2-1} = 2$ and so on until reach the last level where the root of the three holds the sum of all nodes in the array. The algorithm is computed in $O(log\ n)$ time, it is performed $log\ n$ levels and each level is performed in parallel which means a constant time. The idea of the algorithm will be used later for one version of scan parallel algorithm.
+neighbors will be $2^{2-1} = 2$ and so on until reach the last level where the root of the three holds the sum of all nodes in the array. The algorithm is computed in $O(log\ n)$ time, it performed $log\ n$ levels and each level is performed in parallel which means a constant time.
 
 \begin{figure}[t]
 	\centering
@@ -720,9 +720,58 @@ neighbors will be $2^{2-1} = 2$ and so on until reach the last level where the r
 	\label{fig:reductionhillis}
 \end{figure}
 
+Another algorithm presented by Hillis and Steele~\cite{dataparallel} is the scan. They perceived that modifying only one line they can get all the partial sums of an array.
+Looking at the simple summation algorithm explained above(\rlsts{HillisAlgorithms}{a}), it can be appreciated that most of the processors are idle most of the time. Line $5$ shows that during iteration $j$, only $n/2^{j}$ processors are active, and, indeed, half of the processors are never used. However, using the idle processors by allowing more processors to operate all the partial sums of the array can be computed from the previous algorithm explained with same amount of time that took to compute reduction $log\ n$. The key to understand this algorithm is to remember, in defining $\sum_{j}^{k}$ to mean $\sum_{i=j}^{k}x_{i}$, note that $\sum_{j}^{k}$ + $\sum_{k+1}^{m}$ = $\sum_{j}^{m}$. The algorithm replaces each $x_{k}$ by $\sum_{0}^{k}$: that is, the sum of all elements preceding and including $x_{k}$. In Figure \ref{fig:scanhillis}, this process is illustrated for an array of 8 elements.
+The only difference between this algorithm and the earlier one is the test in the if statement in the partial-sums algorithm that determines whether a processor will perform the assignment (line $5$ to $14$). This algorithm keeps more processors active: During step $j$, $n - 2^{j}$ processors are in use; after step $j$, element number $k$ has become $\sum_{a}^{k}$ where $a = max(0, k - 2^{j} + 1)$. For  example, at  level $d  = 1$  of \rfig{scanhillis} the processor $k = 1$ stored the sum of the neighbors at distance $2^{1-1} = 1$ (elements of $1$ and $0$) into the element at index $k = 1$, the processor $k = 2$ stored the sum of the neighbors with the same distance $1$ (elements of $2$ and $1$) into the element at index $k = 2$ and son, at the  next level of  the tree $d = 2$. The distance of the neighbors will be $2^{2-1} = 2$ and the processor $k = 2$ stored the sum of the neighbors $2$ and $0$) into the element at index $k = 2$ (note that this element has the sum of $\sum_{0}^{0}$ to $\sum_{1}^{2}$ that is $\sum_{0}^{2}$) so on until reach the last level where all the nodes have the sum all its precedents elements, the element $k$ has the following sum $\sum_{0}^{k}$. The algorithm is computed in $O(log\ n)$ time, it has $log\ n$ levels and each level is performed in parallel which means a constant time.\\
+In 1990, Guy  E. Blelloch~\cite{ScanAsPrimitive} proposed a new method to perform the scan parallel algorithm. For this new method is also used balanced trees. The idea is to build a balanced binary tree on the input data and sweep it from the leaves to the root to compute the all the partial sums. A binary tree with $n$ leaves has $d = log n$ levels, and each level $d$ has $2^{d}$ nodes. If it is performed one add per node, then we will perform $O(n)$ adds on a single traversal of the tree.
+
+The key  idea in~\cite{ScanAsPrimitive} is  to build a  balanced binary
+tree on the input data $x$ and  sweep it to and from the root, scanning
+at each phase half  of the elements of the array.  The  tree is not an
+actual  data structure,  but a  concept  used to  determine what  each
+thread does at each one of the  two phases of the traversal.  The tree
+representation is  shown in~\rfigs{upsweep}{downsweep} where  blue and
+black arrows  represent read  operations of the  elements of  $x$ that
+will be added, and orange arrows represent copy statements.
+
+As  shown  in \rlstn{Parscan}{a}{b},  the  algorithm  consists of  two
+phases:  \textit{up-sweep} and  \textit{down-sweep}.
+In  the up-sweep phase,  described   in  ~\rlsts{Parscan}{a}  the  tree   is  traversed
+bottom-up computing the scan of half of the internal nodes of the tree
+in~\rfig{upsweep}.  As described in~\rlsts{Parscan}{a} at each level
+(iteration)  $d$  of   the  tree  neighbors  at   distance  $2^d$  are
+accumulated       into        the       elements        at       index
+$k + 2^{(d+1)} - 1, k = 0 \ldots \lceil n/2 \rceil$ of the array (line
+18). For  example, at  level $d  = 0$  of \rfig{upsweep}  neighbors at
+distance $2^{(0+1)}  - 1  = 1$  are accumulated  into the  elements at
+index $k  + 1$, at the  next level of  the tree.  The distance  of the
+neighbors  that  are   accumulated  doubles  as  the   tree  level  is
+incremented  (e.g.  the  distance is  2 at  level $d  = 1$)  until the
+partial sum  at $x[i-1]$  is computed.   This phase  is also  known as
+\textit{parallel reduction},  because after this phase,  the root node
+(the last node in the array) holds the sum of all nodes in the array.\\
+In  the down-sweep  phase,  the  tree is  traversed  top-down and  the
+partial sums computed in the previous phase are propagated downward to
+accumulate  with the  entries which  did not  have their  partial sums
+computed  previously  in the  up-sweep  phase.   The phase  starts  by
+inserting zero at the  root of the tree. Then at  each step, each node
+at the current tree level will: (i)  sum its value to the former value
+of its left child and store the  result into its right child; and (ii)
+copy its own value to its  left child.  For example, consider the node
+at index $7$  level $d = 1$  of the tree in  \rfig{upsweep}. That node
+has two children, a left child at index $5$ and a right child at index
+$7$.  Hence,  during the down-sweep  phase two operations  will occur:
+(i) the value at  index $7$ is summed to the value  at index $5$ (left
+child of index  $7$) and is stored  into the right child  of index $7$
+(index $7$ itself); and (ii) the value at index $7$ is copied to index
+$5$ to be used  in the next level $d = 0$ (orange  arrow to left child
+of index $7$). The algorithm  performs $\mathcal{O}(n)$ operations in the first
+phase (\textit{up-sweep}) and for every level of this phase ($log\ n $ levels) is computed in $\mathcal{O}(1)$ (because is done in parallel) hence the total time is computed in $\mathcal{O}(log\ n)$, similarly for the second phase (\textit{down-sweep}) the total of operations is $\mathcal{O}(n)$ between adds ($n-1$) and swaps ($n-1$) moreover the computed time is $\mathcal{O}(log\ n)$. So the total number of operation of parallel scan is $\mathcal{O}(n)$ and computed time is $\mathcal{O}(log\ n)$ time.\\
+ 
+
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
-	\begin{lstlisting}[label=lst:HillisAlgorithms, caption={The parallel scan and  reduction implementation from Hillis and Steele}, escapeinside={(*}{*)}]
+	\begin{lstlisting}[label=lst:HillisAlgorithms, caption={The parallel scan and reduction implementation proposed Hillis and Steele}, escapeinside={(*}{*)}]
 	(a) Parallel Reduction
 		
 		for(int d = 1; d <= log2(n); d++)
@@ -744,7 +793,6 @@ neighbors will be $2^{2-1} = 2$ and so on until reach the last level where the r
 	\end{lstlisting}
 \end{figure}
 
-
 \begin{figure}[t]
 	\centering
 	\caption{Hillis and  Steele scan algorithm}
@@ -753,151 +801,36 @@ neighbors will be $2^{2-1} = 2$ and so on until reach the last level where the r
 	
 \end{figure}
 
-During  the 80's  Hillis and  Steele~\cite{dataparallel} developed
-approaches to parallelize many serial  algorithms. Although at that time
-these algorithms  seemed to have only  sequential solutions, by  using
-\ttt{The  Connection Machine}  \cite{themachine} they  managed to achieve
-execution times in $\mathcal{O}(log\ n)$.  One of these algorithms was
-the sum of  the elements of an  array, also known as  reduction.  With a
-slight modification of reduction Hillis and Stelle proposed a solution
-to compute \textit{All Partial Sums} of an array,  a problem that
-is currently known as prefix sum or simply scan.
+In 2005, Horn~\cite{GPUGems2} proposed a first version of scan parallel for GPUs, this proposal was based in~\cite{dataparallel}, this implementation is more realist and limited. As was mentioned before for the work of~\cite{dataparallel}, they did not worry about the number of processor. They considered that it is possible to have a number of processors equal to the size of the input (not real situation in these days).
+So the proposed of Horn was limited by the block size of the GPU device, in our days this size could be until 2048. Horn proposed the method using it at solution of the problem $Stream Compaction$. That problems is defined as follow: given an input vector, and one key value. It is necessary to reorder the input that the elements that have the same value of the key are moved towards to the end of the vector. The rest of the elements are moved towards to the begin keeping the original order between them (See Figure~\ref{fig:desire}). Remember that for this version of scan, the complexity is $log n$ and order of the operation is in order of $n log\ n$.\\
 
-The generalization that scan is an important  primitive
-for  parallel  computing  was  presented   by  Guy  E.   Blelloch  in
-~\cite{ScanAsPrimitive}. In  that work scan was  defined as a
-\textit{unit time}  primitive under the \texttt{PRAM  (Parallel Random
-	Access Machine)}  model and  Blelloch presented  a new  technique to
-perform  the scan  operator. That  technique was  implemented using  a
-binary balanced tree  and was explained in  \rcap{Scan}.  Scan
-was  then used   to  parallelize   some  very  relevant   algorithms  like:
-Maximum-Flow, Maximal Independent Set, Minimum Spanning Tree, K-D Tree
-and Line  of Sight,  thus improving their  asymptotic running  time to
-$\mathcal{O}(log\ n)$.
+In 2007 Mark Harris et al.~\cite{harris2007parallel} proposed a new implementation of scan parallel algorithm, this version is based in the work of Blelloch~\cite{ScanAsPrimitive}. In the last method explained, proposed by Horn the number of operations is in order of $O(n log\ n)$ meanwhile the simple serial version of scan performs in order of $O(n)$ operations as well as Blelloch's version. That was one of Harris's main motivations, the possibility of at least achieve the same order of operations than the serial version. So, he implemented a method to solve the scan operation base in the work of Blelloch for a GPU. However, that implementation was the same problem of Horn's implementation, the algorithm only works for an small arrays, because is limited by a thread block. Thereby, the main contribution of Mark Harris was to design of an algorithm to be able to be use it for large arrays.
+The basic idea is simple. It is divided the large array into blocks, each of them can be scanned by a single thread block, and then it is computed the scan operations for the blocks and write the total sum of each block to another array of block sums. Then scan the block sums, generating an array of block increments that that are added to all elements in their respective blocks. For example (see Figure~\ref{fig:largescan}), let $N$ be the number of elements in the input array, and $B$ be the number of elements processed in a block. It is allocated $N/B$ thread blocks of $B/2$ threads each. (Here it is assumed that N is a multiple of $B$. A choice is according of GPU Series. It is used the scan algorithm of the previous sections to scan each block $i$ independently, storing the resulting scans to sequential locations of the output array~\ding{172}. It was made one minor modification to the scan algorithm. Before zeroing the last element of block $i$ (the block of code labeled $B$ in line $15$ in~\rlst{Parscan}), It is stored the value (the total sum of block $i$) to an auxiliary array represented by $\sum$~\ding{173}. Then scan $\sum$ in the same manner, writing the result to an array represented by $\sigma$~\ding{174}. Then add $\sigma[i]$ to all elements of block $i$~\ding{175}. After making all the previous steps, it is obtained the final array of scanned values. 
 
-In~\cite{GPUGems2}  Horn  proposed  an  efficient
-implementation of  scan in GPUs.   That algorithm was based  in Hillis
-and Steele's work and was used  to solve the problem of extracting the
-undesired elements  of a set.  Scan  was used to
-determine  the undesired elements, and this was followed by a search
-and  gather   operation  to   compact the set.  This   problem  is   known  as
-\textit{Stream   Compaction},  and has a running  time   of
-$\mathcal{O}(n.log\ n)$.
-
-In \cite{harris2007parallel} Mark Harris  et al.  implemented in GPUs the scan
-operator     based     on     the     the     work     of     Blelloch
-\cite{ScanAsPrimitive}. That  implementation proved to be  better than
-the solution  proposed by  Horn~\cite{GPUGems2}.  The  main difference
-between those two  approaches is the number of  operations executed to
-solve the problem. In the case of \cite{GPUGems2}, the total number of
-operations is $n.log\ n$, and in the case of \cite{harris2007parallel}
-the  total number  of operations  is $n$,  the same  number as  in the
-serial version.
-
-Also  in~\cite{harris2007parallel},  Harris  presented a  solution  to
-treat large input vectors in GPUs.  It  is well known that the size of
-one GPU block  is limited and thus the computation  of scan for larger
-input sizes is  done in two scan  steps: (i) a first  step inside each
-block; and (ii) a second step among the blocks.  The approach proposed
-in  \rsec{ScanInAClang}  uses~\cite{harris2007parallel} to  deal  with
-large input vectors and the work in ~\cite{ScanAsPrimitive} to perform
-the individual scan steps.
-
-In   \cite{Sengupta:2008}  Sengupta   and  Harris   presented  several
-optimizations     for      the     implementation      proposed     in
-\cite{harris2007parallel}.   Those  optimizations   were  designed  to
-deliver  maximum  performance  for   regular  execution  paths  via  a
-\textit{Single-Instruction,  Multiple-Thread} (SIMT)  architecture and
-regular data access patterns through memory coalescing.  That work was
-the  base  for  the  widely  used  CUDPP  library~\cite{CUDPP},  which
-presents an easy and efficient but limited use of the scan operator.
-
-In  \cite{Nathan:2011} Bell  and  Hoberock designed  a library  called
-Thrust.   That library  resembles  the C++  Standard Template  Library
-(STL).   Thrust  parallel   template  library   allows  to   implement
-high-performance  applications with  minimal  programming effort.  The
-library offers an implementation of the scan operator that easies the task of
-the programmer.  Thrust  was used  to implement  the CUDA version of the
-benchmarks described in \rcap{Experiments}.
-
-Shengen Yan et.  al.~\cite{Yan:2013}  implemented the scan operator in
-OpenCL based on \cite{harris2007parallel},  He improved the performance
-by  reducing the  number  of memory  accesses from  $3n$  to $2n$  and
-eliminating global barrier synchronization completely.
-
-In 2015, Wiefferink~\cite{ScanOpenCL} implemented other version of the
-scan operation in OpenCL.  This work improved the branch divergence of
-the  algorithm in  ~\cite{ScanAsPrimitive} ~\cite{harris2007parallel}.
-As  expected,  this  implementation  works   in  NVIDIA  and  AMD  GPU
-platforms, unlike  most previous versions  that just worked  in NVIDIA
-GPUs.
-
-This section describes the parallel  scan algorithm used in the design
-of the  proposed scan clause.  The algorithm is  based on the  work of
-Mark Harris et al.~\cite{Sengupta:2007} and  is currently known as the best
-approach to the parallel computation of scan.
+\begin{figure}[t]
+	\centering
+	\caption{Example of scan application}
+	\includegraphics[scale=1.0]{images/desireElements.jpg}
+	\label{fig:desire}
+\end{figure}
 
 \begin{figure}[t]
 	\centering
 	\caption{Parallel scan in $\mathcal{O}(log\  n)$}
-	\subfloat[Up-sweep phase~\cite{harris2007parallel}]{
+	\subfloat[Up-sweep phase]{
 		\includegraphics[scale=0.35]{images/upsweep.pdf} \label{fig:upsweep}
 	}
 	\vfill
-	\subfloat[Down-sweep phase~\cite{harris2007parallel}]{
+	\subfloat[Down-sweep phase]{
 		\includegraphics[scale=0.35]{images/downsweep.pdf}\label{fig:downsweep}
 	}
 \end{figure}
-
-For the sake  of simplicity and without any loss  of generality please
-consider the loop  in \rlsts{Parscan}{a} (lines 3--10)  which contains a
-sequential   scan  operation   that  will  be
-parallelized  with the  scan clause.  Notice that  unlike the  code of
-\rlsts{PrefixSum}{a} (line 5) the current  example stores the result of
-the scan operation into the   array $x$ itself (line 8 of \rlsts{Parscan}{a}).
-
-The key  idea in~\cite{Sengupta:2007} is  to build a  balanced binary
-tree on the input data $x$ and  sweep it to and from the root, scanning
-at each phase half  of the elements of the array.  The  tree is not an
-actual  data structure,  but a  concept  used to  determine what  each
-thread does at each one of the  two phases of the traversal.  The tree
-representation is  shown in~\rfigs{upsweep}{downsweep} where  blue and
-black arrows  represent read  operations of the  elements of  $x$ that
-will be added, and orange arrows represent copy statements.
-
-As  shown  in \rlstn{Parscan}{b}{c},  the  algorithm  consists of  two
-phases:  \textit{up-sweep} and  \textit{down-sweep}.  In  the up-sweep
-phase,  described   in  ~\rlsts{Parscan}{b}  the  tree   is  traversed
-bottom-up computing the scan of half of the internal nodes of the tree
-in~\rfig{upsweep}.  As described in  ~\rlsts{Parscan}{b} at each level
-(iteration)  $d$  of   the  tree  neighbors  at   distance  $2^d$  are
-accumulated       into        the       elements        at       index
-$k + 2^{(d+1)} - 1, k = 0 \ldots \lceil n/2 \rceil$ of the array (line
-18). For  example, at  level $d  = 0$  of \rfig{upsweep}  neighbors at
-distance $2^{(0+1)}  - 1  = 1$  are accumulated  into the  elements at
-index $k  + 1$, at the  next level of  the tree.  The distance  of the
-neighbors  that  are   accumulated  doubles  as  the   tree  level  is
-incremented  (e.g.  the  distance is  2 at  level $d  = 1$)  until the
-partial sum  at $x[i-1]$  is computed.   This phase  is also  known as
-\textit{parallel reduction},  because after this phase,  the root node
-(the last node in the array) holds the sum of all nodes in the array.
-
-
+.
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
-	\begin{lstlisting}[label=lst:Parscan, caption={The parallel scan implementation}, escapeinside={(*}{*)}]
-	(a) Modified sequential implementation
+	\begin{lstlisting}[label=lst:Parscan, caption={The parallel scan implementation proposed by Blelloch}, escapeinside={(*}{*)}]
 
-	aux = x[0];
-	x[0] = 0;
-	#pragma omp parallel for scan(+: x)
-	for(int i = 1; i < n; i++) {
-		temp = x[i];
-		x[i] = x[i-1] + aux;
-		aux = temp;
-	}
-
-	(b) Up-sweep phase of scan parallel implementation
+	(a) Up-sweep phase of scan parallel implementation
 
 	x[0] = 0;
 	for(d = n >> 1; d > 0; d >>= 1){
@@ -908,7 +841,7 @@ partial sum  at $x[i-1]$  is computed.   This phase  is also  known as
 		}
 	}
 
-	(c) Down-sweep phase of scan parallel implementation
+	(b) Down-sweep phase of scan parallel implementation
 
 	x[n-1] = 0;
 	for(d = log2(n); d >= 0 ; d--){
@@ -922,22 +855,12 @@ partial sum  at $x[i-1]$  is computed.   This phase  is also  known as
 	\end{lstlisting}
 \end{figure}
 
-In  the down-sweep  phase,  the  tree is  traversed  top-down and  the
-partial sums computed in the previous phase are propagated downward to
-accumulate  with the  entries which  did not  have their  partial sums
-computed  previously  in the  up-sweep  phase.   The phase  starts  by
-inserting zero at the  root of the tree. Then at  each step, each node
-at the current tree level will: (i)  sum its value to the former value
-of its left child and store the  result into its right child; and (ii)
-copy its own value to its  left child.  For example, consider the node
-at index $7$  level $d = 1$  of the tree in  \rfig{upsweep}. That node
-has two children, a left child at index $5$ and a right child at index
-$7$.  Hence,  during the down-sweep  phase two operations  will occur:
-(i) the value at  index $7$ is summed to the value  at index $5$ (left
-child of index  $7$) and is stored  into the right child  of index $7$
-(index $7$ itself); and (ii) the value at index $7$ is copied to index
-$5$ to be used  in the next level $d = 0$ (orange  arrow to left child
-of index $7$).
+\begin{figure}[t]
+	\centering
+	\caption{Scan for large arrays by Mark Harris et al.}
+	\includegraphics[scale=0.4]{images/largescan.png}
+	\label{fig:largescan}
+\end{figure}
 
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
@@ -1027,26 +950,15 @@ of index $7$).
 \end{figure}
 
 
-The algorithm  performs $\mathcal{O}(n)$ operations in the first
-phase (\textit{up-sweep}) and for every level of this phase is computed in $\mathcal{O}(1)$ hence
-the total time is computed in $\mathcal{O}(log\ n)$, similarly for the second phase
-(\textit{down-sweep}) the total of operations is $\mathcal{O}(n)$ between adds ($n-1$)
-and swaps ($n-1$) moreover the computed time is $\mathcal{O}(log\ n)$.
-So the total number of operation of parallel scan
-is $\mathcal{O}(n)$ and computed time is
-$\mathcal{O}(log\ n)$ time.
-
-
 \section{Scan clause implementation in AClang}
 \label{sec:ScanInAClang}
 
 \begin{figure}[t]
 	\centering
 	\caption{Algorithm to perform a block sum scan}
-	\includegraphics[scale=0.35]{images/phaseScan.pdf}
+	\includegraphics[scale=0.45]{images/phaseScan.pdf}
 	\label{fig:scheme}
 \end{figure}
-
 
 
 The Parallel Scan Optimization  pass~\ding{184} shown in \rfig{aclang}
@@ -1060,7 +972,7 @@ leverage on data locality.
 In order to apply the  parallelized scan from~\rsec{ScanAlg} to data sets
 larger than  a single thread block,  an extended four step  method was
 proposed~\cite{harris2007parallel}. This method applies twice the  scan
-algorithm described in \rlstn{Parscan}{b}{c} to spread the scan of each
+algorithm described in \rlstn{Parscan}{a}{b} to spread the scan of each
 block to all blocks  of the array.  Such method is  shown in the block
 diagram of \rfig{scheme} where each  number corresponds to one step of
 the method.   In the first  step, the  method divides the  large input
@@ -1104,7 +1016,7 @@ In the first step, the algorithm obtains the pieces of information of the
 omp scan clause, as detailed in \rlst{ClangScan}{a}, lines 3 through
 20.
 
-Lines 3 to 7 gets the list of variables and the kind of operation
+Lines 3 to 7 get the list of variables and the kind of operation
   associated with the scan clause.
 
 In \rlst{ClangScan}{b}, it's recovered the buffer where the result of the scan
@@ -1881,6 +1793,81 @@ As  expected,  this  implementation  works   in  NVIDIA  and  AMD  GPU
 platforms, unlike  most previous versions  that just worked  in NVIDIA
 GPUs.
 
+\begin{table*}[!t]
+	\centering
+	\caption[small]{micro-benchmarks}
+	\begin{adjustbox}{max width=1.1\textwidth, center}
+		\begin{tabular}{|>{\centering\arraybackslash}p{0.8cm}|p{5cm}|p{9cm}|p{5cm}|} \hline
+			Index  & Name & Definition & Used  on \\ \hline
+			1 & Stream  Compaction
+			& Operation of removing unwanted elements in  a collection.
+			& Parallel breadth tree  traversing, ray tracing, etc.\\ \hline
+			2  & Longest Span with same Sum in two Binary arrays
+			& Given two binary arrays $arr1[]$ and $arr2[]$ of same size n, find the
+			length of the longest common $span (i, j)$ where $j >= i$ such that
+			$arr1[i] + arr1[i+1] + \dotso + arr1[j] = arr2[i] + arr2[i+1] + \dotso +
+			arr2[j]$. 
+			& Programming competitive.\\ \hline
+			3 & Polynomial Evaluation 
+			& Given an array $a$ of coefficients and a number  $x$,   compute  the   value  of:
+			$a_nx^n  + a_{n-1}x^{n-1}  + \dotso  +  a_1x^1 + a0$
+			& Calculus,  Abstract  Algebra\\ \hline
+			4 & Linear Recurrences
+			& A recurrence relation is an equation that
+			recursively  defines  a  multidimensional
+			array  of  values.   Given  one  or  more
+			initial  terms, each  additional term  of
+			the sequence  or matrix  is defined  as a
+			function   of   the   preceding   terms.  
+			& Analisys  of  algorithms,  digital Signal  processing,  Fibonacci Numbers.\\ \hline
+			5  & Random  Number Generator
+			& Given  n numbers,  each with  some
+			frequency  of  occurrence, return  a
+			random  number  with  probability
+			proportional to its
+			frequency of occurrence.
+			& Statistics, cryptography, gaming, gambling, videogames\\ \hline
+			6   & Upward \&  Downward Accumulation
+			& Upward/Downward accumulation refers  to   accumulating  on
+			each node  information about all decedents/every ancestor.
+			& Solve  N-body  problem,  solve    optimization  problems
+			on  trees, such as Minimum   covering   set  and  Maximal
+			independent set.\\ \hline
+			7   & Adding Big Integers
+			&  Sum of big integer numbers
+			& Public-key  cryptography,  mathematical  constant computation  such as $\pi$ \\ \hline
+			8   & Count the number of ways to divide an array in three contiguous
+			parts having equal sum 
+			& Given an array of n numbers, find out the number of ways to
+			divide the array into three contiguous parts such that the sum
+			of three parts is equal.
+			& Programming competitive.\\ \hline
+			9   & Maximum sum of two non-overlapping subarrays of given size
+			& Given an array, find two subarrays with a specific length $K$
+			such that sum of these subarrays is maximum among all possible
+			choices of subarrays. 
+			& Programming competitive, video games.\\ \hline
+			10 & Maximum Subarray sum modulo m
+			& Given an array of n elements and an integer m 
+			find the maximum value of the sum of its subarray modulo m.
+			& Programming competitive.\\ \hline
+			11 & Maximum occurred integer in n ranges
+			& Given n ranges of the form L and R, the task is to find the
+			maximum occurred integer in all the ranges. If more than one
+			such integer exits print the smallest one.  
+			& Programming competitive.\\ \hline
+			12 & Find the prime numbers which can written as sum of most
+			consecutive primes
+			& Given an array of limits, for every limit find the prime number
+			which can be written as the sum of the most consecutive primes
+			smaller than or equal to limit. 
+			& Cryptography. Programming\newline  Competitive.\\
+			\hline
+		\end{tabular}
+	\end{adjustbox}
+	\label{tab:benchmark}
+\end{table*}
+
 
 \chapter{Experimental Evaluation}
 \label{cap:Experiments}
@@ -2029,7 +2016,7 @@ difference was likely due by  the AClang runtime library.  To evaluate
 that, a  new set of  experiments with profile enabled  was performed.
 Figure~\ref{fig:analysis}  shows the  total  execution  time for  some
 micro-benchmarks.  On the x-axis of  the figure are benchmark programs
-identified by their numbers as  listed in \rtab{benchmark} followed by
+identified by their numbers as  listed in~\ref{tab:benchmark} followed by
 a label  OCL (OpenCL)  or OMP (OpenMP)  to indicate  the corresponding
 implementation. On the  y-axis are program execution  times.  Each bar
 in  the  figure  is  broken  down according  to  the  following  tasks
