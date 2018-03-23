@@ -1139,6 +1139,32 @@ To see a final version of the template for one example, see \rcap{ScanUse}.
 \chapter{Using Scan}
 \label{cap:ScanUse}
 
+\section{Stream Compaction}
+
+Stream Compaction
+
+\begin{figure}[t]
+	\lstset{basicstyle=\scriptsize}
+	\begin{lstlisting}[label=lst:seqcod, caption={Fragment of Sequence alignment}, escapeinside={(*}{*)}]
+	
+	int main() {
+	int *h;
+	int *t;
+	
+	t = (int *)malloc(N * sizeof(int));
+	w = (int *)malloc(N * sizeof(int));
+	h = (int *)malloc(N * sizeof(int));
+	
+	...
+	
+	#pragma omp target device(GPU) map(from : t[:N]) map(to : h[:N])
+	#pragma omp parallel for scan(max : t)
+	for (int i = 1; i < N; i++)
+	t[i] = max(t[i - 1], h[i - 1]);
+	
+	\end{lstlisting}
+\end{figure}
+
 \section{Radix Sort}
 \label{sec:Quicksort}
 
@@ -1285,51 +1311,6 @@ the kernel has 3 main components which were detailed before.
 	__global unsigned int *S) {
 		...
 	}
-	\end{lstlisting}
-\end{figure}
-
-\section{Sequence alignment}
-
-Sequence alignment is an important tool for
-researchers in molecular biology in their efforts to relate
-the molecular structure and function to the underlying
-sequence. Biological sequence data mainly consists of
-DNA and protein sequences, which can be treated as
-strings over a fixed alphabet of characters. Usually,
-is considered the comparison of two biological sequences.
-This comparison is done by aligning the two sequences,
-which refers to stacking one sequence above the other
-with the intention of matching characters from the two
-sequences that lie in the same position. To deal with
-missing characters and extraneous characters, gaps may
-be inserted into either sequence. A scoring mechanism is
-designed for each possible alignment and the goal is to
-find an alignment with the best possible score.
-
-Let $m$ and $n$ be the lengths of the two sequences to be
-compared. Sequence alignment algorithms typically
-use dynamic programming in which a table, or multiple
-tables of size $(m+1)x(n+1)$ are filled.
-
-\begin{figure}[t]
-	\lstset{basicstyle=\scriptsize}
-	\begin{lstlisting}[label=lst:seqcod, caption={Fragment of Sequence alignment}, escapeinside={(*}{*)}]
-
-	int main() {
-	int *h;
-	int *t;
-
-	t = (int *)malloc(N * sizeof(int));
-	w = (int *)malloc(N * sizeof(int));
-	h = (int *)malloc(N * sizeof(int));
-
-	...
-
-	#pragma omp target device(GPU) map(from : t[:N]) map(to : h[:N])
-	#pragma omp parallel for scan(max : t)
-	for (int i = 1; i < N; i++)
-		t[i] = max(t[i - 1], h[i - 1]);
-
 	\end{lstlisting}
 \end{figure}
 
@@ -1715,84 +1696,73 @@ Therefore, no changes were made to the runtime library.
 
 \chapter{Related Works}
 \label{cap:RelatedWorks}
+
+The all-prefix-sums operation has been used around for centuries as the recurrence
+$x_{i}$ = $a_{i}$ + $x_{i−1}$. In 1963, Ofman~\cite{Ofman:1962} suggested the use of scan operation to execute a parallel circuit for the addition of binary numbers.
+Later in 1971, Stone~\cite{Stone:1971} suggested a implementation of parallel scan algorithm on a perfect shuffle network for polynomial evaluation.
+Ladner and Fischer~\cite{Ladner:1980} first showed a general method for deriving efficient parallel solutions to the scan problem (the prefix problem was the term used by them) on Boolean circuits that simulate finite-state transducers. Brent and Kung~\cite{Brent:1981} in their discussion about chip complexity of binary arithmetic showed an efficient VLSI layout for a scan circuit.
+At software level, parallel scan algorithms can be classified into two categories: ones that assume number $p$ of processors is unlimited and ones that assume $p$ is fixed and $p$ $<$ $n$.\\
 During  the 80's  Hillis and  Steele~\cite{dataparallel} developed
-approaches to parallelize many serial  algorithms. Although at that time
+approaches to parallelize many serial algorithms. Although at that time
 these algorithms  seemed to have only  sequential solutions, by  using the
-\ttt{The  Connection Machine}  \cite{themachine} they  managed to achieve
-execution times in $\mathcal{O}(log\ n)$.  One of these algorithms was
-the sum of  the elements of an  array, also known as  reduction.  With a
-slight modification of reduction Hillis and Stelle proposed a solution
-to compute \textit{All Partial Sums} of an array,  a problem that
-is currently known as prefix sum or simply scan.
-
-The generalization that scan is an important  primitive
-for  parallel  computing  was  presented   by  Guy  E.   Blelloch  in
-~\cite{ScanAsPrimitive}. In  that work scan was  defined as a
-\textit{unit time}  primitive under the \texttt{PRAM  (Parallel Random
-	Access Machine)}  model and  Blelloch presented  a new  technique to
-perform  the scan  operator. That  technique was  implemented using  a
-binary balanced tree  and was explained in  \rcap{Scan}.  Scan
-was  then used   to  parallelize   some  very  relevant   algorithms  like:
-Maximum-Flow, Maximal Independent Set, Minimum Spanning Tree, K-D Tree
-and Line  of Sight,  thus improving their  asymptotic running  time to
-$\mathcal{O}(log\ n)$.
-
-In~\cite{GPUGems2}  Horn  proposed  an  efficient
-implementation of  scan in GPUs.   That algorithm was based  in Hillis
-and Steele's work and was used  to solve the problem of extracting the
-undesired elements  of a set.  Scan  was used to
-determine  the undesired elements, and this was followed by a search
-and  gather   operation  to   compact the set.  This   problem  is   known  as
-\textit{Stream   Compaction},  and has a running  time   of
-$\mathcal{O}(n.log\ n)$.
-
-In \cite{harris2007parallel} Mark Harris  et al.  implemented in GPUs the scan
-operator     based     on     the     the     work     of     Blelloch
-\cite{ScanAsPrimitive}. That  implementation proved to be  better than
-the solution  proposed by  Horn~\cite{GPUGems2}.  The  main difference
-between those two  approaches is the number of  operations executed to
+\ttt{The  Connection Machine}  \cite{themachine} which had many thousands of processors (unlimited processors). One of these algorithms was the sum of the elements of an  array, also known as  reduction.  With a slight modification of reduction algorithm, Hillis and Stelle proposed a novel solution to compute \textit{All Partial Sums} of an array. In these days is known  as prefix sum or simply scan. However, this scan algorithm in~\cite{dataparallel} has a limitation: it only works when the number of values in the array is a power of two. Comparing with the serial version that performs $O(n)$ operations, this proposed algorithm performs $O(n lg\ n)$ operations.\\
+To reduce the number of additional operations, in 1989, in the work \textit{The scan operation and their applications}~\cite{ScanAsPrimitive} was discussed extensively by Blelloch, in which he argued convincingly that the scan operations should be considered primitive parallel operations and should be, whenever 	possible, implemented in hardware. In the Connection Machine (considered unlimited processors) project \cite{themachine}, where Blelloch participated, the scan primitive was implemented as microcode. This scan was  implemented using a binary balanced tree as was explained in  \ref{sec:ScanAlg} and was showed that the number of operations performed was reduced to $O(n)$.  Scan was  then used  to parallelize   some  very  relevant   algorithms  like: Maximum-Flow, Maximal Independent Set, Minimum Spanning Tree, K-D Tree and Line  of Sight, thus improving their asymptotic reaching a complexity of $\mathcal{O}(n log\ n)$ to $\mathcal{O}(log\ n)$ for some of these algorithms.\\
+With the emergence of general purpose GPUs(limited number of processors), Horn~\cite{GPUGems2} adapted the algorithm proposed in~\cite{dataparallel} in his GPU prefix sum implementation. The algorithm was used  to solve the problem of extracting the undesired elements of a set. Scan  was used to determine  the undesired elements, and this was followed by a search and  gather   operation  to   compact the set.  This   problem  is   known  as \textit{Stream   Compaction},  and has a running  time   of $\mathcal{O}(log\ n)$.\\
+In \cite{harris2007parallel} Mark Harris  et al. adapted the algorithm of Blelloch~\cite{ScanAsPrimitive} for GPU. That  implementation is better than
+the solution  proposed by Horn~\cite{GPUGems2}. The  main difference
+between those two approaches is the number of operations executed to
 solve the problem. In the case of \cite{GPUGems2}, the total number of
-operations is $n.log\ n$, and in the case of \cite{harris2007parallel}
-the  total number  of operations  is $n$,  the same  number as  in the
-serial version.
-
-Also  in~\cite{harris2007parallel},  Harris  presented a  solution  to
-treat large input vectors in GPUs.  It  is well known that the size of
-one GPU block  is limited and thus the computation  of scan for larger
-input sizes is  done in two scan  steps: (i) a first  step inside each
-block; and (ii) a second step among the blocks.  The approach proposed
-in  \rsec{ScanInAClang}  uses~\cite{harris2007parallel} to  deal  with
-large input vectors and the work in ~\cite{ScanAsPrimitive} to perform
-the individual scan steps.
-
-In   \cite{Sengupta:2008}  Sengupta   and  Harris   presented  several
+operations is in order of $O(n.log\ n)$, and in the case of \cite{harris2007parallel}
+the  total number  of operations  is $O(n)$,  the same  number as  in the
+serial version.\\
+Also in~\cite{harris2007parallel}, Harris et al. presented a solution  to
+handle large arrays in GPUs (Rembember that in this case the number of processors is limited). So scan algorithm overcome the power of two constraint through $divide-and-conquer$ and $padding$ so that arrays of arbitrary size can be handled.
+This novel solution was explained in~\ref{sec:ScanAlg}.\\
+In   \cite{Sengupta:2008}  Sengupta and  Harris presented  several
 optimizations     for      the     implementation      proposed     in
-\cite{harris2007parallel}.   Those  optimizations   were  designed  to
-deliver  maximum  performance  for   regular  execution  paths  via  a
-\textit{Single-Instruction,  Multiple-Thread} (SIMT)  architecture and
+\cite{harris2007parallel}. Those  optimizations   were  designed  to
+deliver  maximum  performance  for regular  execution  paths  via  a
+\textit{Single-Instruction,  Multiple-Thread} (SIMT) architecture and
 regular data access patterns through memory coalescing.  That work was
 the  base  for  the  widely  used  CUDPP  library~\cite{CUDPP},  which
-presents an easy and efficient but limited use of the scan operator.
-
+presents an easy and efficient but limited use of the scan operator.\\
 In  \cite{Nathan:2011} Bell  and  Hoberock designed  a library  called
 Thrust.   That library  resembles  the C++  Standard Template  Library
 (STL).   Thrust  parallel   template  library   allows  to   implement
 high-performance  applications with  minimal  programming effort.  The
 library offers an implementation of the scan operator that easies the task of
 the programmer.  Thrust  was used  to implement  the CUDA version of the
-benchmarks described in \rcap{Experiments}.
-
+benchmarks described in \rcap{Experiments}.\\
 Shengen Yan et.  al.~\cite{Yan:2013}  implemented the scan operator in
 OpenCL based on \cite{harris2007parallel},  He improved the performance
 by  reducing the  number  of memory  accesses from  $3n$  to $2n$  and
-eliminating global barrier synchronization completely.
-
+eliminating global barrier synchronization completely.\\
 In 2015, Wiefferink~\cite{ScanOpenCL} implemented other version of the
 scan operation in OpenCL.  This work improved the branch divergence of
 the  algorithm in  ~\cite{ScanAsPrimitive} ~\cite{harris2007parallel}.
 As  expected,  this  implementation  works   in  NVIDIA  and  AMD  GPU
 platforms, unlike  most previous versions  that just worked  in NVIDIA
 GPUs.
+
+\chapter{Experimental Evaluation}
+\label{cap:Experiments}
+
+This  section presents  an experimental  evaluation using  a prototype
+implementation of  the OpenMP scan  clause in the AClang compiler.
+The  experiments in this section  use  three   heterogeneous  CPU-GPU
+architectures:
+
+\begin{inparaenum}[(i)\upshape]
+	\item a desktop with 2.1 GHz 32 cores Intel Xeon CPU E5-2620,
+	NVIDIA Tesla K40c GPU with 12GB and 2880 CUDA cores  running
+	Linux Fedora  release 23;
+	\item  a  laptop  with  2.4  GHz dual-core  Intel  Core  i5  processor
+	integrated with an Intel Iris GPU containing 40 execution units, and
+	running MacOS Sierra 10.12.4; and
+	\item a mobile  Exynos 8890 Octa-core  CPU (4x2.3 GHz Mongoose  \& 4x1.6
+	GHz Cortex-A53)  integrated with an  ARM Mali-T880 MP12  GPU (12x650
+	Mhz), and running Android OS, v6.0 (Marshmallow)
+\end{inparaenum}
 
 \begin{table*}[!t]
 	\centering
@@ -1868,27 +1838,6 @@ GPUs.
 	\end{adjustbox}
 	\label{tab:benchmark}
 \end{table*}
-
-
-
-\chapter{Experimental Evaluation}
-\label{cap:Experiments}
-
-This  section presents  an experimental  evaluation using  a prototype
-implementation of  the OpenMP scan  clause in the AClang compiler.
-The  experiments in this section  use  three   heterogeneous  CPU-GPU
-architectures:
-\begin{inparaenum}[(i)\upshape]
-	\item a desktop with 2.1 GHz 32 cores Intel Xeon CPU E5-2620,
-	NVIDIA Tesla K40c GPU with 12GB and 2880 CUDA cores  running
-	Linux Fedora  release 23;
-	\item  a  laptop  with  2.4  GHz dual-core  Intel  Core  i5  processor
-	integrated with an Intel Iris GPU containing 40 execution units, and
-	running MacOS Sierra 10.12.4; and
-	\item a mobile  Exynos 8890 Octa-core  CPU (4x2.3 GHz Mongoose  \& 4x1.6
-	GHz Cortex-A53)  integrated with an  ARM Mali-T880 MP12  GPU (12x650
-	Mhz), and running Android OS, v6.0 (Marshmallow)
-\end{inparaenum}
 
 The experiments were carried out by a set of micro-benchmarks
 shown on  Table~\ref{tab:benchmark} that were specially selected to  evaluate
