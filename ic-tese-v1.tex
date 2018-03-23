@@ -502,10 +502,7 @@ thread.  Generally, each thread performs an operation on a sample data. This
 allows that the large data can be operated in parallel. GPU was designed for
 graphics processing in mind, and this was the main application for GPUs for a
 long time. Lately, researcher and programmers discovered an opportunity
-\rem{the ability of}\new{to explore} the GPUs \rem{for}\new{to achieve} high
-levels of parallelization. This \rem{is becomes}\new{became} an opportunity to
-increase the performance of many general purpose programs.  That is how started
-what is known as general purpose graphics processing unit programming or GPGPU
+to explore the GPUs to achieve high levels of parallelization. This became an opportunity to increase the performance of many general purpose programs.  That is how started what is known as general purpose graphics processing unit programming or GPGPU
 programming. With the steady growth interest in GPGPUs programming, GPU vendors
 started creating GPUs for different applications in mind, thus, the toolkit was
 created to allow programming in the GPUs. This toolkit, known as CUDA, allows
@@ -819,8 +816,7 @@ $log\ n$. The key to understand this algorithm is to remember, in defining
 $\sum_{j}^{k}$ to mean $\sum_{i=j}^{k}x_{i}$, note that $\sum_{j}^{k}$ +
 $\sum_{k+1}^{m}$ = $\sum_{j}^{m}$. The algorithm replaces each $x_{k}$ by
 $\sum_{0}^{k}$: that is, the sum of all elements preceding and including
-$x_{k}$. \rem{In Figure \ref{fig:scanhillis}, this process is
-illustrated}\new{\rfig{scanhillis} shows this process} for an array of 8
+$x_{k}$. \rfig{scanhillis} shows this process for an array of 8
 elements.  The only difference between this algorithm and the earlier one is
 the test in the if statement in the partial-sums algorithm that determines
 whether a processor will perform the assignment (line $5$ to $14$). This
@@ -873,7 +869,7 @@ computed.   This phase  is also  known as \textit{parallel reduction},  because
 after this phase,  the root node (the last node in the array) holds the sum of
 all nodes in the array.
 
-In  the down-sweep  phase,  the  tree is  traversed
+In  the down-sweep  phase~\rlsts{Parscan}{b},  the  tree is  traversed
 top-down and  the partial sums computed in the previous phase are propagated
 downward to accumulate  with the  entries which  did not  have their  partial
 sums computed  previously  in the  up-sweep  phase.   The phase  starts  by
@@ -1045,20 +1041,7 @@ array of scanned values.
 	 OMPVarListClause<OMPScanClause> *list = cast<OMPVarListClause>cast<OMPScanClause>(*I);
 	}
 
-	(b) Detecting programmer needs
-	 if (num_mapped_data == 1) {
-		 ...
-	 }
-	else {
-	if (num_mapped_data > 2) {
-	 llvm_unreachable("Unsupported scan clause with more than two mapped data");
-	}
-	if (MapClauseTypeValues[0] == OMP_TGT_MAPTYPE_TO ||
-	    MapClauseTypeValues[0] == OMP_TGT_MAPTYPE_TOFROM) {
-		...
-	}
-
-	(c) Preparing the scan algorithm parameters and openCL environment
+	(b) Preparing the scan algorithm parameters and openCL environment
 
 	ThreadBytes = EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_get_threads_blocks(), KArg);
 	Q = dyn_cast<ArrayType>(Q.getTypePtr())->getElementType();
@@ -1072,7 +1055,7 @@ array of scanned values.
 	EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_create_kernel(), FunctionKernel_2);
 	EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_release_buffer(), Aux);
 
-	(d) Customing the scan generator
+	(c) Customing the scan generator
 
 	 CLOS << "#pragma OPENCL EXTENSION cl_khr_fp64 : enable\n\n";
 	 std::string includeContents = CGM.OpenMPSupport.getIncludeStr();
@@ -1189,18 +1172,9 @@ output vector).
 \end{figure}
 
 In the first step, the algorithm obtains the pieces of information of the omp
-scan clause, as detailed in \rlst{ClangScan}{a}, lines 3 through 20. For
+scan clause, as detailed in \rlst{ClangScan}{c}, lines 3 through 20. For
 instance, Lines 3 to 7 get the list of variables and the kind of operation
 associated with the scan clause.
-
-\marcio{Este parágrafo está muito confuso. Além disso, o código da alinea b na
-listagem não diz absolutamente nada. Ninguem da banca irá entender. Ou vc
-remove e simplifica o texto aqui ou coloca código que faça algum sentido.} In
-\rlst{ClangScan}{b}, it's recovered the buffer where the result of the scan
-algorithm will be written, as can be seen in \rlstn{ScanKind}{a}{b}.  In
-\rlst{ScanKind}{a} is a standard way to write scan algorithm (input and output
-vectors). In \rlst{ScanKind}{b} is showed a second way to write scan algorithm,
-in this case it's necessary just an input data and auxiliary variables.
 
 Aclang provides a series of methods in the {\it CodeGenModule} class for
 calling the runtime library responsible for interfacing with the OpenCL
