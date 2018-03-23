@@ -487,76 +487,152 @@ already integral parts of the OpenGL graphics pipeline, the GeForce 256 marked
 the beginning of a natural progression where increasingly more of the graphics
 pipeline would be implemented directly on the graphics processor.
 
-In 2001 was introduced the GeForce 3 that is the first programmable GPU that means
+In 2001 was introduced the GeForce 3, the first programmable GPU, that means
 for the first time, developers had some control over the exact computations
 that would be performed on their GPUs.
 
 \subsection{GPU Overview}
-Graphics processor units were designed to allow to handle massive computations
-that are required to render the graphics that are created and displayed by a computer.
-Commonly, this requires the execution of the same operation on a large data set. Insomuch as that processing should be in real time. it must be completed as
-fast as can be done. The GPU was the answer to how to do this. A GPU consists of many cores. These all cores are capable of executing a thread.
-Generally, each thread performs an operation on a sample data. This allows that the large data can be operated in parallel.
-GPU was designed for graphics processing in mind, and this was the main application for GPUs
-for a long time. Lately, researcher and programmers discovered a opportunity the ability of the GPUs for high levels of parallelization. This is becomes an opportunity to increase the performance of many general purpose programs.
-That is how started what is known as general purpose graphics processing unit programming or GPGPU programming. With the steady growth interest in GPGPUs programming, GPU vendors started creating GPUs for different applications in mind, thus, the toolkit was created to allow programming in the GPUs. This toolkit, known as CUDA, allows the programmer to create applications that can run on GPUs. A major advantage of CUDA is its similarity with the C language. This allows the implementation of many applications as well as the increase in the number of parallel algorithms to harness the potential of the GPU. As was mentioned before, GPUs have the ability to execute a program in parallel. The downside to using GPU is the fact that a CPU is necessary mandatory. The GPU by itself can't be a standalone unit. To be able to operate on a GPU, the presence of the CPU is necessary to manage the execution of the program. The CPU is responsible for determining which portions of the application are completed by the GPU and what the parameters will be used in this operation. Also, an important function of the CPU is responsible for the memory management of the GPU. Thereby the operations are performed in the GPU, the data must be copied from the CPU memory. In the same way, when the GPU finished its work, it is necessary pass the data from the GPU to the CPU. This is a very expensive operation that often limits the programmers to be able to use the GPU.
-In addition to the above explained the use of the GPU has several other disadvantages.
-Similarly to the digital signal processor (DSP), the GPU has a slower clock speed than the CPU. It also does not have the same size of the cache. It does not implement branch prediction or any of that type of optimization. For this reason a GPU cannot keep up with the CPU in serial execution.
-For these reasons, it is very important to define what portions of the program can be done serially and executed on the CPU, meanwhile what portions could be parallelized and executed on the GPU. If the proportion to be executed in the GPU compensates in time with all the disadvantages mentioned above and it is faster than its serial version, worth the use of the GPU.
-There have been done many studies on the GPU and how is possible to use the GPU in several research areas. The new ease of use has also contributed to an increase in the number of people wanting to conduct research into the viability of a GPU implementation for their application. Studies also look at the various ways that the GPU can be utilized to improve performance. A very common situation nowadays is the waiting of many people for some research that makes possible the use of GPUs in their applications.
-As an example, Trancoso \etal~\cite{Trancoso2005} analysed a very simple application as implemented on a GPU, a low-end CPU, and a high-end CPU. They discussed the application’s performance on the GPU relative to the CPU and also looked at several of the different variables that can be changed to improve the GPU’s performance. They also looked at what factors make a program more likely to be better suited for a GPU than a CPU.
-Another example, Owens \etal~\cite{Owens2008}, they studied how the GPU can handle applications that were previously implemented on a CPU. That study looks at the GPU design and discusses about the possible performance improvements offered for the GPU. Also they analyzed how the GPU was used for specific applications such as in-game, physics and computational biophysics.
+Graphics processor units are designed to allow to handle massive computations,
+required to render the graphics that are created and displayed by a computer.
+Commonly, this requires the execution of the same operation on a large data set. In addition, this processing should be done in real time, and must be completed as
+fast as can be done. The GPU was the answer to this.
 
-As CUDA was mentioned, it is also important to mention OpenCL. The OpenCL standard is the first open, royalty-free, unified programming model for accelerating algorithms on heterogeneous systems. OpenCL allows the use of a C-based programming language for developing code across different platforms, such as CPUs, GPUs, DSPs, and field-programmable gate arrays (FPGAs).
-OpenCL is a programming model for software engineers and a methodology for system architects. It is based on standard ANSI C (C99) with extensions to extract parallelism. OpenCL also includes an application program interface (API) for the host to communicate with the hardware accelerator (mainly GPU), traditionally over PCI Express, or one kernel to communicate with another without host interaction.
-In the OpenCL model, the user schedules tasks to command queues, of which there is at least one for each device. The OpenCL run-time then breaks the data-parallel tasks into pieces and sends them to the processing elements in the device. This is the method for a host to communicate with any hardware accelerator. It is up to the individual hardware accelerator vendors to abstract away the vendor-specific implementation.
-Summing up what was said before, OpenCL is an framework that allows the use of several devices from different vendors. So many developers agree that CUDA has a better performance than OpenCL in Nvidia devices however, no all the costumers have Nvidia card therefore in several times is preferred OpenCL instead of CUDA. Clearly if Nvidia card is a option, CUDA will always be chosen.
+A GPU consists of many cores. These all cores are capable of executing a
+thread.  Generally, each thread performs an operation on a sample data. This
+allows that the large data can be operated in parallel. GPU was designed for
+graphics processing in mind, and this was the main application for GPUs for a
+long time. Lately, researcher and programmers discovered an opportunity
+\rem{the ability of}\new{to explore} the GPUs \rem{for}\new{to achieve} high
+levels of parallelization. This \rem{is becomes}\new{became} an opportunity to
+increase the performance of many general purpose programs.  That is how started
+what is known as general purpose graphics processing unit programming or GPGPU
+programming. With the steady growth interest in GPGPUs programming, GPU vendors
+started creating GPUs for different applications in mind, thus, the toolkit was
+created to allow programming in the GPUs. This toolkit, known as CUDA, allows
+the programmer to create applications that can run on GPUs. A major advantage
+of CUDA is its similarity with the C language.  This allows the implementation
+of many applications as well as the increase in the number of parallel
+algorithms to harness the potential of the GPU. As was mentioned before, GPUs
+have the ability to execute a program in parallel. The downside to using GPU is
+the fact that a CPU is necessary mandatory. The GPU by itself can't be a
+standalone unit. To be able to operate on a GPU, the presence of the CPU is
+necessary to manage the execution of the program. The CPU is responsible for
+determining which portions of the application are completed by the GPU and what
+the parameters will be used in this operation. Also, an important function of
+the CPU is responsible for the memory management of the GPU. Thereby the
+operations are performed in the GPU, the data must be copied from the CPU
+memory. In the same way, when the GPU finished its work, it is necessary pass
+the data from the GPU to the CPU. This is a very expensive operation that often
+limits the programmers to be able to use the GPU.
+
+In addition to the above explained the use of the GPU has several other
+disadvantages.  Similarly to the digital signal processor (DSP), the GPU has a
+slower clock speed than the CPU. It also does not have the same size of the
+cache. It does not implement branch prediction or any of that type of
+optimization. For this reason a GPU cannot keep up with the CPU in serial
+execution.  For these reasons, it is very important to define what portions of
+the program can be done serially and executed on the CPU, meanwhile what
+portions could be parallelized and executed on the GPU. If the proportion to be
+executed in the GPU compensates in time with all the disadvantages mentioned
+above and it is faster than its serial version, worth the use of the GPU.
+There have been done many studies on the GPU and how is possible to use the GPU
+in several research areas. The new ease of use has also contributed to an
+increase in the number of people wanting to conduct research into the viability
+of a GPU implementation for their application. Studies also look at the various
+ways that the GPU can be utilized to improve performance. A very common
+situation nowadays is the waiting of many people for some research that makes
+possible the use of GPUs in their applications.
+
+As an example, Trancoso \etal~\cite{Trancoso2005} analysed a very simple
+application as implemented on a GPU, a low-end CPU, and a high-end CPU. They
+discussed the application’s performance on the GPU relative to the CPU and also
+looked at several of the different variables that can be changed to improve the
+GPU’s performance. They also looked at what factors make a program more likely
+to be better suited for a GPU than a CPU. Another example, Owens
+\etal~\cite{Owens2008}, they studied how the GPU can handle applications that
+were previously implemented on a CPU. That study looks at the GPU design and
+discusses about the possible performance improvements offered for the GPU. Also
+they analyzed how the GPU was used for specific applications such as in-game,
+physics and computational biophysics.
+
+As CUDA was mentioned, it is also important to mention OpenCL. The OpenCL
+standard is the first open, royalty-free, unified programming model for
+accelerating algorithms on heterogeneous systems. OpenCL allows the use of a
+C-based programming language for developing code across different platforms,
+such as CPUs, GPUs, DSPs, and field-programmable gate arrays (FPGAs).  OpenCL
+is a programming model for software engineers and a methodology for system
+architects. It is based on standard ANSI C (C99) with extensions to extract
+parallelism. OpenCL also includes an application program interface (API) for
+the host to communicate with the hardware accelerator (mainly GPU),
+traditionally over PCI Express, or one kernel to communicate with another
+without host interaction.  In the OpenCL model, the user schedules tasks to
+command queues, of which there is at least one for each device. The OpenCL
+run-time then breaks the data-parallel tasks into pieces and sends them to the
+processing elements in the device. This is the method for a host to communicate
+with any hardware accelerator. It is up to the individual hardware accelerator
+vendors to abstract away the vendor-specific implementation.  Summing up what
+was said before, OpenCL is an framework that allows the use of several devices
+from different vendors. So many developers agree that CUDA has a better
+performance than OpenCL in Nvidia devices however, no all the costumers have
+Nvidia card therefore in several times is preferred OpenCL instead of CUDA.
+Clearly if Nvidia card is a option, CUDA will always be chosen.
 
 \subsection{GPU hardware}
 \label{sec:gpugardware}
-Before going into the programming of GPUs (see~\rsec{gpuprogramming}), it is important to have some background in GPU architecture.
-The GPU programming model exposed by CUDA very much mirrors the underlying
-hardware. Some of the details that make GPU programming hard are more apparent
-when looking at the underlying hardware.
-A CUDA GPU is built around a single kind of processor (as opposed to the different
-kinds of processors found in earlier GPUs). The processors in the GPU (called
-MPs, MultiProcessors) all contain a number of cores called SPs (Streaming Processors).
-Each MP also contains local memory, called shared memory since it can be
-accessed by all of the SPs in that MP. The number of MPs varies over the available
-GPUs; cheaper GPUs have as few as one MP, and as you go up in price the number
-of MPs increases.
-Each MP of the GPU can manage a large number of threads; on today’s GPUs
-up to 2048 threads can run on a single MP. The GPU schedules threads in groups
-of 32, called Warps, that are executed in lock-step (SIMD style execution). Threads are also divided into Blocks; the threads within a block can communicate using the
-shared memory. The maximum number of threads per block is 1024 ~\cite{NvidiaGuide2018}. Threads within
-a warp can communicate via the shared memory without using any synchronisation
-primitive. However, if communication takes place across warps synchronization is
-necessary. A barrier synchronization mechanism exists to ensure that all threads
-within a block have reached the same position in the code. Blocks are also grouped
-into a grid, that is the collection of blocks executing the same program.
+Before going into the programming of GPUs (see~\rsec{gpuprogramming}), it is
+important to have some background in GPU architecture.  The GPU programming
+model exposed by CUDA very much mirrors the underlying hardware. Some of the
+details that make GPU programming hard are more apparent when looking at the
+underlying hardware.  A CUDA GPU is built around a single kind of processor (as
+opposed to the different kinds of processors found in earlier GPUs). The
+processors in the GPU (called MPs, MultiProcessors) all contain a number of
+cores called SPs (Streaming Processors).  Each MP also contains local memory,
+called shared memory since it can be accessed by all of the SPs in that MP. The
+number of MPs varies over the available GPUs; cheaper GPUs have as few as one
+MP, and as you go up in price the number of MPs increases.  Each MP of the GPU
+can manage a large number of threads; on today’s GPUs up to 2048 threads can
+run on a single MP. The GPU schedules threads in groups of 32, called Warps,
+that are executed in lock-step (SIMD style execution). Threads are also divided
+into Blocks; the threads within a block can communicate using the shared
+memory. The maximum number of threads per block is 1024
+~\cite{NvidiaGuide2018}. Threads within a warp can communicate via the shared
+memory without using any synchronization primitive. However, if communication
+takes place across warps synchronization is necessary. A barrier
+synchronization mechanism exists to ensure that all threads within a block have
+reached the same position in the code. Blocks are also grouped into a grid,
+that is the collection of blocks executing the same program.
 
 \subsection{Programming for GPUs}
 \label{sec:gpuprogramming}
-The GPGPU programming landscape has rapidly evolved over the past several years. This allowed that in these days there are several approaches to programming GPUs. For this section, CUDA language will be taken as a reference.
+The GPGPU programming landscape has rapidly evolved over the past several
+years. This allowed that in these days there are several approaches to
+programming GPUs. For this section, CUDA language will be taken as a reference.
 
-CUDA is a parallel computing platform and programming model developed by NVIDIA designed for GPU computing.
-CUDA computing system has two parts: The host and device.
-The host part is one or many traditional CPU(s) like Intel or AMD CPUs. The
-device part is consist of one or several GPU(s), which is used as co-processors. Since
-GPU can involve a lot of parallelisms, CUDA devices could help to accelerate those applications that have a lot of data to  parallelize. Thus, parallelism is the key factor to decide if the application is appropriate for a CPU-GPU system.
+CUDA is a parallel computing platform and programming model developed by NVIDIA
+designed for GPU computing.  CUDA computing system has two parts: The host and
+device.  The host part is one or many traditional CPU(s) like Intel or AMD
+CPUs. The device part is consist of one or several GPU(s), which is used as
+co-processors. Since GPU can involve a lot of parallelisms, CUDA devices could
+help to accelerate those applications that have a lot of data to  parallelize.
+Thus, parallelism is the key factor to decide if the application is appropriate
+for a CPU-GPU system.
 
 \subsubsection{CUDA Function Declaration}
 \label{CUDAfunction}
 
 As stated above, a complete CUDA Program is a mixed code with both GPU and CPU
-code. Function declaration keywords is designed to support this kind of mix coding. As
-shown in Table~\ref{tab:cudaFunction} functions in CUDA can be declared as global, host or device. A kernel
-function is the function that will generate a large number threads and it is declared as
-global. During the compilation, the NVCC compiler will generate thousands of threads for
-the kernel function and map them to the GPU. The keyword device is used to declare a CUDA device
-functions that can only be executed on GPU. In addition, a CUDA device function can
-only be called in a kernel function. The last keyword, host, is design for declaration for a
-host function which is run on CPU. The keywords host and device can be used  together to instruct the compiler to generate two versions of the kernel, one to running on CPU and another for the GPU.
+code. Function declaration keywords is designed to support this kind of mix
+coding. As shown in Table~\ref{tab:cudaFunction} functions in CUDA can be
+declared as global, host or device. A kernel function is the function that will
+generate a large number threads and it is declared as global. During the
+compilation, the NVCC compiler will generate thousands of threads for the
+kernel function and map them to the GPU. The keyword device is used to declare
+a CUDA device functions that can only be executed on GPU. In addition, a CUDA
+device function can only be called in a kernel function. The last keyword,
+host, is design for declaration for a host function which is run on CPU. The
+keywords host and device can be used  together to instruct the compiler to
+generate two versions of the kernel, one to running on CPU and another for the
+GPU.
 
 \begin{table*}[!t]
 	\caption[small]{Kind of CUDA functions}
@@ -576,7 +652,16 @@ host function which is run on CPU. The keywords host and device can be used  tog
 \subsubsection{CUDA Thread Organization}
 \label{CUDA Thread Organization}
 When a kernel is executed, the execution is distributed over a grid of thread
-blocks as shown in \rfig{threadsblocks}. Since all threads are executed in the kernel function, some mechanisms are necessary to define in which data area the threads must work. In CUDA, all threads are organized in two-level hierarchy-block and grid, as shown in \rfig{threadorganization}. A number of threads compose a block and uses the threadIdx to index them in a block. A grid is organized in the same way and uses blockIdx to index each block in a grid. Both threadIdx and blockIdx are pre-defined variables of CUDA. In addition, there are another two pre-defined variables blockDim and gridDim, which are used to indicate the dimension block and grid by number of threads in a block and number of blocks in a grid. An example is showed in \ref{fig:cudaindex}.
+blocks as shown in \rfig{threadsblocks}. Since all threads are executed in the
+kernel function, some mechanisms are necessary to define in which data area the
+threads must work. In CUDA, all threads are organized in two-level
+hierarchy-block and grid, as shown in \rfig{threadorganization}. A number of
+threads compose a block and uses the threadIdx to index them in a block. A grid
+is organized in the same way and uses blockIdx to index each block in a grid.
+Both threadIdx and blockIdx are pre-defined variables of CUDA. In addition,
+there are another two pre-defined variables blockDim and gridDim, which are
+used to indicate the dimension block and grid by number of threads in a block
+and number of blocks in a grid. An example is showed in \rfig{cudaindex}.
 
 \begin{figure}[t]
 	\centering
@@ -705,9 +790,9 @@ the  OpenCL  driver.
 In the 80's Hillis and Stelle~\cite{dataparallel} presented several algorithms
 parallelized. To execute these algorithms, it was used on the Connection Machine System~\cite{themachine}. Thus, a very important observation of these algorithms
 is that Hillis considered a unlimited number of processors, so they did not worry about that. The algorithms was tested with 65536 elements (maximum number of processors of The Connection Machine~\cite{themachine}).
-One algorithm presented in the work mentioned aboves performs a sum of an array of numbers (see Figure \ref{fig:reductionhillis}). In this days this problem is known as $reduction$.\\
+One algorithm presented in the work mentioned aboves performs a sum of an array of numbers (see \rfig{reductionhillis}). In this days this problem is known as $reduction$.\\
 The main idea to solve the problems is to organize the addends at the leaves of a
-binary tree and performing the sums at each level of the tree in parallel. Exist several ways to organize an array into a binary tree. Figure \ref{fig:reductionhillis} illustrates the method chosen by them. As an example, it is presented an array of 8 elements named $x_{0}$ through $x_{7}$. In this algorithm, for purposes of simplicity, the number of elements to be summed is assumed to be an integral power of two. There are as many processors as elements, and the line $4$ (in~\rlsts{HillisAlgorithms}{a}) causes all processors to execute the lines $5$ and $6$ (~\rlsts{HillisAlgorithms}{a}) in synchrony, but the variable k has a different value for each processor, namely, the index of that processor within the array. At the end of the process, $x_{n-1}$ contains the sum of the n elements.\\
+binary tree and performing the sums at each level of the tree in parallel. Exist several ways to organize an array into a binary tree. \rfig{reductionhillis} illustrates the method chosen by them. As an example, it is presented an array of 8 elements named $x_{0}$ through $x_{7}$. In this algorithm, for purposes of simplicity, the number of elements to be summed is assumed to be an integral power of two. There are as many processors as elements, and the line $4$ (in~\rlsts{HillisAlgorithms}{a}) causes all processors to execute the lines $5$ and $6$ (~\rlsts{HillisAlgorithms}{a}) in synchrony, but the variable k has a different value for each processor, namely, the index of that processor within the array. At the end of the process, $x_{n-1}$ contains the sum of the n elements.\\
 As described in~\rlsts{HillisAlgorithms}{a} at each level
 (iteration) $d$ of the tree, if the processor $k$ that meets the property of the line $5$
 stored the sum of the neighbors at distance $2^{d-1}$ on his own position.
@@ -721,10 +806,47 @@ neighbors will be $2^{2-1} = 2$ and so on until reach the last level where the r
 	\label{fig:reductionhillis}
 \end{figure}
 
-Another algorithm presented by Hillis and Steele~\cite{dataparallel} is the scan. They perceived that modifying only one line they can get all the partial sums of an array.
-Looking at the simple summation algorithm explained above(\rlsts{HillisAlgorithms}{a}), it can be appreciated that most of the processors are idle most of the time. Line $5$ shows that during iteration $j$, only $n/2^{j}$ processors are active, and, indeed, half of the processors are never used. However, using the idle processors by allowing more processors to operate all the partial sums of the array can be computed from the previous algorithm explained with same amount of time that took to compute reduction $log\ n$. The key to understand this algorithm is to remember, in defining $\sum_{j}^{k}$ to mean $\sum_{i=j}^{k}x_{i}$, note that $\sum_{j}^{k}$ + $\sum_{k+1}^{m}$ = $\sum_{j}^{m}$. The algorithm replaces each $x_{k}$ by $\sum_{0}^{k}$: that is, the sum of all elements preceding and including $x_{k}$. In Figure \ref{fig:scanhillis}, this process is illustrated for an array of 8 elements.
-The only difference between this algorithm and the earlier one is the test in the if statement in the partial-sums algorithm that determines whether a processor will perform the assignment (line $5$ to $14$). This algorithm keeps more processors active: During step $j$, $n - 2^{j}$ processors are in use; after step $j$, element number $k$ has become $\sum_{a}^{k}$ where $a = max(0, k - 2^{j} + 1)$. For  example, at  level $d  = 1$  of \rfig{scanhillis} the processor $k = 1$ stored the sum of the neighbors at distance $2^{1-1} = 1$ (elements of $1$ and $0$) into the element at index $k = 1$, the processor $k = 2$ stored the sum of the neighbors with the same distance $1$ (elements of $2$ and $1$) into the element at index $k = 2$ and son, at the  next level of  the tree $d = 2$. The distance of the neighbors will be $2^{2-1} = 2$ and the processor $k = 2$ stored the sum of the neighbors $2$ and $0$) into the element at index $k = 2$ (note that this element has the sum of $\sum_{0}^{0}$ to $\sum_{1}^{2}$ that is $\sum_{0}^{2}$) so on until reach the last level where all the nodes have the sum all its precedents elements, the element $k$ has the following sum $\sum_{0}^{k}$. The algorithm is computed in $O(log\ n)$ time, it has $log\ n$ levels and each level is performed in parallel which means a constant time.\\
-In 1990, Guy  E. Blelloch~\cite{ScanAsPrimitive} proposed a new method to perform the scan parallel algorithm. For this new method is also used balanced trees. The idea is to build a balanced binary tree on the input data and sweep it from the leaves to the root to compute the all the partial sums. A binary tree with $n$ leaves has $d = log n$ levels, and each level $d$ has $2^{d}$ nodes. If it is performed one add per node, then we will perform $O(n)$ adds on a single traversal of the tree.
+Another algorithm presented by Hillis and Steele~\cite{dataparallel} is the
+scan. They perceived that modifying only one line they can get all the partial
+sums of an array.  Looking at the simple summation algorithm explained
+above(\rlsts{HillisAlgorithms}{a}), it can be appreciated that most of the
+processors are idle most of the time. Line $5$ shows that during iteration $j$,
+only $n/2^{j}$ processors are active, and, indeed, half of the processors are
+never used. However, using the idle processors by allowing more processors to
+operate all the partial sums of the array can be computed from the previous
+algorithm explained with same amount of time that took to compute reduction
+$log\ n$. The key to understand this algorithm is to remember, in defining
+$\sum_{j}^{k}$ to mean $\sum_{i=j}^{k}x_{i}$, note that $\sum_{j}^{k}$ +
+$\sum_{k+1}^{m}$ = $\sum_{j}^{m}$. The algorithm replaces each $x_{k}$ by
+$\sum_{0}^{k}$: that is, the sum of all elements preceding and including
+$x_{k}$. \rem{In Figure \ref{fig:scanhillis}, this process is
+illustrated}\new{\rfig{scanhillis} shows this process} for an array of 8
+elements.  The only difference between this algorithm and the earlier one is
+the test in the if statement in the partial-sums algorithm that determines
+whether a processor will perform the assignment (line $5$ to $14$). This
+algorithm keeps more processors active: During step $j$, $n - 2^{j}$ processors
+are in use; after step $j$, element number $k$ has become $\sum_{a}^{k}$ where
+$a = max(0, k - 2^{j} + 1)$. For  example, at  level $d  = 1$  of
+\rfig{scanhillis} the processor $k = 1$ stored the sum of the neighbors at
+distance $2^{1-1} = 1$ (elements of $1$ and $0$) into the element at index $k =
+1$, the processor $k = 2$ stored the sum of the neighbors with the same
+distance $1$ (elements of $2$ and $1$) into the element at index $k = 2$ and
+son, at the  next level of  the tree $d = 2$. The distance of the neighbors
+will be $2^{2-1} = 2$ and the processor $k = 2$ stored the sum of the neighbors
+$2$ and $0$) into the element at index $k = 2$ (note that this element has the
+sum of $\sum_{0}^{0}$ to $\sum_{1}^{2}$ that is $\sum_{0}^{2}$) so on until
+reach the last level where all the nodes have the sum all its precedents
+elements, the element $k$ has the following sum $\sum_{0}^{k}$. The algorithm
+is computed in $O(log\ n)$ time, it has $log\ n$ levels and each level is
+performed in parallel which means a constant time.
+
+In 1990, Guy  E. Blelloch~\cite{ScanAsPrimitive} proposed a new method to
+perform the scan parallel algorithm. For this new method is also used balanced
+trees. The idea is to build a balanced binary tree on the input data and sweep
+it from the leaves to the root to compute the all the partial sums. A binary
+tree with $n$ leaves has $d = log n$ levels, and each level $d$ has $2^{d}$
+nodes. If it is performed one add per node, then we will perform $O(n)$ adds on
+a single traversal of the tree.
 
 The key  idea in~\cite{ScanAsPrimitive} is  to build a  balanced binary
 tree on the input data $x$ and  sweep it to and from the root, scanning
@@ -735,40 +857,45 @@ representation is  shown in~\rfigs{upsweep}{downsweep} where  blue and
 black arrows  represent read  operations of the  elements of  $x$ that
 will be added, and orange arrows represent copy statements.
 
-As  shown  in \rlstn{Parscan}{a}{b},  the  algorithm  consists of  two
-phases:  \textit{up-sweep} and  \textit{down-sweep}.
-In  the up-sweep phase,  described   in  ~\rlsts{Parscan}{a}  the  tree   is  traversed
-bottom-up computing the scan of half of the internal nodes of the tree
-in~\rfig{upsweep}.  As described in~\rlsts{Parscan}{a} at each level
-(iteration)  $d$  of   the  tree  neighbors  at   distance  $2^d$  are
-accumulated       into        the       elements        at       index
-$k + 2^{(d+1)} - 1, k = 0 \ldots \lceil n/2 \rceil$ of the array (line
-18). For  example, at  level $d  = 0$  of \rfig{upsweep}  neighbors at
-distance $2^{(0+1)}  - 1  = 1$  are accumulated  into the  elements at
-index $k  + 1$, at the  next level of  the tree.  The distance  of the
-neighbors  that  are   accumulated  doubles  as  the   tree  level  is
-incremented  (e.g.  the  distance is  2 at  level $d  = 1$)  until the
-partial sum  at $x[i-1]$  is computed.   This phase  is also  known as
-\textit{parallel reduction},  because after this phase,  the root node
-(the last node in the array) holds the sum of all nodes in the array.\\
-In  the down-sweep  phase,  the  tree is  traversed  top-down and  the
-partial sums computed in the previous phase are propagated downward to
-accumulate  with the  entries which  did not  have their  partial sums
-computed  previously  in the  up-sweep  phase.   The phase  starts  by
-inserting zero at the  root of the tree. Then at  each step, each node
-at the current tree level will: (i)  sum its value to the former value
-of its left child and store the  result into its right child; and (ii)
-copy its own value to its  left child.  For example, consider the node
-at index $7$  level $d = 1$  of the tree in  \rfig{upsweep}. That node
-has two children, a left child at index $5$ and a right child at index
-$7$.  Hence,  during the down-sweep  phase two operations  will occur:
-(i) the value at  index $7$ is summed to the value  at index $5$ (left
-child of index  $7$) and is stored  into the right child  of index $7$
-(index $7$ itself); and (ii) the value at index $7$ is copied to index
-$5$ to be used  in the next level $d = 0$ (orange  arrow to left child
-of index $7$). The algorithm  performs $\mathcal{O}(n)$ operations in the first
-phase (\textit{up-sweep}) and for every level of this phase ($log\ n $ levels) is computed in $\mathcal{O}(1)$ (because is done in parallel) hence the total time is computed in $\mathcal{O}(log\ n)$, similarly for the second phase (\textit{down-sweep}) the total of operations is $\mathcal{O}(n)$ between adds ($n-1$) and swaps ($n-1$) moreover the computed time is $\mathcal{O}(log\ n)$. So the total number of operation of parallel scan is $\mathcal{O}(n)$ and computed time is $\mathcal{O}(log\ n)$ time.\\
- 
+As  shown  in \rlstn{Parscan}{a}{b},  the  algorithm  consists of  two phases:
+\textit{up-sweep} and  \textit{down-sweep}.  In  the up-sweep phase,  described
+in  ~\rlsts{Parscan}{a}  the  tree   is  traversed bottom-up computing the scan
+of half of the internal nodes of the tree in~\rfig{upsweep}.  As described
+in~\rlsts{Parscan}{a} at each level (iteration)  $d$  of   the  tree  neighbors
+at   distance  $2^d$  are accumulated       into        the       elements
+at       index $k + 2^{(d+1)} - 1, k = 0 \ldots \lceil n/2 \rceil$ of the array
+(line 18). For  example, at  level $d  = 0$  of \rfig{upsweep}  neighbors at
+distance $2^{(0+1)}  - 1  = 1$  are accumulated  into the  elements at index $k
++ 1$, at the  next level of  the tree.  The distance  of the neighbors  that
+are   accumulated  doubles  as  the   tree  level  is incremented  (e.g.  the
+distance is  2 at  level $d  = 1$)  until the partial sum  at $x[i-1]$  is
+computed.   This phase  is also  known as \textit{parallel reduction},  because
+after this phase,  the root node (the last node in the array) holds the sum of
+all nodes in the array.
+
+In  the down-sweep  phase,  the  tree is  traversed
+top-down and  the partial sums computed in the previous phase are propagated
+downward to accumulate  with the  entries which  did not  have their  partial
+sums computed  previously  in the  up-sweep  phase.   The phase  starts  by
+inserting zero at the  root of the tree. Then at  each step, each node at the
+current tree level will: (i)  sum its value to the former value of its left
+child and store the  result into its right child; and (ii) copy its own value
+to its  left child.  For example, consider the node at index $7$  level $d = 1$
+of the tree in  \rfig{upsweep}. That node has two children, a left child at
+index $5$ and a right child at index $7$.  Hence,  during the down-sweep  phase
+two operations  will occur: (i) the value at  index $7$ is summed to the value
+at index $5$ (left child of index  $7$) and is stored  into the right child  of
+index $7$ (index $7$ itself); and (ii) the value at index $7$ is copied to
+index $5$ to be used  in the next level $d = 0$ (orange  arrow to left child of
+index $7$). The algorithm  performs $\mathcal{O}(n)$ operations in the first
+phase (\textit{up-sweep}) and for every level of this phase ($log\ n $ levels)
+is computed in $\mathcal{O}(1)$ (because is done in parallel) hence the total
+time is computed in $\mathcal{O}(log\ n)$, similarly for the second phase
+(\textit{down-sweep}) the total of operations is $\mathcal{O}(n)$ between adds
+($n-1$) and swaps ($n-1$) moreover the computed time is $\mathcal{O}(log\ n)$.
+So the total number of operation of parallel scan is $\mathcal{O}(n)$ and
+computed time is $\mathcal{O}(log\ n)$ time.
+
 
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
@@ -802,11 +929,55 @@ phase (\textit{up-sweep}) and for every level of this phase ($log\ n $ levels) i
 
 \end{figure}
 
-In 2005, Horn~\cite{GPUGems2} proposed a first version of scan parallel for GPUs, this proposal was based in~\cite{dataparallel}, this implementation is more realist and limited. As was mentioned before for the work of~\cite{dataparallel}, they did not worry about the number of processor. They considered that it is possible to have a number of processors equal to the size of the input (not real situation in these days).
-So the proposed of Horn was limited by the block size of the GPU device, in our days this size could be until 2048. Horn proposed the method using it at solution of the problem $Stream Compaction$. That problems is defined as follow: given an input vector, and one key value. It is necessary to reorder the input that the elements that have the same value of the key are moved towards to the end of the vector. The rest of the elements are moved towards to the begin keeping the original order between them (See Figure~\ref{fig:desire}). Remember that for this version of scan, the complexity is $log n$ and order of the operation is in order of $n log\ n$.\\
+In 2005, Horn~\cite{GPUGems2} proposed a first version of scan parallel for
+GPUs, this proposal was based in~\cite{dataparallel}, this implementation is
+more realist and limited. As was mentioned before for the work
+of~\cite{dataparallel}, they did not worry about the number of processor. They
+considered that it is possible to have a number of processors equal to the size
+of the input (not real situation in these days).
 
-In 2007 Mark Harris et al.~\cite{harris2007parallel} proposed a new implementation of scan parallel algorithm, this version is based in the work of Blelloch~\cite{ScanAsPrimitive}. In the last method explained, proposed by Horn the number of operations is in order of $O(n log\ n)$ meanwhile the simple serial version of scan performs in order of $O(n)$ operations as well as Blelloch's version. That was one of Harris's main motivations, the possibility of at least achieve the same order of operations than the serial version. So, he implemented a method to solve the scan operation base in the work of Blelloch for a GPU. However, that implementation was the same problem of Horn's implementation, the algorithm only works for an small arrays, because is limited by a thread block. Thereby, the main contribution of Mark Harris was to design of an algorithm to be able to be use it for large arrays.
-The basic idea is simple. It is divided the large array into blocks, each of them can be scanned by a single thread block, and then it is computed the scan operations for the blocks and write the total sum of each block to another array of block sums. Then scan the block sums, generating an array of block increments that that are added to all elements in their respective blocks. For example (see Figure~\ref{fig:largescan}), let $N$ be the number of elements in the input array, and $B$ be the number of elements processed in a block. It is allocated $N/B$ thread blocks of $B/2$ threads each. (Here it is assumed that N is a multiple of $B$. A choice is according of GPU Series. It is used the scan algorithm of the previous sections to scan each block $i$ independently, storing the resulting scans to sequential locations of the output array~\ding{172}. It was made one minor modification to the scan algorithm. Before zeroing the last element of block $i$ (the block of code labeled $B$ in line $15$ in~\rlst{Parscan}), It is stored the value (the total sum of block $i$) to an auxiliary array represented by $\sum$~\ding{173}. Then scan $\sum$ in the same manner, writing the result to an array represented by $\sigma$~\ding{174}. Then add $\sigma[i]$ to all elements of block $i$~\ding{175}. After making all the previous steps, it is obtained the final array of scanned values. 
+So the proposed of Horn was limited by the block size of the GPU device, in our
+days this size could be until 2048. Horn proposed the method using it at
+solution of the problem $Stream Compaction$. That problems is defined as
+follow: given an input vector, and one key value. It is necessary to reorder
+the input that the elements that have the same value of the key are moved
+towards to the end of the vector. The rest of the elements are moved towards to
+the begin keeping the original order between them (See
+Figure~\ref{fig:desire}). Remember that for this version of scan, the
+complexity is $log n$ and order of the operation is in order of $n log\ n$.
+
+In 2007 Mark Harris et al.~\cite{harris2007parallel} proposed a new
+implementation of scan parallel algorithm, this version is based in the work of
+Blelloch~\cite{ScanAsPrimitive}. In the last method explained, proposed by Horn
+the number of operations is in order of $O(n log\ n)$ meanwhile the simple
+serial version of scan performs in order of $O(n)$ operations as well as
+Blelloch's version. That was one of Harris's main motivations, the possibility
+of at least achieve the same order of operations than the serial version. So,
+he implemented a method to solve the scan operation base in the work of
+Blelloch for a GPU. However, that implementation was the same problem of Horn's
+implementation, the algorithm only works for an small arrays, because is
+limited by a thread block. Thereby, the main contribution of Mark Harris was to
+design of an algorithm to be able to be use it for large arrays.
+
+The basic idea is simple. It is divided the large array into blocks, each of
+them can be scanned by a single thread block, and then it is computed the scan
+operations for the blocks and write the total sum of each block to another
+array of block sums. Then scan the block sums, generating an array of block
+increments that that are added to all elements in their respective blocks. For
+example (see~\rfig{largescan}), let $N$ be the number of elements in
+the input array, and $B$ be the number of elements processed in a block. It is
+allocated $N/B$ thread blocks of $B/2$ threads each. (Here it is assumed that N
+is a multiple of $B$. A choice is according of GPU Series. It is used the scan
+algorithm of the previous sections to scan each block $i$ independently,
+storing the resulting scans to sequential locations of the output
+array~\ding{172}. It was made one minor modification to the scan algorithm.
+Before zeroing the last element of block $i$ (the block of code labeled $B$ in
+line $15$ in~\rlst{Parscan}), It is stored the value (the total sum of block
+$i$) to an auxiliary array represented by $\sum$~\ding{173}. Then scan $\sum$
+in the same manner, writing the result to an array represented by
+$\sigma$~\ding{174}. Then add $\sigma[i]$ to all elements of block
+$i$~\ding{175}. After making all the previous steps, it is obtained the final
+array of scanned values.
 
 \begin{figure}[t]
 	\centering
@@ -990,7 +1161,11 @@ blocks up to that entry (inclusive).   Finally in the fourth step,
 for each block the method adds the previous block sums  to the elements of the current
 block~\ding{185}.
 
-The following paragraph describes how ACLang implements the parallel scanning algorithm. This process makes the necessary calls to the AClang runtime library and populates a template that will execute the scan algorithm with the program data (e.g., type of data to be carried out the scan, the scan operation, the output vector).
+The following paragraph describes how ACLang implements the parallel scanning
+algorithm. This process makes the necessary calls to the AClang runtime library
+and populates a template that will execute the scan algorithm with the program
+data (e.g., type of data to be carried out the scan, the scan operation, the
+output vector).
 
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
@@ -1013,36 +1188,46 @@ The following paragraph describes how ACLang implements the parallel scanning al
 	\end{lstlisting}
 \end{figure}
 
-In the first step, the algorithm obtains the pieces of information of the
-omp scan clause, as detailed in \rlst{ClangScan}{a}, lines 3 through
-20.
+In the first step, the algorithm obtains the pieces of information of the omp
+scan clause, as detailed in \rlst{ClangScan}{a}, lines 3 through 20. For
+instance, Lines 3 to 7 get the list of variables and the kind of operation
+associated with the scan clause.
 
-Lines 3 to 7 get the list of variables and the kind of operation
-  associated with the scan clause.
-
-In \rlst{ClangScan}{b}, it's recovered the buffer where the result of the scan
-algorithm will be written, as can be seen in \rlstn{ScanKind}{a}{b}.
-In \rlstn{ScanKind}{a} is a standard way to write scan algorithm (input and output vectors). In \rlstn{ScanKind}{b} is showed a second way to write scan algorithm,
+\marcio{Este parágrafo está muito confuso. Além disso, o código da alinea b na
+listagem não diz absolutamente nada. Ninguem da banca irá entender. Ou vc
+remove e simplifica o texto aqui ou coloca código que faça algum sentido.} In
+\rlst{ClangScan}{b}, it's recovered the buffer where the result of the scan
+algorithm will be written, as can be seen in \rlstn{ScanKind}{a}{b}.  In
+\rlst{ScanKind}{a} is a standard way to write scan algorithm (input and output
+vectors). In \rlst{ScanKind}{b} is showed a second way to write scan algorithm,
 in this case it's necessary just an input data and auxiliary variables.
 
-Lines 24 to 34 retrieve the
-scan parameters and and makes an initial configuration of OpenCL. Line $24$ computes the number of threads per block and the
-number of blocks. That will be used to call the sub-routines of the parallel scan algorithm. This is a very important step because as mentioned before, the algorithm only works for input sizes that are powers of 2 ($2^{k}$). So when the
-size is not a power of two, It's impossible to solve the problem. Hereby, to fix
-it, it's founded the closest higher number that is a product of two powers of
-two. Let's represent the number of blocks as $B$ and the number of threads per
-block as $T$.\\ For example, if the size of the input data is $12$, the closest number with the properties mentioned before is $16$, where we found more of one solution
-such as ($B$:1 - $T$:16), ($B$:2 - $T$:8), ($B$:4 - $T$:4) and so on.
-Attention, in some cases it's possible to find some solution with $T$ bigger
-than the threads provides for the architecture used. Thus, $T$ is limited
-according of the architecture programmer features, similarly for $B$.\\
+Aclang provides a series of methods in the {\it CodeGenModule} class for
+calling the runtime library responsible for interfacing with the OpenCL
+drivers. Those functions have the following structure:
+$CGM.operation1.MPtoGPURuntime().operation2$. Lines 24 to 34 retrieve the scan
+parameters and and makes an initial configuration of OpenCL. Line $24$ computes
+the number of threads per block and the number of blocks. That will be used to
+call the sub-routines of the parallel scan algorithm. This is a very important
+step because as mentioned before, the algorithm only works for input sizes that
+are powers of 2 ($2^{k}$). So when the size is not a power of two, It's
+impossible to solve the problem. Hereby, to fix it, it's founded the closest
+higher number that is a product of two powers of two. Let's represent the
+number of blocks as $B$ and the number of threads per block as $T$.
+
+For example, if the size of the input data is $12$, the closest number with the
+properties mentioned before is $16$, where we found more of one solution such
+as ($B$:1 - $T$:16), ($B$:2 - $T$:8), ($B$:4 - $T$:4) and so on.  Attention, in
+some cases it's possible to find some solution with $T$ bigger than the threads
+provides for the architecture used.  Thus, $T$ is limited according of the
+architecture programmer features, similarly for $B$.
+
 Therefore, the maximum size to compute the scan algorithm is limited for the
-resources provided in the architecture, later in \ref{cap:Conclusion} it will
-show a proposal to extend that limit.
-Line 25 retrieves the type of variable in which the
-program is performing the scan operation. This variable can be of type int,
-double, float, but can also be a new user-defined type. In this case, it is
-mandatory for this new type to be defined within the "omp declare target"
+resources provided in the architecture, later in \rcap{Conclusion} it will show
+a proposal to extend that limit.  Line 25 retrieves the type of variable in
+which the program is performing the scan operation. This variable can be of
+type int, double, float, but can also be a new user-defined type. In this case,
+it is mandatory for this new type to be defined within the "omp declare target"
 clauses (see example in \rlst{pol}).
 
 Line $26$ find the operator that the programmer defined to use in the scan
@@ -1051,22 +1236,18 @@ could use the scan algorithm, the most common are: ($+$, $*$, $\&$, $||$,
 $max$, $min$). In the case that a new variable was defined it is mandatory
 define an operator for this variable (See example in \rlst{pol}).
 
-Line $28$ does a needed step to execute the scan algorithm, it
-created an auxiliary buffer (as can see in \ref{fig:scheme} ~\ding{183}).
-Aclang provides a series of methods in the {\it CodeGenModule} class for
-calling the runtime library responsible for interfacing with the OpenCL
-drivers. Those functions have the following structure:
-$CGM.operation1.MPtoGPURuntime().operation2$.  Lines $29$ to $33$ generate code
-for the runtime library to call the OpenCL driver to compile the kernels and
-dispatch then for execution.
+Line $28$ does a needed step to execute the scan algorithm, it created an
+auxiliary buffer (as can see in \rfig{scheme} ~\ding{183}).  Lines $29$ to $33$
+generate code for the runtime library to call the OpenCL driver to compile the
+kernels and dispatch then for execution.
 
 Lines $31$ to $33$ execute the necessaries kernels to compute the scan
 algorithm. Line $31$ computes the scan for every single block thread
-independently (as can see in \ref{fig:scheme} ~\ding{182}). Line $32$ executes
+independently (as can see in \rfig{scheme} ~\ding{182}). Line $32$ executes
 the second kernel that is in charge to computed the sum of accumulates from the
-auxiliary vector (as seen in \ref{fig:scheme} ~\ding{184}). Line $33$ executes
+auxiliary vector (as seen in \rfig{scheme} ~\ding{184}). Line $33$ executes
 the kernel in charge to distributes the corresponding accumulates to the
-positions on the result vector (as can see in \ref{fig:scheme} ~\ding{185}).
+positions on the result vector (as can see in \rfig{scheme} ~\ding{185}).
 
 Finally, line $34$ transfers the solution vector data to the programmer desired
 vector, as we mentioned before, the programmer has two options to receive the
@@ -1807,9 +1988,9 @@ GPUs.
 			& Given two binary arrays $arr1[]$ and $arr2[]$ of same size n, find the
 			length of the longest common $span (i, j)$ where $j >= i$ such that
 			$arr1[i] + arr1[i+1] + \dotso + arr1[j] = arr2[i] + arr2[i+1] + \dotso +
-			arr2[j]$. 
+			arr2[j]$.
 			& Programming competitive.\\ \hline
-			3 & Polynomial Evaluation 
+			3 & Polynomial Evaluation
 			& Given an array $a$ of coefficients and a number  $x$,   compute  the   value  of:
 			$a_nx^n  + a_{n-1}x^{n-1}  + \dotso  +  a_1x^1 + a0$
 			& Calculus,  Abstract  Algebra\\ \hline
@@ -1819,7 +2000,7 @@ GPUs.
 			array  of  values.   Given  one  or  more
 			initial  terms, each  additional term  of
 			the sequence  or matrix  is defined  as a
-			function   of   the   preceding   terms.  
+			function   of   the   preceding   terms.
 			& Analisys  of  algorithms,  digital Signal  processing,  Fibonacci Numbers.\\ \hline
 			5  & Random  Number Generator
 			& Given  n numbers,  each with  some
@@ -1838,7 +2019,7 @@ GPUs.
 			&  Sum of big integer numbers
 			& Public-key  cryptography,  mathematical  constant computation  such as $\pi$ \\ \hline
 			8   & Count the number of ways to divide an array in three contiguous
-			parts having equal sum 
+			parts having equal sum
 			& Given an array of n numbers, find out the number of ways to
 			divide the array into three contiguous parts such that the sum
 			of three parts is equal.
@@ -1846,22 +2027,22 @@ GPUs.
 			9   & Maximum sum of two non-overlapping subarrays of given size
 			& Given an array, find two subarrays with a specific length $K$
 			such that sum of these subarrays is maximum among all possible
-			choices of subarrays. 
+			choices of subarrays.
 			& Programming competitive, video games.\\ \hline
 			10 & Maximum Subarray sum modulo m
-			& Given an array of n elements and an integer m 
+			& Given an array of n elements and an integer m
 			find the maximum value of the sum of its subarray modulo m.
 			& Programming competitive.\\ \hline
 			11 & Maximum occurred integer in n ranges
 			& Given n ranges of the form L and R, the task is to find the
 			maximum occurred integer in all the ranges. If more than one
-			such integer exits print the smallest one.  
+			such integer exits print the smallest one.
 			& Programming competitive.\\ \hline
 			12 & Find the prime numbers which can written as sum of most
 			consecutive primes
 			& Given an array of limits, for every limit find the prime number
 			which can be written as the sum of the most consecutive primes
-			smaller than or equal to limit. 
+			smaller than or equal to limit.
 			& Cryptography. Programming\newline  Competitive.\\
 			\hline
 		\end{tabular}
@@ -2018,7 +2199,7 @@ difference was likely due by  the AClang runtime library.  To evaluate
 that, a  new set of  experiments with profile enabled  was performed.
 Figure~\ref{fig:analysis}  shows the  total  execution  time for  some
 micro-benchmarks.  On the x-axis of  the figure are benchmark programs
-identified by their numbers as  listed in~\ref{tab:benchmark} followed by
+identified by their numbers as  listed in~\rtab{benchmark} followed by
 a label  OCL (OpenCL)  or OMP (OpenMP)  to indicate  the corresponding
 implementation. On the  y-axis are program execution  times.  Each bar
 in  the  figure  is  broken  down according  to  the  following  tasks
