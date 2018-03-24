@@ -925,51 +925,24 @@ computed time is $\mathcal{O}(log\ n)$ time.
 
 \end{figure}
 
-\rem{In 2005, Horn~\cite{GPUGems2} proposed a first version of scan parallel for
-GPUs, this proposal was based in~\cite{dataparallel}, this implementation is
-more realist and limited. As was mentioned before for the work
-of~\cite{dataparallel}, they did not worry about the number of processor. They
-considered that it is possible to have a number of processors equal to the size
-of the input (not real situation in these days).}
-\new{In 2005, Horn~\cite{GPUGems2} proposed the first version of scan parallel
+
+In 2005, Horn~\cite{GPUGems2} proposed the first version of scan parallel
 for GPUs. This proposal was based in~\cite{dataparallel}. However, this
 implementation is more realist, but limited. As was mentioned before for the
 work of~\cite{dataparallel}, they did not worry about the number of processors.
 They considered that it is possible to have a number of processors equal to the
-size of the input (a not real situation in these days).}
+size of the input (a not real situation in these days).
+So Horn's proposal was limited by the block size of the GPU device, which,
+today, this size could be up to 2048. Horn proposed this method by using it
+as the solution of the problem $Stream Compaction$. This problem is defined
+as follow: given an input vector, and a key value,  it is necessary to
+reorder the input so that elements with the same key are moved to the end of
+the vector. The rest of the elements are moved towards to the beginning,
+keeping the original order between them (See Figure~\ref{fig:desire}). Recall
+that for this version of scan, the complexity is $log n$, and the order of
+the operation is $n log\ n$.
 
-\rem{So the proposed of Horn was limited by the block size of the GPU device, in our
-days this size could be until 2048. Horn proposed the method using it at
-solution of the problem $Stream Compaction$. That problems is defined as
-follow: given an input vector, and one key value. It is necessary to reorder
-the input that the elements that have the same value of the key are moved
-towards to the end of the vector. The rest of the elements are moved towards to
-the begin keeping the original order between them (See
-Figure~\ref{fig:desire}). Remember that for this version of scan, the
-complexity is $log n$ and order of the operation is in order of $n log\ n$.}
-\new{So Horn's proposal was limited by the block size of the GPU device, which,
-  today, this size could be up to 2048. Horn proposed this method by using it
-  as the solution of the problem $Stream Compaction$. This problem is defined
-  as follow: given an input vector, and a key value,  it is necessary to
-  reorder the input so that elements with the same key are moved to the end of
-  the vector. The rest of the elements are moved towards to the beginning,
-  keeping the original order between them (See Figure~\ref{fig:desire}). Recall
-  that for this version of scan, the complexity is $log n$, and the order of
-the operation is $n log\ n$.}
-
-\rem{In 2007 Mark Harris et al.~\cite{harris2007parallel} proposed a new
-implementation of scan parallel algorithm, this version is based in the work of
-Blelloch~\cite{ScanAsPrimitive}. In the last method explained, proposed by Horn
-the number of operations is in order of $O(n log\ n)$ meanwhile the simple
-serial version of scan performs in order of $O(n)$ operations as well as
-Blelloch's version. That was one of Harris's main motivations, the possibility
-of at least achieve the same order of operations than the serial version. So,
-he implemented a method to solve the scan operation base in the work of
-Blelloch for a GPU. However, that implementation was the same problem of Horn's
-implementation, the algorithm only works for an small arrays, because is
-limited by a thread block. Thereby, the main contribution of Mark Harris was to
-design of an algorithm to be able to be use it for large arrays.}
-\new{In 2007 Mark Harris et al.~\cite{harris2007parallel} proposed a new
+In 2007 Mark Harris et al.~\cite{harris2007parallel} proposed a new
 implementation of scan parallel algorithm. This version was based in the work
 of Blelloch~\cite{ScanAsPrimitive}. In the method proposed by Horn the number
 of operations is in order of $O(n log\ n)$ meanwhile the simple serial version
@@ -980,19 +953,14 @@ method to solve the scan operation base in the work of Blelloch for a GPU.
 However, that implementation had the same problem of Horn's implementation, the
 algorithm only works for an small arrays, because it is limited by a thread
 block. Thereby, the main contribution of Mark Harris was to design a new
-algorithm to be able to use it for large arrays.}
+algorithm to be able to use it for large arrays.
 
-\rem{The basic idea is simple. It is divided the large array into blocks, each of
-them can be scanned by a single thread block, and then it is computed the scan
-operations for the blocks and write the total sum of each block to another
-array of block sums. Then scan the block sums, generating an array of block
-increments that are added to all elements in their respective blocks.}
-\new{The basic idea is simple. The large array is divided into blocks, each of which
+The basic idea is simple. The large array is divided into blocks, each of which
 can be scanned by a single thread block, and then the scan operations are
 computed for the blocks and the total sum of each block is written to another
 array of sums of blocks. Next, the block sums are examined, generating an array
 of block increments that are added to all the elements in their respective
-blocks.}
+blocks.
 
 For example (see~\rfig{largescan}), let $N$ be the number of elements in
 the input array, and $B$ be the number of elements processed in a block. It is
@@ -1214,7 +1182,7 @@ output vector).
 
 In the first step, the algorithm obtains the pieces of information of the omp
 scan clause, as detailed in \rlst{ClangScan}{a}. For
-instance, Lines 3 to 12 get the list of variables and the kind of operation
+instance, Lines $3$ to $12$ get the list of variables and the kind of operation
 associated with the scan clause.
 
 Aclang provides a series of methods in the {\it CodeGenModule} class for
@@ -1239,7 +1207,7 @@ architecture programmer features, similarly for $B$.
 
 Therefore, the maximum size to compute the scan algorithm is limited for the
 resources provided in the architecture, later in \rcap{Conclusion} it will show
-a proposal to extend that limit.  Line 25 retrieves the type of variable in
+a proposal to extend that limit.  Line $9$ retrieves the type of variable in
 which the program is performing the scan operation. This variable can be of
 type int, double, float, but can also be a new user-defined type. In this case,
 it is mandatory for this new type to be defined within the "omp declare target"
@@ -1252,11 +1220,11 @@ $max$, $min$). In the case that a new variable was defined it is mandatory
 define an operator for this variable (See example in \rlst{pol}).
 
 Line $18$ does a needed step to execute the scan algorithm, it created an
-auxiliary buffer (as can see in \rfig{scheme} ~\ding{183}).  Lines $19$ to $26$
+auxiliary buffer (as can see in \rfig{scheme} ~\ding{183}).  Lines $19$ to $25$
 generate code for the runtime library to call the OpenCL driver to compile the
 kernels and dispatch then for execution.
 
-Lines $25$ to $26$ execute the necessaries kernels to compute the scan
+Lines $26$ executes the necessaries kernels to compute the scan
 algorithm. First, computes the scan for every single block thread
 independently (as can see in \rfig{scheme} ~\ding{182}). Then, it executes
 the second kernel that is in charge to computed the sum of accumulates from the
@@ -1309,12 +1277,12 @@ where the programmer wants to save the result vector. Line $16$ represents when
 the programmer needs a new vector to save the result. Line $17$ refers to the
 programmer wants to save the result vector in input data vector.
 
-Back to \rlst{ClangScan}{d}, Line $38$ fillings a standard header. Lines $39$
-to $42$ analyze if the programmer defined a new type of variable with its
+Back to \rlst{ClangScan}{d}, Line $32$ fillings a standard header. Lines $33$
+to $36$ analyze if the programmer defined a new type of variable with its
 respective operator. If is true, that information is placed immediately after
 the header mentioned before.
 
-Lines $43$ to $52$ define the neutral value according to the operation, a
+Lines $37$ to $46$ define the neutral value according to the operation, a
 neutral value is defined by the operation ($a$ = $a$ $\oplus$ $neutralValue$)
 where $a$ is any variable $\oplus$ is an operator, as we can see, when we
 operate any variable with the neutral. For example, for the sum operation, the
@@ -1324,8 +1292,8 @@ basic operation, for default this neutral is defined internally, however when
 the programmer defined a new type of variable, it is mandatory define the
 neutral value in the section "omp declare target"
 
-Line $54$ defines the word $dataType$, it represents the type of variable that
-is used for the programmer. Finally, line $55$ closes the file that will
+Line $48$ defines the word $dataType$, it represents the type of variable that
+is used for the programmer. Finally, line $49$ closes the file that will
 perform the scan parallel algorithm. Remember, the explained is a very
 summarized code of the total process. The aims to explain that code is to show
 the mainly components to understand the process to how pass from the omp clause
@@ -1337,27 +1305,92 @@ To see a final version of the template for one example, see \rcap{ScanUse}.
 
 \section{Stream Compaction}
 
-Stream Compaction
-
+Stream compaction is an important primitive in a variety of general-purpose applications, including collision detection and sparse matrix compression. Also Stream compaction is the primary method for transforming a heterogeneous vector, with elements of many types, into homogeneous vectors, in which each element has the same type. This is particularly useful with vectors that have some elements that are interesting and many elements that are not interesting. Stream compaction produces a smaller vector with only interesting elements. With this smaller vector, computation is more efficient, because we compute on only interesting elements.\\
+\begin{figure}[t]
+	\centering
+	\caption{Stream Compaction Example}
+	\includegraphics[scale=1.2]{images/stremexample.jpg}
+	\label{fig:streamexample}
+\end{figure}
+Informally, stream compaction is a filtering operation: from an input vector, it selects a subset of this vector and packs that subset into a dense output vector. Figure~\ref{fig:streamexample} shows an example. More formally, stream compaction takes an input vector $A$ and a predicate $p$, and outputs only those elements in $A$ for which $p(A)$ is true, preserving the ordering of the input elements. 
+Stream compaction requires two steps, a scan and a scatter.
+\begin{enumerate}  
+\item The first step generates a temporary vector where the elements that pass the predicate are set to 1 and the other elements are set to 0. We then scan this temporary vector. For each element that passes the predicate, the result of the scan now contains the destination address for that element in the output vector.
+\item The second step scatters the input elements to the output vector using the addresses generated by the scan.
+\end{enumerate}
+To illustrated  technique, see the following example:
+Let vector $A$ and predicate refers to the elements greater than 10.\\
+$A \: = \: <17, 4, 6, 8, 11, 5, 13, 19, 0, 24>$ and it is desired  $<17, 11, 13, 19, 24>$\\
+As was mentioned before, the first step performs a vector of bits where
+the $i$ element is $1$ if satisfies the predicate $0$ otherwise. For the example:\\
+$input \:\: <17, 4, 6, 8, 11, 5, 13, 19, 0, 24>$\\
+$bits \:\: <1, 0, 0, 0, 1, 0, 1, 1, 0, 1>$\\
+Then scan a vector $bits$ into $bitsum$.\\
+$bitsum \:\: <1, 1, 1, 1, 2, 2, 3, 4, 4, 5> $\\
+The second step, to every element with value $1$ in the vector $bits$, it is saved the value from the vector input in the address that contains the element $i$ of the vector $bitsum$, after that, finally it is got the desire vector.\\
+$output \:\: <17, 11, 13, 19, 24>$
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
-	\begin{lstlisting}[label=lst:seqcod, caption={Fragment of Sequence alignment}, escapeinside={(*}{*)}]
+	\begin{lstlisting}[label=lst:strcod, caption={Fragment of Stream Compaction Benchemark}, escapeinside={(*}{*)}]
 
-	int main() {
-	int *h;
-	int *t;
+	int main(){
+		
+		input = (int *)malloc( sizeof(int) * N );
+		bits = (int *)malloc( sizeof(int) * N );
+		bitsum = (int *)malloc( sizeof(int) * N );
+		output = (int *)malloc( sizeof(int) * N );
+		
+		fill( input );
+		
+		int predicate = read_predicate();
+		
+		f( input, bits, N, predicate ); //Fill bits in parallel
+		
+		bitsum[0] = 0;
+		#pragma omp target device(GPU) map(from:bits[:N],to:bitssum[:N])
+		#pragma omp parallel for scan(+:bitsum)
+		for(int i = 1 ; i < N ; i++)
+			bitsum[i] = bitsum[i-1] +  bits[i-1];
+		
+		exclusive_to_inclusive( bitsum, bit ); //In parallel transform bitsum to its inclusive version 
+		
+		g( output,input, bitsum, bit ); //In parallel fill the output vector
+		
+	}
+	\end{lstlisting}
+\end{figure}
 
-	t = (int *)malloc(N * sizeof(int));
-	w = (int *)malloc(N * sizeof(int));
-	h = (int *)malloc(N * sizeof(int));
-
+\rlst{strcod}  presents a fragment from $Stream Compaction$. The algorithm is based in the two steps mentioned before.
+Lines $4$ to $7$ create the necessary vectors in addition to input and output.
+Line $13$ fills the vector bit in parallel. The \ttt{target} clause (lines 16--17) defines the portion of the program  that will be executed by the accelerator device (lines 18--19) defined in the line $16$.
+Due the version provided is a exclusive, it is necessary an additional step, so Line $21$ to pass from the exclusive to its inclusive version. Finally, Line $23$ fills the the vector output with the information generated in the vectors bitsum and bit.\\
+\rlst{strker} presents the kernel generated by AClang. Due is a basic application of scan, the kernel generated has a basic structure. Line $3$ defines the neutral or also called identity element, in this case the operation used was a sum, thus the neutral value is $0$. As can be seen, each kernel has the type of variable for the vectors, this information was extracted from the omp clause and replaced as was explained in the section \ref{sec:ScanInAClang}.
+Lines $6$ to $10$ presented the kernel that performs the steps ~\ding{182} and ~\ding{183} of Figure \ref{fig:scheme}. Lines $12$ to $16$ also presented the kernel that computes the step ~\ding{184} of Figure \ref{fig:scheme}. Finally, lines $18$ to $21$ show the kernel that performs the step ~\ding{185} of the same figure.
+ 
+\begin{figure}[t]
+	\lstset{basicstyle=\scriptsize}
+	\begin{lstlisting}[label=lst:strker, caption={Fragment of Stream Compaction kernel generated}, escapeinside={(*}{*)}]
+	#pragma OPENCL EXTENSION cl_khr_fp64 : enable
+	
+	#define _initializer 0
+	
+	
+	__kernel void kernel_0 (__global int *input,
+	__global int *S,
+	const int n) {
 	...
-
-	#pragma omp target device(GPU) map(from : t[:N]) map(to : h[:N])
-	#pragma omp parallel for scan(max : t)
-	for (int i = 1; i < N; i++)
-	t[i] = max(t[i - 1], h[i - 1]);
-
+	}
+	
+	__kernel void kernel_1 (__global int *input,
+	const int n) {
+	
+	...
+	}
+	
+	__kernel void kernel_2(__global int *outpu, __global int *input,
+	__global int *S) {
+	...
+	}
 	\end{lstlisting}
 \end{figure}
 
@@ -1412,7 +1445,6 @@ algorithm works.
 	\end{lstlisting}
 \end{figure}
 
-\marcio{Maicol: Os itens abaixo precisam ser reescritos. Não está claro a explicação do algoritmo}
 But, How can \rlst{radexample} do parallel?
 The next steps show how to do it.
 \begin{enumerate}
@@ -1421,7 +1453,7 @@ where every bit that is 0 in the new vector is 1 else the value is 0.
 \item Scan the vector, and record the sum of the predicate in the process. Notice, Scan
 algorithm works for arrays of arbitrary size instead of $2^{n}$ size, however as how was
 explained before the propose resolves for any arbitrary size.
-\item Flips bits of the predicate, and scan that.
+\item Flips bits of the predicate, and scan it.
 \item Move the values in the vector with the following rule:
 \begin{enumerate}
 \item For the $i^{th}$ element in the vector:
@@ -1506,29 +1538,6 @@ the kernel has 3 main components which were detailed before.
 	__kernel void kernel_2(__global unsigned int *input,
 	__global unsigned int *S) {
 		...
-	}
-	\end{lstlisting}
-\end{figure}
-
-\begin{figure}[t]
-	\lstset{basicstyle=\scriptsize}
-	\begin{lstlisting}[label=lst:seqkernel, caption={Fragment of Radix Sort
-	kernel generated}, escapeinside={(*}{*)}]
-	__kernel void kernel_0 (__global unsigned int *input,
-	__global unsigned int *S,
-	const int n) {
-	...
-	}
-
-	__kernel void kernel_1 (__global unsigned int *input,
-	const int n) {
-
-	...
-	}
-
-	__kernel void kernel_2(__global unsigned int *input,
-	__global unsigned int *S) {
-	...
 	}
 	\end{lstlisting}
 \end{figure}
