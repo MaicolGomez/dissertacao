@@ -895,7 +895,7 @@ computed time is $\mathcal{O}(log\ n)$ time.
 
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
-	\begin{lstlisting}[label=lst:HillisAlgorithms, caption={The parallel scan and reduction implementation proposed Hillis and Steele}, escapeinside={(*}{*)}]
+	\begin{lstlisting}[label=lst:HillisAlgorithms, caption={The parallel scan and reduction proposed by Hillis and Steele}, escapeinside={(*}{*)}]
 	(a) Parallel Reduction
 
 		for(int d = 1; d <= log2(n); d++)
@@ -925,14 +925,20 @@ computed time is $\mathcal{O}(log\ n)$ time.
 
 \end{figure}
 
-In 2005, Horn~\cite{GPUGems2} proposed a first version of scan parallel for
+\rem{In 2005, Horn~\cite{GPUGems2} proposed a first version of scan parallel for
 GPUs, this proposal was based in~\cite{dataparallel}, this implementation is
 more realist and limited. As was mentioned before for the work
 of~\cite{dataparallel}, they did not worry about the number of processor. They
 considered that it is possible to have a number of processors equal to the size
-of the input (not real situation in these days).
+of the input (not real situation in these days).}
+\new{In 2005, Horn~\cite{GPUGems2} proposed the first version of scan parallel
+for GPUs. This proposal was based in~\cite{dataparallel}. However, this
+implementation is more realist, but limited. As was mentioned before for the
+work of~\cite{dataparallel}, they did not worry about the number of processors.
+They considered that it is possible to have a number of processors equal to the
+size of the input (a not real situation in these days).}
 
-So the proposed of Horn was limited by the block size of the GPU device, in our
+\rem{So the proposed of Horn was limited by the block size of the GPU device, in our
 days this size could be until 2048. Horn proposed the method using it at
 solution of the problem $Stream Compaction$. That problems is defined as
 follow: given an input vector, and one key value. It is necessary to reorder
@@ -940,9 +946,18 @@ the input that the elements that have the same value of the key are moved
 towards to the end of the vector. The rest of the elements are moved towards to
 the begin keeping the original order between them (See
 Figure~\ref{fig:desire}). Remember that for this version of scan, the
-complexity is $log n$ and order of the operation is in order of $n log\ n$.
+complexity is $log n$ and order of the operation is in order of $n log\ n$.}
+\new{So Horn's proposal was limited by the block size of the GPU device, which,
+  today, this size could be up to 2048. Horn proposed this method by using it
+  as the solution of the problem $Stream Compaction$. This problem is defined
+  as follow: given an input vector, and a key value,  it is necessary to
+  reorder the input so that elements with the same key are moved to the end of
+  the vector. The rest of the elements are moved towards to the beginning,
+  keeping the original order between them (See Figure~\ref{fig:desire}). Recall
+  that for this version of scan, the complexity is $log n$, and the order of
+the operation is $n log\ n$.}
 
-In 2007 Mark Harris et al.~\cite{harris2007parallel} proposed a new
+\rem{In 2007 Mark Harris et al.~\cite{harris2007parallel} proposed a new
 implementation of scan parallel algorithm, this version is based in the work of
 Blelloch~\cite{ScanAsPrimitive}. In the last method explained, proposed by Horn
 the number of operations is in order of $O(n log\ n)$ meanwhile the simple
@@ -953,14 +968,33 @@ he implemented a method to solve the scan operation base in the work of
 Blelloch for a GPU. However, that implementation was the same problem of Horn's
 implementation, the algorithm only works for an small arrays, because is
 limited by a thread block. Thereby, the main contribution of Mark Harris was to
-design of an algorithm to be able to be use it for large arrays.
+design of an algorithm to be able to be use it for large arrays.}
+\new{In 2007 Mark Harris et al.~\cite{harris2007parallel} proposed a new
+implementation of scan parallel algorithm. This version was based in the work
+of Blelloch~\cite{ScanAsPrimitive}. In the method proposed by Horn the number
+of operations is in order of $O(n log\ n)$ meanwhile the simple serial version
+of scan performs in order of $O(n)$ operations, as well as Blelloch's version.
+That was one of Harris's main motivations: the possibility of at least achieve
+the same order of operations than the serial version. So, he implemented a
+method to solve the scan operation base in the work of Blelloch for a GPU.
+However, that implementation had the same problem of Horn's implementation, the
+algorithm only works for an small arrays, because it is limited by a thread
+block. Thereby, the main contribution of Mark Harris was to design a new
+algorithm to be able to use it for large arrays.}
 
-The basic idea is simple. It is divided the large array into blocks, each of
+\rem{The basic idea is simple. It is divided the large array into blocks, each of
 them can be scanned by a single thread block, and then it is computed the scan
 operations for the blocks and write the total sum of each block to another
 array of block sums. Then scan the block sums, generating an array of block
-increments that that are added to all elements in their respective blocks. For
-example (see~\rfig{largescan}), let $N$ be the number of elements in
+increments that are added to all elements in their respective blocks.}
+\new{The basic idea is simple. The large array is divided into blocks, each of which
+can be scanned by a single thread block, and then the scan operations are
+computed for the blocks and the total sum of each block is written to another
+array of sums of blocks. Next, the block sums are examined, generating an array
+of block increments that are added to all the elements in their respective
+blocks.}
+
+For example (see~\rfig{largescan}), let $N$ be the number of elements in
 the input array, and $B$ be the number of elements processed in a block. It is
 allocated $N/B$ thread blocks of $B/2$ threads each. (Here it is assumed that N
 is a multiple of $B$. A choice is according of GPU Series. It is used the scan
@@ -1039,13 +1073,16 @@ array of scanned values.
 	OpenMPClauseKind ckind = ((*I)->getClauseKind());
 	if (ckind == OMPC_scan){ //Checking if the clause extracted is our Scan clause.
 	 OMPVarListClause<OMPScanClause> *list = cast<OMPVarListClause>cast<OMPScanClause>(*I);
-	}
+     for (auto l = list->varlist_begin(); l != list->varlist_end(); l++) {
+       DeclRefExpr *scanVar = cast<DeclRefExpr>(*l);
+       const std::string scanVarType = scanVar->getType().getAsString();
+       OpenMPScanClauseOperator op = cast<OMPScanClause>(*I)->getOperator();
+       ...
+     }
 
 	(b) Preparing the scan algorithm parameters and openCL environment
 
 	ThreadBytes = EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_get_threads_blocks(), KArg);
-	Q = dyn_cast<ArrayType>(Q.getTypePtr())->getElementType();
-	OpenMPScanClauseOperator op = cast<OMPScanClause>(*I)->getOperator();
 
 	EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_create_read_write(), Size);
 	EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_create_program(), FileStrScan);
@@ -1053,6 +1090,10 @@ array of scanned values.
 	EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_create_kernel(), FunctionKernel_0);
 	EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_create_kernel(), FunctionKernel_1);
 	EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_create_kernel(), FunctionKernel_2);
+
+    EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_set_kernel_arg(), Args);
+    EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_execute_kernel(), GroupSize);
+
 	EmitRuntimeCall(CGM.getMPtoGPURuntime().cl_release_buffer(), Aux);
 
 	(c) Customing the scan generator
@@ -1172,19 +1213,19 @@ output vector).
 \end{figure}
 
 In the first step, the algorithm obtains the pieces of information of the omp
-scan clause, as detailed in \rlst{ClangScan}{c}, lines 3 through 20. For
-instance, Lines 3 to 7 get the list of variables and the kind of operation
+scan clause, as detailed in \rlst{ClangScan}{a}. For
+instance, Lines 3 to 12 get the list of variables and the kind of operation
 associated with the scan clause.
 
 Aclang provides a series of methods in the {\it CodeGenModule} class for
 calling the runtime library responsible for interfacing with the OpenCL
 drivers. Those functions have the following structure:
-$CGM.operation1.MPtoGPURuntime().operation2$. Lines 24 to 34 retrieve the scan
-parameters and and makes an initial configuration of OpenCL. Line $24$ computes
+$CGM.operation1.MPtoGPURuntime().operation2$. The algorithm retrieve the scan
+parameters and makes an initial configuration of OpenCL. For instance, Line $16$ computes
 the number of threads per block and the number of blocks. That will be used to
 call the sub-routines of the parallel scan algorithm. This is a very important
 step because as mentioned before, the algorithm only works for input sizes that
-are powers of 2 ($2^{k}$). So when the size is not a power of two, It's
+are powers of 2 ($2^{k}$). So when the size is not a power of two, it's
 impossible to solve the problem. Hereby, to fix it, it's founded the closest
 higher number that is a product of two powers of two. Let's represent the
 number of blocks as $B$ and the number of threads per block as $T$.
@@ -1204,28 +1245,28 @@ type int, double, float, but can also be a new user-defined type. In this case,
 it is mandatory for this new type to be defined within the "omp declare target"
 clauses (see example in \rlst{pol}).
 
-Line $26$ find the operator that the programmer defined to use in the scan
+Line $10$ find the operator that the programmer defined to use in the scan
 algorithm. Attention, this operator should be a binary associative operator to
 could use the scan algorithm, the most common are: ($+$, $*$, $\&$, $||$,
 $max$, $min$). In the case that a new variable was defined it is mandatory
 define an operator for this variable (See example in \rlst{pol}).
 
-Line $28$ does a needed step to execute the scan algorithm, it created an
-auxiliary buffer (as can see in \rfig{scheme} ~\ding{183}).  Lines $29$ to $33$
+Line $18$ does a needed step to execute the scan algorithm, it created an
+auxiliary buffer (as can see in \rfig{scheme} ~\ding{183}).  Lines $19$ to $26$
 generate code for the runtime library to call the OpenCL driver to compile the
 kernels and dispatch then for execution.
 
-Lines $31$ to $33$ execute the necessaries kernels to compute the scan
-algorithm. Line $31$ computes the scan for every single block thread
-independently (as can see in \rfig{scheme} ~\ding{182}). Line $32$ executes
+Lines $25$ to $26$ execute the necessaries kernels to compute the scan
+algorithm. First, computes the scan for every single block thread
+independently (as can see in \rfig{scheme} ~\ding{182}). Then, it executes
 the second kernel that is in charge to computed the sum of accumulates from the
-auxiliary vector (as seen in \rfig{scheme} ~\ding{184}). Line $33$ executes
+auxiliary vector (as seen in \rfig{scheme} ~\ding{184}). At last, it executes
 the kernel in charge to distributes the corresponding accumulates to the
 positions on the result vector (as can see in \rfig{scheme} ~\ding{185}).
 
-Finally, line $34$ transfers the solution vector data to the programmer desired
-vector, as we mentioned before, the programmer has two options to receive the
-result vector.
+Finally, the runtime library transfers the solution vector data to the
+programmer desired vector, as we mentioned before, the programmer has two
+options to receive the result vector.
 
 \subsection{The Template}
 \label{sec:template}
@@ -1301,22 +1342,22 @@ Stream Compaction
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
 	\begin{lstlisting}[label=lst:seqcod, caption={Fragment of Sequence alignment}, escapeinside={(*}{*)}]
-	
+
 	int main() {
 	int *h;
 	int *t;
-	
+
 	t = (int *)malloc(N * sizeof(int));
 	w = (int *)malloc(N * sizeof(int));
 	h = (int *)malloc(N * sizeof(int));
-	
+
 	...
-	
+
 	#pragma omp target device(GPU) map(from : t[:N]) map(to : h[:N])
 	#pragma omp parallel for scan(max : t)
 	for (int i = 1; i < N; i++)
 	t[i] = max(t[i - 1], h[i - 1]);
-	
+
 	\end{lstlisting}
 \end{figure}
 
