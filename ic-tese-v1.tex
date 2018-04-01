@@ -232,9 +232,13 @@
 
 
 % Agradecimentos ou Acknowledgements ou Agradecimientos
-\prefacesection{Agradecimentos}
+\prefacesection{Acknowledgements}
+First of all, I want to thank God, my family for their constant and unconditional support. To my adviser Prof. Guido and co-adviser Prof. Marcio for the constant help and advice during these two years to be able to finish this work. To the panel to accept the invitation and for their time provided.
 
-\guido{Make the writing for AClang uniform. I found Aclang, ACLang, etc.; it should be AClang}
+Along over this two years, I found the AClang project that allowed me to add my work within its structure, thanks to AClang project's creators.\\
+Thanks to CAPES for supporting in all this time (Scholarship number : 1590935). 
+
+
 % Sempre deve haver um resumo em português:
 \begin{resumo}
 Prefix Scan (ou simplesmente scan) é um operador que computa todas as somas
@@ -459,6 +463,8 @@ implementation of the OpenMP scan clause into the AClang Compiler.
 performance numbers and analyzes the results when programs are compiled with
 the new scan clause. Finally, \rcap{Conclusion} concludes the work.
 
+The contribution of this work was published in the following conference paper ~\cite{maicol2017}.
+
 \guido{Put a new paragraph here saying that the contribution of this work has been
 published in the following conference paper:
 \begin{itemize}
@@ -518,6 +524,7 @@ programmable cores. These cores are capable of executing
 threads of computation, where each thread performs an operation on a slice of 
 a large  input data set. }
 
+Therefore, over time the use of GPUs has been improved the performance of programs. 
 \guido{You swtich the subject all of sudenly!! Now you are talking about something entirely different!!}
 \ed{The downside to using GPU is
 the fact that having a partner CPU is necessary to enable GPU execution. 
@@ -547,7 +554,7 @@ GPU to accelerate  that fragment of the code.}
 
 \guido{CUDA is NOT a toolkit is a language}
 \ed{With the goal of enabling general-purpose applications, GPU manufacturers
-started offering programming  toolkits. In particular, Nvidia designed a toolkit 
+started offering programming  toolkits. In particular, NVIDIA designed a toolkit 
 based on the CUDA  language that  allows programmers to create applications 
 that can run on GPUs. A major advantage
 of CUDA is its similarity with the C language.  This allows the implementation
@@ -575,9 +582,9 @@ with any hardware accelerator. It is up to the individual hardware accelerator
 vendors to abstract away the vendor-specific implementation.  Summing up what
 was said before, OpenCL is an framework that allows the use of several devices
 from different vendors. Most developers agree that CUDA has a better
-performance than OpenCL in Nvidia devices. However, not all the users have
-Nvidia cards, and  therefore OpenCL is the preferred choice  instead of CUDA.
-Clearly if Nvidia card is a option, CUDA will always be chosen.}
+performance than OpenCL in NVIDIA devices. However, not all the users have
+NVIDIA cards, and  therefore OpenCL is the preferred choice  instead of CUDA.
+Clearly if NVIDIA card is a option, CUDA will always be chosen.}
 
 \guido{This paragraph is badly written and uses many statements to say a simple thing
 which could have been said by a single statement}
@@ -695,26 +702,27 @@ used to indicate \ed{the block and grid dimensions, respectively the number of t
 and the number of blocks in a grid}. An example is showed in \rfig{cudaindex}.
 
 \guido{Realign the figures; They are far away from the related text and the three below could be on the same page}
-\begin{figure}[p]
+\begin{figure}[t]
 	\centering
 	\caption{A two-dimensional arrangement of 8 thread blocks within a grid.}
-	\includegraphics[scale=0.70]{images/threadsblock.png}
+	\includegraphics[scale=0.75]{images/threadsblock.png}
 	\label{fig:threadsblocks}
 \end{figure}
-\begin{figure}[p]
+
+\begin{figure}[h]
 	\centering
 	\caption{CUDA Thread Organization}
-	\includegraphics[scale=0.50]{images/thread_organization.png}
+	\includegraphics[scale=0.45]{images/thread_organization.png}
 	\label{fig:threadorganization}
 \end{figure}
-\begin{figure}[p]
+\begin{figure}[h!]
 	\caption{CUDA parallel thread hierarchy}
 	\centering
-	\includegraphics[scale=0.60]{images/cuda_indexing.png}
+	\includegraphics[scale=0.50]{images/cuda_indexing.png}
 	\label{fig:cudaindex}
 \end{figure}
 
-
+\newpage
 \subsubsection{CUDA Device Memory}
 \label{CUDA Device Memory}
 Memory hierarchy is one of the main factors in a system. \rfig{cudamemory} shows the overview of the CUDA memory hierarchy. \ed{There exist 
@@ -728,8 +736,8 @@ four kinds of memory in CUDA: global memory, constant memory, shared memory and 
 \end{figure}
 
 \ed{Global memory can be read and written in a kernel while constant memory can only be
-read. However, access to the constant memory is much faster than the global memory because it can be cached \guido{Can't you transfer data from the  global memory to the shared memory and   cache the shared memory as well?}. Shared memory is designed for the data communication fof
-threads within a block. This is fast memory but is also very limited. \guido{Why limited? Explain better}. Moreover, each thread has several private registers which are the fastest storage elements in a GPU device; these registers are used   frequently by their corresponding threads. Since memory access contributes a lot to the computation time of the program, developers should take advantage of these different kinds of memories. The key rule is that registers and shared memory should be used as much as possible and the data that are not modified in the execution should be stored in the constant memory to have a faster access.}
+read. However, access to the constant memory is much faster than the global memory \guido{Can't you transfer data from the  global memory to the shared memory and   cache the shared memory as well?}. Shared memory is designed for the data communication for 
+threads within a block. This is fast memory but is also very limited for its size that is very smaller than the global memory. \guido{Why limited? Explain better}. Moreover, each thread has several private registers which are the fastest storage elements in a GPU device; these registers are used   frequently by their corresponding threads. Since memory access contributes a lot to the computation time of the program, developers should take advantage of these different kinds of memories. The key rule is that registers and shared memory should be used as much as possible and the data that are not modified in the execution should be stored in the constant memory to have a faster access.}
 
 \subsubsection{OpenCL}
 
@@ -823,17 +831,44 @@ the  OpenCL  driver.
 
 \ed{In the 80's Hillis and Stelle~\cite{dataparallel} presented several algorithms to enable parallelization of common computing problems. To execute these algorithms, they used the Connection Machine System~\cite{themachine} (CM), a large message-passing  based parallel architecture. A  very important observation from those days was that Hillis and Stelle considered that given the almost unlimited number of processors in the CM  there was no need to worry about what would happen if the size of the problem they were dealing with surpassed the CM limits. Hence, most of the algorithms were evaluated  with at most 65536 elements (the maximum number of processors of the CM).}
 
-\ed{One of the algorithm proposed by Hillis and Stelle~\cite{dataparallel} aimed at  performing the sum of an array of numbers (see \rfig{reductionhillis}), an operation which nowadays is calleed  $reduction$.\\ The main idea behind their work was to organize the array data at the leaves of a
-binary tree and perform the sums at each level of the tree in parallel. There are several ways to organize an array onto a binary tree, as shown in  \rfig{reductionhillis}. As an example, \rfig{reductionhillis} presents an array of 8 elements named $x_{0}$ through $x_{7}$. In this algorithm, for the sake of simplicity, the number of elements to be summed is assumed to be an integral power of two. In their solution, there are as many processors as elements, and line $4$ (in~\rlsts{HillisAlgorithms}{a}) causes all processors to execute lines $5$ and $6$ (~\rlsts{HillisAlgorithms}{a}) synchronously, but variable k has a different value for each processor, namely, the index of that processor within the array. At the end of the process, $x_{n-1}$ contains the sum of the n elements.}
+\ed{One of the algorithm proposed by Hillis and Stelle~\cite{dataparallel} aimed at  performing the sum of an array of numbers (see \rfig{reductionhillis}), an operation which nowadays is calleed  $reduction$.}
+	
+	\begin{figure}[h]
+		\centering
+		\caption{Hillis and Steele reduction algorithm}
+		\includegraphics[scale=0.5]{images/reduction.png}
+		\label{fig:reductionhillis}
+	\end{figure}
+	 The main idea behind their work was to organize the array data at the leaves of a
+binary tree and perform the sums at each level of the tree in parallel. There are several ways to organize an array onto a binary tree, as shown in  \rfig{reductionhillis}. As an example, \rfig{reductionhillis} presents an array of 8 elements named $x_{0}$ through $x_{7}$. In this algorithm, for the sake of simplicity, the number of elements to be summed is assumed to be an integral power of two. In their solution, there are as many processors as elements, and line $4$ (in~\rlsts{HillisAlgorithms}{a}) causes all processors to execute lines $5$ and $6$ (~\rlsts{HillisAlgorithms}{a}) synchronously, but variable k has a different value for each processor, namely, the index of that processor within the array. At the end of the process, $x_{n-1}$ contains the sum of the n elements.
 
 \guido{Realign the figures; They are far away from the related text and the three below could be on the same page}
-\begin{figure}[p]
-	\centering
-	\caption{Hillis and Steele reduction algorithm}
-	\includegraphics[scale=0.5]{images/reduction.png}
-	\label{fig:reductionhillis}
+
+\begin{figure}[t]
+	\lstset{basicstyle=\scriptsize}
+	\begin{lstlisting}[label=lst:HillisAlgorithms, caption={The parallel scan and reduction proposed by Hillis and Steele}, escapeinside={(*}{*)}]
+	(a) Parallel Reduction
+	
+	for(int d = 1; d <= log2(n); d++)
+	    for(int k = 0 ; k < n ; k++){ //In parallel
+	       if( (k+1)%2^d == 0 ){
+	           x[k] = x[k - 2^(d-1)] + x[k];
+	       }
+	    }
+	
+	(b) Parallel Scan
+	
+	for(int d = 1; d <= log2(n); d++)
+	    for(int k = 0 ; k < n ; k++){ //In parallel
+	       if( k >= 2^d ){
+	         x[k] = x[k - 2^(d-1)] + x[k];
+	       }
+	    }
+	
+	\end{lstlisting}
 \end{figure}
-\begin{figure}[p]
+
+\begin{figure}[h]
 	\centering
 	\caption{Hillis and  Steele scan algorithm}
 	\includegraphics[scale=0.5]{images/hillisscan.png}
@@ -847,61 +882,35 @@ binary tree and perform the sums at each level of the tree in parallel. There ar
 (iteration) $d$ of the tree, if the processor $k$  meets the property of line $5$ it
 stores the sum of the neighbors at distance $2^{d-1}$ on his own position.
 For  example, at  level $d  = 1$  of \rfig{reductionhillis} the processor $k = 1$ stores the sum of the neighbors at distance $2^{1-1} = 1$ (elements of $1$ and $0$) into the element at index $k = 1$, at the  next level of  the tree $d = 2$. The distance of the
-neighbors in this case is  $2^{2-1} = 2$ and this continues until the algorithm reaches the last level where the root of the tree stores the sum of all nodes in the array. The algorithm is computed in $O(log\ n)$ time, it traverses $log\ n$ levels and at each level it performs operations in parallel in  constant time.}
+neighbors in this case is  $2^{2-1} = 2$ and this continues until the algorithm reaches the last level where the root of the tree stores the sum of all nodes in the array. The algorithm is computed in $O(log\ n)$ time, it traverses $log\ n$ levels and at each level it performs operations in parallel in constant time.}
 
 
 \ed{Another algorithm presented by Hillis and Steele~\cite{dataparallel} was the
 \tit{scan}. They noticed that by modifying only one line they could get all the partial
 sums of an array.  Looking at the simple summation algorithm explained
-above(\rlsts{HillisAlgorithms}{a}), one can notice that most of the
+above (\rlsts{HillisAlgorithms}{a}), one can notice that most of the
 processors are idle most of the time. Line $5$ shows that during iteration $j$,
 only $n/2^{j}$ processors are active, and, indeed, half of the processors are
 never used. Hence, by making the idle processors do useful work 
 one could also compute all the partial sums of the array.} 
 
-\begin{figure}[t]
-	\lstset{basicstyle=\scriptsize}
-	\begin{lstlisting}[label=lst:HillisAlgorithms, caption={The parallel scan and reduction proposed by Hillis and Steele}, escapeinside={(*}{*)}]
-	(a) Parallel Reduction
-
-		for(int d = 1; d <= log2(n); d++)
-			for(int k = 0 ; k < n ; k++){ //In parallel
-				if( (k+1)%2^d == 0 ){
-					x[k] = x[k - 2^(d-1)] + x[k];
-				}
-			}
-
-	(b) Parallel Scan
-
-		for(int d = 1; d <= log2(n); d++)
-			for(int k = 0 ; k < n ; k++){ //In parallel
-				if( k >= 2^d ){
-					x[k] = x[k - 2^(d-1)] + x[k];
-				}
-		}
-
-	\end{lstlisting}
-\end{figure}
 
 \ed{This could be done  by means of a variation of the  algorithm explained above, and  in the 
 same  amount of time that took to compute reduction, i.e. $log\ n$. 
 \guido{These following statements are very confusing; what do you mean? Re-write it!!}
-\guido{The key to understand this algorithm is to remember, in defining
-$\sum_{j}^{k}$ to mean $\sum_{i=j}^{k}x_{i}$, note that $\sum_{j}^{k}$ +
-$\sum_{k+1}^{m}$ = $\sum_{j}^{m}$. The algorithm replaces each $x_{k}$ by
-$\sum_{0}^{k}$: that is, the sum of all elements preceding and including
-$x_{k}$.} \rfig{scanhillis} shows this process for an array of 8
+\guido{The key to understand this algorithm is to remember, that by definition $\sum_{j}^{m}$ = $\sum_{j}^{k}$ +
+$\sum_{k+1}^{m}$.  For example, in the level $d$ one processor uses the value of two elements, one element the sum $\sum_{0}^{i}$ and the second has $\sum_{i+1}^{k}$, therefore it is obtained the sum between $0$ to $k$ ($\sum_{0}^{k}$). That is, the sum of all elements preceding and including element $k$.} \rfig{scanhillis} shows this process for an array of 8
 elements.} 
 
 \guido{IMPORTANT}
 \guido{I changed this following paragraph in a way that might changed the meaning; check if the meaning is still correct}
 \ed{The only difference between this algorithm and the earlier one on reduction is
 the test in the if statement on the partial-sums \rem{algorithm} \guido{Which algortihm is this?}  
-that determines whether a processor will perform the assignment (line $5$ to $14$). This
+that determines whether a processor will perform the assignment (line $5$ to $14$ in \rlsts{HillisAlgorithms}). This
 algorithm keeps more processors active: During step $j$, $n - 2^{j}$ processors
 are in use; after step $j$, element number $k$ has become $\sum_{a}^{k}$ where
 $a = max(0, k - 2^{j} + 1)$. For  example, at  level $d  = 1$  of
-\rfig{scanhillis} the processor $k = 1$ stors the sum of the neighbors at
+\rfig{scanhillis} the processor $k = 1$ stores the sum of the neighbors at
 distance $2^{1-1} = 1$ (elements of $1$ and $0$) into the element at index $k =
 1$, processor $k = 2$ stores the sum of the neighbors with the same
 distance $1$ (elements of $2$ and $1$) into the element at index $k = 2$ and
@@ -913,7 +922,7 @@ the algorithm reaches the last level where all nodes have the sum of all its pre
 elements, and thus  element $k$ stores the sum $\sum_{0}^{k}$.} 
 \guido{Is this following phrase correct? Constant time?} The algorithm
 is computed in $O(log\ n)$ time, it traverses $log\ n$ levels and at each level it
-performs operations in parallel, i.e. in constant time.
+performs operations in parallel, i.e. in constant time due to the numbers of processors.
 
 \begin{figure}[t]
 	\centering
@@ -1305,7 +1314,7 @@ scan algorithm.}
 
 \guido{IMPORTANT}
 \guido{I changed this following paragraph in a way that might changed the meaning; check if the meaning is still correct}
-\ed{\rlst{TemplateScan}{a} defineds the header for each kernel. This example shows
+\ed{\rlst{TemplateScan}{a} defines the header for each kernel. This example shows
 the header of the first kernel., whicd 
 defines  variable $dataType$. As mentioned before, that information was
 extracted from the clause scan. As expected, every kernel that use
@@ -1315,10 +1324,7 @@ that variable type has  $dataType$  replaced  by the real variable type.}
 \guido{VERY UNCLEAR THIS BELOW!!}
 \guido{I changed this following paragraph in a way that might changed the meaning; check if the meaning is still correct}
 \ed{\rlst{TemplateScan}{b} defines how the program will perform the calculations
-between two variables. It specifies the  new operation defined for a new
-variable type. It is possible to \guido{Operate what? what are you doing, very unclear!!} operate two variable in a simple way for a
-primitive variables: for example for two variables $x$ and $y$ of type $int$ we
-use the line $10$ to compute the result.}
+between two variables. In the case that the programmer uses an operation on primitive  variables (int, double, float) such as $+$, $*$, $\&$, $|$ line 10 will be used.}
 
 On other hand, when the programmer defined a new type of variable, he must
 define also its binary associative operator to be able to use the scan
@@ -1334,7 +1340,7 @@ the programmer wants to save the resulting vector in the input data vector.}
 
 \guido{IMPORTANT}
 \guido{I changed this following paragraph in a way that might changed the meaning; check if the meaning is still correct}
-\ed{Back to \rlst{ClangScan}{d}, Line $32$ fills a standard header. Lines $33$
+\ed{Back to \rlst{ClangScan}{c}, Line $32$ fills a standard header. Lines $33$
 to $36$ analyze if the programmer defined a new type of variable with its
 respective operator. If is true, that information is placed immediately after
 the header mentioned before.}
@@ -1425,7 +1431,7 @@ $output \:\: <17, 11, 13, 19, 24>$\\
 Lines $4$ to $7$ create the necessary vectors in addition to input and output.
 Line $13$ fills the vector bit in parallel. The \ttt{target} clause (lines 16--17) defines the portion of the program  that will be executed by the accelerator device (lines 18--19) defined in the line $16$.
 \guido{Which version? provided by whom?}
-Since the version provided is exclusive, it is necessary an additional step (Line $21$) to pass from the exclusive to the inclusive version. Finally, Line $23$ fills the the vector output with the information generated in the vectors $bitsum$ and $bits$.
+Since this first $scan$ $clause$ only provides an exclusive version, it is necessary an additional step (Line $21$) to pass from the exclusive to the inclusive version. Finally, Line $23$ fills the the vector output with the information generated in the vectors $bitsum$ and $bits$.
 
 \ed{\rlst{strker} presents the kernel generated by AClang. Since this is  a basic application of scan, the kernel generated has a basic structure. Line $3$ defines the neutral or also called identity element. In this case the operation used was a sum, thus the neutral value is $0$. As it can be seen, each kernel has the type of variable for the vectors; this information was extracted from the OpenMP clause and replaced as was explained in  section \ref{sec:ScanInAClang}.}
 
@@ -1515,11 +1521,11 @@ The following steps show how the radix sort could eventually be parallelized.
 
 \guido{bit in common? What do you mean by that? 1 else the value? What is this?}
 \begin{enumerate}
-\item \ed{Generate a vector of the list (bit in common, starting from the least significant bit)
-where every bit that is 0 in the new vector is 1 else the value is 0.}
-\item \ed{Scan the vector, and record the sum of the predicate in the process. Notice, the scan
+\item \ed{Generate a vector of the list (bit in the same position, starting from the least significant bit)
+where every bit that is 0 in the new vector is 1 (Predicate: (bit\&1==0)) otherwise the element in the vector  is 0.}
+\item \ed{Scan the vector, and record the sum of the predicate vector in the process. Notice, the scan
 algorithm works for arrays of arbitrary sizes instead of $2^{n}$ sizes; however as 
-explained before} \guido{the proposed what? approach} the proposed \ed{works}  for any arbitrary size.
+explained before} \guido{the proposed what? approach} the $scan$ $clause$ \ed{works}  for any arbitrary size.
 \item \ed{Flip bits of the predicate, and scan them.}
 \item Move the values in the vector using the following rule:
 \begin{enumerate}
@@ -1580,9 +1586,9 @@ int main(){
 \ed{In the code \rlst{radcode}, line 7 indicates the traversal of  every bit, which, depending on the
 type of the variable could be 15, 31 or 63. Line 9 defines an auxiliary variable to help
 working on  the current bit. Next lines (10 -- 14) generate the vector mentioned above
-in the step 1, and also generates the opposite vector \guido{of the first one? what is this? Not clear}  of the first one. 
+in the step 1, and also generates the opposite vector (see lines 12 -- 13) \guido{of the first one? what is this? Not clear}. 
 The following lines (17 -- 25) compute the scan operator for the vector \guido{Give it a name; this mentioned before does not help} 
-mentioned before. Finally, lines (27 -- 32) move the elements in accordance to the vectors generated in the previous step.}
+of the line 12. Finally, lines (27 -- 32) move the elements in accordance to the vectors generated in the previous step.}
 
 \ed{\rlst{radkernel} presents the OpenCL kernel generated by the AClang compiler. 
 The kernel has 3 main components which were detailed before.}
