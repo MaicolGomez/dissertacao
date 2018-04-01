@@ -465,11 +465,6 @@ the new scan clause. Finally, \rcap{Conclusion} concludes the work.
 
 The contribution of this work was published in the following conference paper ~\cite{maicol2017}.
 
-\guido{Put a new paragraph here saying that the contribution of this work has been
-published in the following conference paper:
-\begin{itemize}
-\item Reference to the MPP paper
-\end{itemize}}
 
 \chapter{Background}
 \label{cap:background}
@@ -511,8 +506,7 @@ Commonly, this requires the execution of the same operation on a large data set.
 In addition, this processing should be done in real time, and must be completed as
 fast as can be done. The GPU was the answer to this.
 
-\guido{The order in which things happenned is wrong; I changed it}
-\ed{GPUs were designed for graphics processing in mind, and this was the main application 
+GPUs were designed for graphics processing in mind, and this was the main application 
 for GPUs for a long time. Lately, programmers discovered an opportunity
 to explore GPUs so as to achieve high levels of parallelization for general-purpose 
 application beyond the graphics domain.  That is how started 
@@ -522,13 +516,11 @@ started building GPU designs that were more flexible and had an open
 programming model. Hence,  modern GPUs started been designed  consisting on many 
 programmable cores. These cores are capable of executing 
 threads of computation, where each thread performs an operation on a slice of 
-a large  input data set. }
+a large  input data set.
 
 Therefore, over time the use of GPUs has been improved the performance of programs. 
-\guido{You swtich the subject all of sudenly!! Now you are talking about something entirely different!!}
-\ed{The downside to using GPU is
+The downside to using GPU is
 the fact that having a partner CPU is necessary to enable GPU execution. 
-\guido{Do not use acronym forms in academic texts: can not yes; avoid can't }
 The GPU by itself can not be a standalone unit. To be able to operate on a GPU, the presence of the CPU is
 necessary to manage the execution of the program. The CPU is responsible for
 determining which portions of the application are completed by the GPU and defining which
@@ -538,9 +530,9 @@ delivered and received from the GPU. Hence, for  the
 operations that need to be performed in the GPU, the data must be copied from the CPU
 memory. Similarly, when the GPU finishes its work, it is necessary to pass
 the data from the GPU to the CPU. Such data transfer operations are typically  very expensive 
-and often limits the applications that can benefit from the GPU usage.}
+and often limits the applications that can benefit from the GPU usage.
 
-\ed{In addition to the above discussion, GPUs have several other
+In addition to the above discussion, GPUs have several other
 disadvantages.  Similarly to Digital Signal Processors (DSPs), a GPU has a
 slower clock rate than the CPU. It also does not have the same cache sizes. 
 It does not implement branch prediction or any similar optimizations. For these
@@ -550,19 +542,18 @@ the program can be done serially and executed on the CPU, and which other
 portions could be parallelized and executed on the GPU. If the proportion of
 the code to be executed on the GPU compensates the disadvantages mentioned
 above and produces an overall faster code than its serial version, it is worth to use the
-GPU to accelerate  that fragment of the code.}
+GPU to accelerate  that fragment of the code.
 
-\guido{CUDA is NOT a toolkit is a language}
-\ed{With the goal of enabling general-purpose applications, GPU manufacturers
+With the goal of enabling general-purpose applications, GPU manufacturers
 started offering programming  toolkits. In particular, NVIDIA designed a toolkit 
 based on the CUDA  language that  allows programmers to create applications 
 that can run on GPUs. A major advantage
 of CUDA is its similarity with the C language.  This allows the implementation
 of many applications as well as the increase in the number of parallel
 algorithms that can  harness the potential of GPUs. As was mentioned before, GPUs
-have the ability to execute a program in parallel.}
+have the ability to execute a program in parallel.
 
-\ed{By seeking to have a  broader  programming model that could  span parallel execution 
+By seeking to have a  broader  programming model that could  span parallel execution 
 for a range of accelerator devices, and not only CPU to GPUs, a large share of
 the industry proposed a new language called OpenCL. The OpenCL
 standard is the first open, royalty-free, unified programming model for
@@ -584,25 +575,13 @@ was said before, OpenCL is an framework that allows the use of several devices
 from different vendors. Most developers agree that CUDA has a better
 performance than OpenCL in NVIDIA devices. However, not all the users have
 NVIDIA cards, and  therefore OpenCL is the preferred choice  instead of CUDA.
-Clearly if NVIDIA card is a option, CUDA will always be chosen.}
-
-\guido{This paragraph is badly written and uses many statements to say a simple thing
-which could have been said by a single statement}
-\rem{
-There have been done many studies on the GPU and how is possible to use the GPU
-in several research areas. The new ease of use has also contributed to an
-increase in the number of people wanting to conduct research into the viability
-of a GPU implementation for their application. Studies also look at the various
-ways that the GPU can be utilized to improve performance. A very common
-situation nowadays is the waiting of many people for some research that makes
-possible the use of GPUs in their applications.}
-
-\new{There has been a huge amount of research work on GPU architectures and code  
+Clearly if NVIDIA card is a option, CUDA will always be chosen.
+There has been a huge amount of research work on GPU architectures and code  
 optimization. \rcap{RelatedWorks} discusses the most relevant  research related to this 
 dissertation. Neverthless, it is important to highlight the importance of users understaning 
 the process of evaluating  if it is worth or not the usage of a GPU to accelerate a specific  
-fragment of code.}
-\ed{As an example, Trancoso \etal~\cite{Trancoso2005} analyzed a very simple
+fragment of code.
+As an example, Trancoso \etal~\cite{Trancoso2005} analyzed a very simple
 application when implemented on a GPU, a low-end CPU, and a high-end CPU. They
 discussed the application’s performance on the GPU relative to the CPU and also
 looked at several of the different variables that can be changed to improve the
@@ -612,11 +591,11 @@ to be better suited for a GPU than a CPU. Owens
 were previously implemented on a CPU. That study looks at the GPU design and
 discusses about the possible performance improvements offered by the GPU. Also
 they analyzed how the GPU was used for specific applications such as in-game
-physics and computational biophysics.}
+physics and computational biophysics.
 
 \subsection{GPU hardware}
 \label{sec:gpugardware}
-\ed{Before going into the programming of GPUs (see~\rsec{gpuprogramming}), it is
+Before going into the programming of GPUs (see~\rsec{gpuprogramming}), it is
 important to have some background on GPU architecture.  The GPU programming
 model exposed by CUDA very much mirrors the underlying hardware. Some of the
 details that make GPU programming hard are more apparent when looking at the
@@ -637,28 +616,27 @@ memory without using any synchronization primitive. However, if communication
 takes place across warps synchronization is necessary. A barrier
 synchronization mechanism exists to ensure that all threads within a block have
 reached the same position in the code. Blocks are also grouped into a grid,
-that is the collection of blocks executing the same program.}
+that is the collection of blocks executing the same program.
 
-\guido{You sometimes uses NVIDIA other times Nvidia; please pick one: NVIDIA}
 \subsection{Programming for GPUs}
 \label{sec:gpuprogramming}
 The GPGPU programming landscape has rapidly evolved over the past several
-years. \ed{Nowadays there are several approaches to
-programming GPUs}. For this section, CUDA language will be taken as a reference.
+years. Nowadays there are several approaches to
+programming GPUs. For this section, CUDA language will be taken as a reference.
 
-\ed{CUDA is a parallel computing platform and programming model developed by NVIDIA
+CUDA is a parallel computing platform and programming model developed by NVIDIA
  for GPU computing.  CUDA computing system has two parts: The host and
 device.  The host part is one or many traditional CPU(s) like Intel or AMD
 CPUs. The device part consists of one or several GPU(s), which are used as
 co-processors. Since GPUs can enable much  parallelism, CUDA devices could
 help to accelerate those applications that have a lot of data to  parallelize.
 Thus, parallelism is the key factor in deciding if the application is appropriate
-for a CPU-GPU system.}
+for a CPU-GPU system.
 
 \subsubsection{CUDA Function Declaration}
 \label{CUDAfunction}
 
-\ed{As stated above, a complete CUDA Program is a mixed code with both GPU and CPU
+As stated above, a complete CUDA Program is a mixed code with both GPU and CPU
 code. Function declaration keywords are designed to support this kind of mix
 coding. As shown in Table~\ref{tab:cudaFunction} functions in CUDA can be
 declared as \ttt{global}, \ttt{host} or \ttt{device}. A kernel function is the function that will
@@ -670,7 +648,7 @@ a CUDA device function that can only be executed on GPU. In addition, a CUDA
 \ttt{host}, is design for declaration for a host function which is run on CPU. The
 keywords \ttt{host} and \ttt{device} can be used  together to instruct the compiler to
 generate two versions of the kernel, one running on the CPU and another on the
-GPU.}
+GPU.
 
 \begin{table*}[!t]
 	\caption[small]{Kind of CUDA functions}
@@ -698,10 +676,9 @@ threads compose a block and uses the threadIdx to index them in a block. A grid
 is organized in the same way and uses blockIdx to index each block in a grid.
 Both threadIdx and blockIdx are pre-defined variables of CUDA. In addition,
 there are another two pre-defined variables blockDim and gridDim, which are
-used to indicate \ed{the block and grid dimensions, respectively the number of threads in a block
-and the number of blocks in a grid}. An example is showed in \rfig{cudaindex}.
+used to indicate the block and grid dimensions, respectively the number of threads in a block
+and the number of blocks in a grid. An example is showed in \rfig{cudaindex}.
 
-\guido{Realign the figures; They are far away from the related text and the three below could be on the same page}
 \begin{figure}[t]
 	\centering
 	\caption{A two-dimensional arrangement of 8 thread blocks within a grid.}
@@ -725,8 +702,8 @@ and the number of blocks in a grid}. An example is showed in \rfig{cudaindex}.
 \newpage
 \subsubsection{CUDA Device Memory}
 \label{CUDA Device Memory}
-Memory hierarchy is one of the main factors in a system. \rfig{cudamemory} shows the overview of the CUDA memory hierarchy. \ed{There exist 
-four kinds of memory in CUDA: global memory, constant memory, shared memory and register. As shown in \rfig{cudamemory}, the global memory and constant memory are used to communicate with the host device.}\\
+Memory hierarchy is one of the main factors in a system. \rfig{cudamemory} shows the overview of the CUDA memory hierarchy. There exist 
+four kinds of memory in CUDA: global memory, constant memory, shared memory and register. As shown in \rfig{cudamemory}, the global memory and constant memory are used to communicate with the host device.\\
 
 \begin{figure}[t]
 	\caption{CUDA Memory Hierarchy}
@@ -735,9 +712,9 @@ four kinds of memory in CUDA: global memory, constant memory, shared memory and 
 	\label{fig:cudamemory}
 \end{figure}
 
-\ed{Global memory can be read and written in a kernel while constant memory can only be
-read. However, access to the constant memory is much faster than the global memory \guido{Can't you transfer data from the  global memory to the shared memory and   cache the shared memory as well?}. Shared memory is designed for the data communication for 
-threads within a block. This is fast memory but is also very limited for its size that is very smaller than the global memory. \guido{Why limited? Explain better}. Moreover, each thread has several private registers which are the fastest storage elements in a GPU device; these registers are used   frequently by their corresponding threads. Since memory access contributes a lot to the computation time of the program, developers should take advantage of these different kinds of memories. The key rule is that registers and shared memory should be used as much as possible and the data that are not modified in the execution should be stored in the constant memory to have a faster access.}
+Global memory can be read and written in a kernel while constant memory can only be
+read. However, access to the constant memory is much faster than the global memory . Shared memory is designed for the data communication for 
+threads within a block. This is fast memory but is also very limited for its size that is very smaller than the global memory. Moreover, each thread has several private registers which are the fastest storage elements in a GPU device; these registers are used   frequently by their corresponding threads. Since memory access contributes a lot to the computation time of the program, developers should take advantage of these different kinds of memories. The key rule is that registers and shared memory should be used as much as possible and the data that are not modified in the execution should be stored in the constant memory to have a faster access.
 
 \subsubsection{OpenCL}
 
@@ -829,9 +806,9 @@ the  OpenCL  driver.
 \section{The Scan algortihm}
 \label{sec:ScanAlg}
 
-\ed{In the 80's Hillis and Stelle~\cite{dataparallel} presented several algorithms to enable parallelization of common computing problems. To execute these algorithms, they used the Connection Machine System~\cite{themachine} (CM), a large message-passing  based parallel architecture. A  very important observation from those days was that Hillis and Stelle considered that given the almost unlimited number of processors in the CM  there was no need to worry about what would happen if the size of the problem they were dealing with surpassed the CM limits. Hence, most of the algorithms were evaluated  with at most 65536 elements (the maximum number of processors of the CM).}
+In the 80's Hillis and Stelle~\cite{dataparallel} presented several algorithms to enable parallelization of common computing problems. To execute these algorithms, they used the Connection Machine System~\cite{themachine} (CM), a large message-passing  based parallel architecture. A  very important observation from those days was that Hillis and Stelle considered that given the almost unlimited number of processors in the CM  there was no need to worry about what would happen if the size of the problem they were dealing with surpassed the CM limits. Hence, most of the algorithms were evaluated  with at most 65536 elements (the maximum number of processors of the CM).
 
-\ed{One of the algorithm proposed by Hillis and Stelle~\cite{dataparallel} aimed at  performing the sum of an array of numbers (see \rfig{reductionhillis}), an operation which nowadays is calleed  $reduction$.}
+One of the algorithm proposed by Hillis and Stelle~\cite{dataparallel} aimed at  performing the sum of an array of numbers (see \rfig{reductionhillis}), an operation which nowadays is calleed  $reduction$.
 	
 	\begin{figure}[h]
 		\centering
@@ -842,7 +819,6 @@ the  OpenCL  driver.
 	 The main idea behind their work was to organize the array data at the leaves of a
 binary tree and perform the sums at each level of the tree in parallel. There are several ways to organize an array onto a binary tree, as shown in  \rfig{reductionhillis}. As an example, \rfig{reductionhillis} presents an array of 8 elements named $x_{0}$ through $x_{7}$. In this algorithm, for the sake of simplicity, the number of elements to be summed is assumed to be an integral power of two. In their solution, there are as many processors as elements, and line $4$ (in~\rlsts{HillisAlgorithms}{a}) causes all processors to execute lines $5$ and $6$ (~\rlsts{HillisAlgorithms}{a}) synchronously, but variable k has a different value for each processor, namely, the index of that processor within the array. At the end of the process, $x_{n-1}$ contains the sum of the n elements.
 
-\guido{Realign the figures; They are far away from the related text and the three below could be on the same page}
 
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
@@ -875,37 +851,28 @@ binary tree and perform the sums at each level of the tree in parallel. There ar
 	\label{fig:scanhillis}
 \end{figure}
 
-
-\guido{IMPORTANT}
-\guido{I changed this following paragraph in a way that might changed the meaning; check if the meaning is still correct}
-\ed{As described in~\rlsts{HillisAlgorithms}{a} at each level
+As described in~\rlsts{HillisAlgorithms}{a} at each level
 (iteration) $d$ of the tree, if the processor $k$  meets the property of line $5$ it
 stores the sum of the neighbors at distance $2^{d-1}$ on his own position.
 For  example, at  level $d  = 1$  of \rfig{reductionhillis} the processor $k = 1$ stores the sum of the neighbors at distance $2^{1-1} = 1$ (elements of $1$ and $0$) into the element at index $k = 1$, at the  next level of  the tree $d = 2$. The distance of the
-neighbors in this case is  $2^{2-1} = 2$ and this continues until the algorithm reaches the last level where the root of the tree stores the sum of all nodes in the array. The algorithm is computed in $O(log\ n)$ time, it traverses $log\ n$ levels and at each level it performs operations in parallel in constant time.}
+neighbors in this case is  $2^{2-1} = 2$ and this continues until the algorithm reaches the last level where the root of the tree stores the sum of all nodes in the array. The algorithm is computed in $O(log\ n)$ time, it traverses $log\ n$ levels and at each level it performs operations in parallel in constant time.
 
-
-\ed{Another algorithm presented by Hillis and Steele~\cite{dataparallel} was the
+Another algorithm presented by Hillis and Steele~\cite{dataparallel} was the
 \tit{scan}. They noticed that by modifying only one line they could get all the partial
 sums of an array.  Looking at the simple summation algorithm explained
 above (\rlsts{HillisAlgorithms}{a}), one can notice that most of the
 processors are idle most of the time. Line $5$ shows that during iteration $j$,
 only $n/2^{j}$ processors are active, and, indeed, half of the processors are
 never used. Hence, by making the idle processors do useful work 
-one could also compute all the partial sums of the array.} 
+one could also compute all the partial sums of the array.
 
-
-\ed{This could be done  by means of a variation of the  algorithm explained above, and  in the 
+This could be done  by means of a variation of the  algorithm explained above, and  in the 
 same  amount of time that took to compute reduction, i.e. $log\ n$. 
-\guido{These following statements are very confusing; what do you mean? Re-write it!!}
-\guido{The key to understand this algorithm is to remember, that by definition $\sum_{j}^{m}$ = $\sum_{j}^{k}$ +
-$\sum_{k+1}^{m}$.  For example, in the level $d$ one processor uses the value of two elements, one element the sum $\sum_{0}^{i}$ and the second has $\sum_{i+1}^{k}$, therefore it is obtained the sum between $0$ to $k$ ($\sum_{0}^{k}$). That is, the sum of all elements preceding and including element $k$.} \rfig{scanhillis} shows this process for an array of 8
-elements.} 
+\rfig{scanhillis} shows this process for an array of 8
+elements.
 
-\guido{IMPORTANT}
-\guido{I changed this following paragraph in a way that might changed the meaning; check if the meaning is still correct}
-\ed{The only difference between this algorithm and the earlier one on reduction is
-the test in the if statement on the partial-sums \rem{algorithm} \guido{Which algortihm is this?}  
+The only difference between this algorithm and the earlier one on reduction is
+the test in the if statement on the partial-sums
 that determines whether a processor will perform the assignment (line $5$ to $14$ in \rlsts{HillisAlgorithms}). This
 algorithm keeps more processors active: During step $j$, $n - 2^{j}$ processors
 are in use; after step $j$, element number $k$ has become $\sum_{a}^{k}$ where
@@ -914,13 +881,13 @@ $a = max(0, k - 2^{j} + 1)$. For  example, at  level $d  = 1$  of
 distance $2^{1-1} = 1$ (elements of $1$ and $0$) into the element at index $k =
 1$, processor $k = 2$ stores the sum of the neighbors with the same
 distance $1$ (elements of $2$ and $1$) into the element at index $k = 2$ and
-\new{its} son at the  next level of  the tree $d = 2$.}
-\ed{The distance of the neighbors become  $2^{2-1} = 2$ and the processor at $k = 2$ stores the 
+its son at the  next level of  the tree $d = 2$.
+The distance of the neighbors become  $2^{2-1} = 2$ and the processor at $k = 2$ stores the 
 sum of the neighbors $2$ and $0$ into the element at index $k = 2$ (notice that this element stores the
 sum from $\sum_{0}^{0}$ to $\sum_{1}^{2}$, that is $\sum_{0}^{2}$). This continues until
 the algorithm reaches the last level where all nodes have the sum of all its preceding
-elements, and thus  element $k$ stores the sum $\sum_{0}^{k}$.} 
-\guido{Is this following phrase correct? Constant time?} The algorithm
+elements, and thus  element $k$ stores the sum $\sum_{0}^{k}$.
+The algorithm
 is computed in $O(log\ n)$ time, it traverses $log\ n$ levels and at each level it
 performs operations in parallel, i.e. in constant time due to the numbers of processors.
 
@@ -936,22 +903,22 @@ performs operations in parallel, i.e. in constant time due to the numbers of pro
 	}
 \end{figure}
 
-\ed{In 1990, Guy  E. Blelloch~\cite{ScanAsPrimitive} proposed a new method,
+In 1990, Guy  E. Blelloch~\cite{ScanAsPrimitive} proposed a new method,
 also based on balanced trees,  to perform the scan parallel algorithm.  
 His idea  was to build a balanced binary tree on the input data and sweep
 it from the leaves to the root to compute all the partial sums. A binary
 tree with $n$ leaves has $d = log n$ levels, and each level $d$ has $2^{d}$
 nodes. If one addition is performed at each node, the algorithm  performs 
-$O(n)$ additions on a single traversal of the tree.}
+$O(n)$ additions on a single traversal of the tree.
 
-\ed{The key  idea in~\cite{ScanAsPrimitive} is  to build a  balanced binary
+The key  idea in~\cite{ScanAsPrimitive} is  to build a  balanced binary
 tree on the input data $x$ and  sweep it to and from the root, scanning
 at each phase half  of the elements of the array.  The  tree is not an
 actual  data structure,  but a  concept  used to  determine what  each
 thread does at each one of the  two phases of the traversal.  The tree
 representation is  shown in~\rfigs{upsweep}{downsweep} where  blue and
 black arrows  represent read  operations of the  elements of  $x$ that
-will be added, and orange arrows represent copy statements.}
+will be added, and orange arrows represent copy statements.
 
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
@@ -1029,9 +996,7 @@ computed time is $\mathcal{O}(log\ n)$ time.
 \end{figure}
 
 
-\guido{IMPORTANT}
-\guido{I changed this following paragraph in a way that might changed the meaning; check if the meaning is still correct}
-\ed{In 2005, Horn~\cite{GPUGems2} proposed the first version of scan parallel
+In 2005, Horn~\cite{GPUGems2} proposed the first version of scan parallel
 for GPUs. Their proposal was based on~\cite{dataparallel}. Although this
 implementation is more realistic, it is also  limited. As  mentioned before in~\cite{dataparallel}, 
 they also did not worry about the number of processors.
@@ -1045,9 +1010,9 @@ reorder the input so that elements with the same key are moved to the end of
 the vector. On the other hand, the rest of the elements are moved towards the beginning,
 thus keeping the original order between them (See Figure~\ref{fig:desire}). Recall
 that for this version of scan, the complexity is $log n$, and the order of
-the operation is $n log\ n$.}
+the operation is $n log\ n$.
 
-\ed{In 2007 Mark Harris et al.~\cite{harris2007parallel} proposed a new
+In 2007 Mark Harris et al.~\cite{harris2007parallel} proposed a new
 implementation of the scan parallel algorithm. This version was based in the work
 of Blelloch~\cite{ScanAsPrimitive}. In the method proposed by Horn the number
 of operations is in order of $O(n log\ n)$ meanwhile the simple serial version
@@ -1064,17 +1029,16 @@ can be scanned by a single thread block, and then the scan operations are
 computed for the blocks and the total sum of each block is written to another
 array of sums of blocks. Next, the block sums are examined, generating an array
 of block increments that are added to all the elements in their respective
-blocks.}
+blocks.
 
-\guido{I did not like these shades on this figure; makes it a nbit weird to read; plase removes the shade effect}
 \begin{figure}[t]
 	\centering
 	\caption{Scan for large arrays by Mark Harris et al.}
-	\includegraphics[scale=0.4]{images/largescan.png}
+	\includegraphics[scale=0.5]{images/largescan.png}
 	\label{fig:largescan}
 \end{figure}
 
-\ed{For example (see~\rfig{largescan}), let $N$ be the number of elements in
+For example (see~\rfig{largescan}), let $N$ be the number of elements in
 the input array, and $B$ be the number of elements processed in a block. In this case,
 $N/B$ thread blocks of $B/2$ threads each allocated. Here,  it is assumed that N
 is a multiple of $B$, which is dependent on the architecture  of the GPU. The scan
@@ -1087,7 +1051,7 @@ $i$) is stored into an auxiliary array represented by $\sum$~\ding{173}. Then sc
 is done as before, and the  result is written into an array represented by
 $\sigma$~\ding{174}. Then $\sigma[i]$ is added to all elements of block
 $i$~\ding{175}. After doing all the previous steps, the final
-array of scanned values is obtained.}
+array of scanned values is obtained.
 
 \begin{figure}[p]
 	\lstset{basicstyle=\scriptsize}
@@ -1255,44 +1219,43 @@ impossible to solve the problem. Hence, to fix it,
 higher number that is a product of two powers of two is founded. Let us represent the
 number of blocks as $B$ and the number of threads per block as $T$.
 
-\ed{For example, if the size of the input data is $12$, the closest number with the
+For example, if the size of the input data is $12$, the closest number with the
 properties mentioned before is $16$, where we found more of one solution such
 as ($B$:1 - $T$:16), ($B$:2 - $T$:8), ($B$:4 - $T$:4) and so on.  To do this one should
 be careful as in some cases it is possible to find some solution with $T$ bigger than the threads
 provided by the architecture used.  Thus, $T$ is limited according of the  features of the 
-used architecture, similarly for $B$.}
+used architecture, similarly for $B$.
 
-\ed{Therefore, the maximum size to compute the scan algorithm is limited by the
+Therefore, the maximum size to compute the scan algorithm is limited by the
 resources provided in the architecture. Later in \rcap{Conclusion} it will be shown
 a proposal to extend that limit.  Line $9$ retrieves the type of variables in
 which the program is performing the scan operation. This variable can be of
 type  \ttt{int},  \ttt{double},  \ttt{float}, but can also be a new user-defined type. In this case,
 it is mandatory for this new type to be defined within the \ttt{omp declare target}
-clauses (see example in \rlst{pol}).}
+clauses (see example in \rlst{pol}).
 
-\ed{Line $10$ finds the operator that the programmer defined to use in the scan
+Line $10$ finds the operator that the programmer defined to use in the scan
 algorithm. This operator should be a binary associative operator to be used
 by the scan algorithm; the most common operators are: ($+$, $*$, $\&$, $||$,
 $max$, $min$). In the case that a new variable was defined it is mandatory
-to define an operator for this variable (See example in \rlst{pol}).}
+to define an operator for this variable (See example in \rlst{pol}).
 
-\ed{Line $18$ does a needed step to execute the scan algorithm. It creates an
+Line $18$ does a needed step to execute the scan algorithm. It creates an
 auxiliary buffer (as shown in \rfig{scheme} ~\ding{183}).  Lines $19$ to $25$
 generate code for the runtime library to call the OpenCL driver to compile the
-kernels and dispatch then for execution.}
+kernels and dispatch then for execution.
 
-\guido{Lines, you just mention one!!}
-\ed{Lines $26$ executes the necessary kernels to compute the scan
+Lines $26$ executes the necessary kernels to compute the scan
 algorithm. First, it computes the scan for every single block thread
 independently (as shown in \rfig{scheme} ~\ding{182}). Then, it executes
 the second kernel that is in charge to compute the sum of the additions from the
 auxiliary vector (as shown in \rfig{scheme} ~\ding{184}). It then executes
 the kernel in charge of distributing the corresponding additions to the
-positions on the resulting vector (as can see in \rfig{scheme} ~\ding{185}).}
+positions on the resulting vector (as can see in \rfig{scheme} ~\ding{185}).
 
-\ed{Finally, the runtime library transfers the solution  data to the vector
+Finally, the runtime library transfers the solution  data to the vector
 specified by the programmer; notice that, as we mentioned before, 
-the programmer has two options to receive the resulting vector.}
+the programmer has two options to receive the resulting vector.
 
 \subsection{The Template}
 \label{sec:template}
@@ -1301,30 +1264,23 @@ This section aims to explain how it is built the code of the parallel scan
 algorithm.  Remember that the algorithm is based on the best algorithm known
 today~\cite{Sengupta:2007}.
 
-\guido{IMPORTANT}
-\guido{I changed this following paragraph in a way that might changed the meaning; check if the meaning is still correct}
-\ed{To summarize this section, it can be said that the algorithm has only three
+To summarize this section, it can be said that the algorithm has only three
 parameters, those parameters could be different according to the applications.
 The first one is the  type of variable, the second one is the operator defined
 for the variable used. Finally the third one, specifies how the programmer 
 wants to  use of new types of variables and operators.
 Thereby, as was mentioned before, all the information is collected in the
 compilation phase to be used for the generation of the kernel that will execute the parallel
-scan algorithm.}
+scan algorithm.
 
-\guido{IMPORTANT}
-\guido{I changed this following paragraph in a way that might changed the meaning; check if the meaning is still correct}
-\ed{\rlst{TemplateScan}{a} defines the header for each kernel. This example shows
+\rlst{TemplateScan}{a} defines the header for each kernel. This example shows
 the header of the first kernel., whicd 
 defines  variable $dataType$. As mentioned before, that information was
 extracted from the clause scan. As expected, every kernel that use
-that variable type has  $dataType$  replaced  by the real variable type.}
+that variable type has  $dataType$  replaced  by the real variable type.
 
-\guido{IMPORTANT}
-\guido{VERY UNCLEAR THIS BELOW!!}
-\guido{I changed this following paragraph in a way that might changed the meaning; check if the meaning is still correct}
-\ed{\rlst{TemplateScan}{b} defines how the program will perform the calculations
-between two variables. In the case that the programmer uses an operation on primitive  variables (int, double, float) such as $+$, $*$, $\&$, $|$ line 10 will be used.}
+\rlst{TemplateScan}{b} defines how the program will perform the calculations
+between two variables. In the case that the programmer uses an operation on primitive  variables (int, double, float) such as $+$, $*$, $\&$, $|$ line 10 will be used.
 
 On other hand, when the programmer defined a new type of variable, he must
 define also its binary associative operator to be able to use the scan
@@ -1333,21 +1289,17 @@ operation has to be defined in the section "omp declare target" for the
 programmer. That information is recovered from the scan clause as a function
 and the way to use this new operation is specified in line $11$.
 
-\ed{Finally, the last component of the template \rlst{TemplateScan}{c} refers to
+Finally, the last component of the template \rlst{TemplateScan}{c} refers to
 where the programmer wants to save the resulting vector. Line $16$ does the  tasks
 required  when the programmer needs a new vector to save the result. Line $17$ activates when
-the programmer wants to save the resulting vector in the input data vector.}
+the programmer wants to save the resulting vector in the input data vector.
 
-\guido{IMPORTANT}
-\guido{I changed this following paragraph in a way that might changed the meaning; check if the meaning is still correct}
-\ed{Back to \rlst{ClangScan}{c}, Line $32$ fills a standard header. Lines $33$
+Back to \rlst{ClangScan}{c}, Line $32$ fills a standard header. Lines $33$
 to $36$ analyze if the programmer defined a new type of variable with its
 respective operator. If is true, that information is placed immediately after
-the header mentioned before.}
+the header mentioned before.
 
-\guido{IMPORTANT}
-\guido{I changed this following paragraph in a way that might changed the meaning; check if the meaning is still correct}
-\ed{Lines $37$ to $46$ define the neutral value according to the operation defined by the programmer.
+Lines $37$ to $46$ define the neutral value according to the operation defined by the programmer.
 A neutral value is defined by the operation ($a$ = $a$ $\oplus$ $neutralValue$)
 where $a$ is any variable and $\oplus$ an operator that 
 operates any variable with the neutral. For example, for the sum operation, the
@@ -1355,16 +1307,16 @@ neutral value is $0$, for the multiplication is $1$ and so on. This information
 is necessary because the scan algorithm needs it. When scan runs  with a basic C/C++
 primitive  operator, the neutral  element is set by default internally in the OpenMP runtime. However when
 the programmer defines a new type of variable, the OpenMP standard enforces  the programmer  to define
-neutral value in the section "omp declare target".}
+neutral value in the section "omp declare target".
 
-\ed{Line $48$ defines the word $dataType$; it represents the type of variable that
+Line $48$ defines the word $dataType$; it represents the type of variable that
 is used by the programmer. Finally, line $49$ closes the file that will
 perform the scan parallel algorithm. Remember, the describe code and its  discussion  is a small
 glimpse of the total process OpenCL code generation process. Our goal was to show
 only the mainly components, in the hope that they could work as a guide to the  
 understanding of the translation process from the omp clause
 to OpenCL code. Much information has been left aside for the sake of simplicity.
-To see a final version of the template for one example see \rcap{ScanUse}.}
+To see a final version of the template for one example see \rcap{ScanUse}.
 
 %%HERE
 \chapter{Using Scan}
@@ -1382,7 +1334,7 @@ Stream compaction is an important primitive in a variety of general-purpose appl
 Informally, stream compaction is a filtering operation: from an input vector, it selects a subset of this vector and packs that subset into a dense output vector. Figure~\ref{fig:streamexample} shows an example. More formally, stream compaction takes an input vector $A$ and a predicate $p$, and outputs only those elements in $A$ for which $p(A)$ is true, preserving the ordering of the input elements. 
 Stream compaction requires two steps, a scan and a scatter.
 \begin{enumerate}  
-\item \ed{The first step generates a temporary vector where the elements that pass the predicate are set to 1 and the other elements are set to 0. We then scan this temporary vector. For each element that passes the predicate, the result of the scan now contains the destination address for that element in the output vector.}
+\item The first step generates a temporary vector where the elements that pass the predicate are set to 1 and the other elements are set to 0. We then scan this temporary vector. For each element that passes the predicate, the result of the scan now contains the destination address for that element in the output vector.
 \item The second step scatters the input elements to the output vector using the addresses generated by the scan.
 \end{enumerate}
 To illustrated  technique, see the following example.
@@ -1430,12 +1382,11 @@ $output \:\: <17, 11, 13, 19, 24>$\\
 \rlst{strcod}  presents a fragment from $Stream Compaction$. The algorithm is based in the two steps approach mentioned before.
 Lines $4$ to $7$ create the necessary vectors in addition to input and output.
 Line $13$ fills the vector bit in parallel. The \ttt{target} clause (lines 16--17) defines the portion of the program  that will be executed by the accelerator device (lines 18--19) defined in the line $16$.
-\guido{Which version? provided by whom?}
 Since this first $scan$ $clause$ only provides an exclusive version, it is necessary an additional step (Line $21$) to pass from the exclusive to the inclusive version. Finally, Line $23$ fills the the vector output with the information generated in the vectors $bitsum$ and $bits$.
 
-\ed{\rlst{strker} presents the kernel generated by AClang. Since this is  a basic application of scan, the kernel generated has a basic structure. Line $3$ defines the neutral or also called identity element. In this case the operation used was a sum, thus the neutral value is $0$. As it can be seen, each kernel has the type of variable for the vectors; this information was extracted from the OpenMP clause and replaced as was explained in  section \ref{sec:ScanInAClang}.}
+\rlst{strker} presents the kernel generated by AClang. Since this is  a basic application of scan, the kernel generated has a basic structure. Line $3$ defines the neutral or also called identity element. In this case the operation used was a sum, thus the neutral value is $0$. As it can be seen, each kernel has the type of variable for the vectors; this information was extracted from the OpenMP clause and replaced as was explained in  section \ref{sec:ScanInAClang}.
 
-\ed{Lines $6$ to $10$ show the kernel that performs steps ~\ding{182} and ~\ding{183} of Figure \ref{fig:scheme}. Lines $12$ to $16$ show the kernel that computes the step ~\ding{184} of Figure \ref{fig:scheme}. Finally, lines $18$ to $21$ show the kernel that performs the step ~\ding{185} of the same figure.}
+Lines $6$ to $10$ show the kernel that performs steps ~\ding{182} and ~\ding{183} of Figure \ref{fig:scheme}. Lines $12$ to $16$ show the kernel that computes the step ~\ding{184} of Figure \ref{fig:scheme}. Finally, lines $18$ to $21$ show the kernel that performs the step ~\ding{185} of the same figure.
  
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
@@ -1467,18 +1418,16 @@ Since this first $scan$ $clause$ only provides an exclusive version, it is neces
 \section{Radix Sort}
 \label{sec:Quicksort}
 
-\ed{A sorting algorithm puts elements of a list in certain order. This section
+A sorting algorithm puts elements of a list in certain order. This section
 presents a Radix Sort algorithm parallelized by means of the scan operator. It is
 well know how a Radix Sort algorithm works.  For this reason, the section
-focuses only on explaining the parallelized version.}
+focuses only on explaining the parallelized version.
 
-\guido{IMPORTANT}
-\guido{I changed this following paragraph in a way that might changed the meaning; check if the meaning is still correct}
-\ed{The basic idea is to considerer each element to be sorted digit by digit, from
+The basic idea is to considerer each element to be sorted digit by digit, from
 the least to the most significant digit. For every digit the elements will be rearranged.
 Consider, for example, a list of 4 elements having 4 binary digits each. 
 \rlst{radexample} shows a visual representation of how the
-algorithm works.}
+algorithm works.
 
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
@@ -1519,24 +1468,22 @@ algorithm works.}
 
 The following steps show how the radix sort could eventually be parallelized.
 
-\guido{bit in common? What do you mean by that? 1 else the value? What is this?}
 \begin{enumerate}
-\item \ed{Generate a vector of the list (bit in the same position, starting from the least significant bit)
-where every bit that is 0 in the new vector is 1 (Predicate: (bit\&1==0)) otherwise the element in the vector  is 0.}
-\item \ed{Scan the vector, and record the sum of the predicate vector in the process. Notice, the scan
+\item Generate a vector of the list (bit in the same position, starting from the least significant bit)
+where every bit that is 0 in the new vector is 1 (Predicate: (bit\&1==0)) otherwise the element in the vector  is 0.
+\item Scan the vector, and record the sum of the predicate vector in the process. Notice, the scan
 algorithm works for arrays of arbitrary sizes instead of $2^{n}$ sizes; however as 
-explained before} \guido{the proposed what? approach} the $scan$ $clause$ \ed{works}  for any arbitrary size.
-\item \ed{Flip bits of the predicate, and scan them.}
+explained before the $scan$ $clause$ works  for any arbitrary size.
+\item Flip bits of the predicate, and scan them.
 \item Move the values in the vector using the following rule:
 \begin{enumerate}
 \item For the $i^{th}$ element in the vector:
-\item \ed{If the $i^{th}$ predicate (from the vector generated in step 1) is true, move the $i^{th}$
-value to the index in the $i^{th}$ element of the predicate scan.}
-\item \ed{Else, move the $i^{th}$ value to the index in the $i^{th}$ element of the opposite array
-\guido{What is predicate sca? What is Predicate? Not defined before}
-of the Predicate Scan plus the sum of the original Predicate.}
+\item If the $i^{th}$ predicate (from the vector generated in step 1) is true, move the $i^{th}$
+value to the index in the $i^{th}$ element of the predicate scan.
+\item Else, move the $i^{th}$ value to the index in the $i^{th}$ element of the opposite array
+of the Predicate Scan plus the sum of the original Predicate.
 \end{enumerate}
-\item \ed{Move to the next significant bit (NSB).}
+\item Move to the next significant bit (NSB).
 \end{enumerate}
 
 
@@ -1583,15 +1530,15 @@ int main(){
 	\end{lstlisting}
 \end{figure}
 
-\ed{In the code \rlst{radcode}, line 7 indicates the traversal of  every bit, which, depending on the
+In the code \rlst{radcode}, line 7 indicates the traversal of  every bit, which, depending on the
 type of the variable could be 15, 31 or 63. Line 9 defines an auxiliary variable to help
 working on  the current bit. Next lines (10 -- 14) generate the vector mentioned above
-in the step 1, and also generates the opposite vector (see lines 12 -- 13) \guido{of the first one? what is this? Not clear}. 
-The following lines (17 -- 25) compute the scan operator for the vector \guido{Give it a name; this mentioned before does not help} 
-of the line 12. Finally, lines (27 -- 32) move the elements in accordance to the vectors generated in the previous step.}
+in the step 1, and also generates the opposite vector (see lines 12 -- 13). 
+The following lines (17 -- 25) compute the scan operator for the vector 
+of the line 12. Finally, lines (27 -- 32) move the elements in accordance to the vectors generated in the previous step.
 
-\ed{\rlst{radkernel} presents the OpenCL kernel generated by the AClang compiler. 
-The kernel has 3 main components which were detailed before.}
+\rlst{radkernel} presents the OpenCL kernel generated by the AClang compiler. 
+The kernel has 3 main components which were detailed before.
 
 \begin{figure}[t]
 	\lstset{basicstyle=\scriptsize}
@@ -1629,31 +1576,26 @@ P(x) = a_{n}x^n + a_{n-1}x^{n-1} + a_{n-2}x^{n-2} + ... + a_{1}x + a_{0}
 \label{eq:pol}
 \end{equation}
 
-\guido{Repetitive} \rem{Polynomial evaluation is used in many problems as was mentioned above,}
-\ed{This section shows how to use a non primitive variable (\ttt{int}, \ttt{long}, \ttt{float}, \ttt{double}, \ttt{bool}, \ttt{char})
+This section shows how to use a non primitive variable (\ttt{int}, \ttt{long}, \ttt{float}, \ttt{double}, \ttt{bool}, \ttt{char})
 and the AClang scan clause implementation to solve polynomial evaluation. \rlst{pol} presents
 a fragment of the code to perform the value of the polynomial. ~\req{pol} is the basic
-representation of a polynomial.}
+representation of a polynomial.
 
-\guido{MY GOD!!!!!!}
-\rem{Before of describe the code of for the problem, in this section is
-showed how can solve the problem using Scan operator.}
-
-\ed{The trick to solve polynomial evaluation using scan is to replace each element (Coefficient) of the Polynomial for a pair. In this case,  
+The trick to solve polynomial evaluation using scan is to replace each element (Coefficient) of the Polynomial for a pair. In this case,  
 element $a_{i}$ becomes the pair $(a_{i}, x)$ thus resulting in an array of pairs. To perform the scan operation on the new array of pairs, 
-the $\oplus$ operator should be defined  as follows:}
+the $\oplus$ operator should be defined  as follows:
 
 \begin{equation}
 (p, y) \oplus (q, z) = (p z + q, y z)
 \label{eq:opepol}
 \end{equation}
 
-\ed{It is a little  bit difficult to understand this at first, but
+It is a little  bit difficult to understand this at first, but
 each such pair is computed in order to summarize the essential knowledge needed for a
 segment of the array. This segment itself represents a polynomial. The first
 number in the pair is the value of the segment's polynomial evaluated for x,
 while the second is $x^{n}$, where $n$ is the length of the represented segment
-of the polynomial.}
+of the polynomial.
 
 To use the scan operator, it is  necessary first to confirm that the operator is indeed associative. 
 \req{demos}  demonstrates that the operator is associative.
@@ -1666,10 +1608,10 @@ To use the scan operator, it is  necessary first to confirm that the operator is
 \label{eq:demos}
 \end{equation}
 
-\ed{ Now let us look at an example to see how it works. Suppose that it is necessary to evaluate the
+Now let us look at an example to see how it works. Suppose that it is necessary to evaluate the
 polynomial $x^{3} + x^{2} + 1$ when $x$ is 2. In this case, the coefficients of the
 polynomial can be represented using the array $<1, 1, 0, 1>$. The first step of the
-algorithm is to convert it into an array of pairs.}\\
+algorithm is to convert it into an array of pairs.\\
 
 $<$ $(1, 2), (1, 2), (0, 2), (1, 2)$ $>$\\
 
@@ -2032,7 +1974,7 @@ implementation of  the OpenMP scan  clause in the AClang compiler.
 The  experiments in this section  use  three   heterogeneous  CPU-GPU
 architectures:
 
-\ed{
+
 \begin{enumerate}
 	\item A desktop with 2.1 GHz 32 cores Intel Xeon CPU E5-2620,
 	NVIDIA Tesla K40c GPU with 12GB and 2880 CUDA cores  running
@@ -2043,7 +1985,7 @@ architectures:
 	\item A mobile  Exynos 8890 Octa-core  CPU (4x2.3 GHz Mongoose  \& 4x1.6
 	GHz Cortex-A53)  integrated with an  ARM Mali-T880 MP12  GPU (12x650
 	Mhz), and running Android OS, v6.0 (Marshmallow)
-\end{enumerate}}
+\end{enumerate}
 
 \begin{table*}[!t]
 	\centering
@@ -2128,7 +2070,7 @@ This set of  micro-benchmarks was designed to  enable the exploration
 of  the  parallel scan  algorithms  of  representative applications  in
 scientific computing.  For each micro-benchmark  used  in   the  evaluation
 three  versions  were developed:
-\ed{
+
 \begin{enumerate}
 	\item A CUDA based version, using the Trust C++ template library~\cite{trust}.
 	Thrust provides a  rich collection of data  parallel primitives such
@@ -2143,7 +2085,7 @@ three  versions  were developed:
 	\item a C/C++ version using the proposed OpenMP parallel scan clausA
 	which enables a  higher level of abstraction when compared to the OpenCL and
 	CUDA versions.
-\end{enumerate}}
+\end{enumerate}
 
 The results presented  in all experiments of this  section are average
 over  ten  executions. Variance  is  negligible;  hence, we  will  not
@@ -2262,18 +2204,18 @@ and GPU dispatch  (Managment bar).  The analysis reveals  that 80\% to
 90\% of  the slowdown over  the OpenCL  implementation are due  to the
 AClang  runtime  library, not  the  algorithm  itself.  In  fact,  the
 runtime library  does not  have specific routines  to handle  the scan
-operation  data management.   \ed{This was  implemented using  existing
+operation  data management. This was  implemented using  existing
 offload and dispatch operations in the library.  We believe that it is
 possible  to  reduce  this  performance  difference  significantly  by
 slightly adapting the runtime library  to provide routines specific to
-the new scan clause.}
+the new scan clause.
 
-\ed{When dealing with  large inputs, the algorithm computes the scan operator
+When dealing with  large inputs, the algorithm computes the scan operator
 in accordance to the available architectural resources. In other words,
 the algorithm will divide the input size in slices according to the total number of 
 threads available in the GPU.  For example if there are 1M threads and the size of the input
 is 10M, the algorithm will run a slice of 1M threads 10 times,  and then will
-merge the partials slices to obtain the final answer.}
+merge the partials slices to obtain the final answer.
 
 \chapter{Conclusions and Future Works}
 \label{cap:Conclusion}
@@ -2295,8 +2237,8 @@ smaller design effort. The main findings are:
 	level of abstraction of OpenMP when compared to CUDA and OpenCL.
 \end{itemize}
 
-\new{As a future work, we intend to extend this approach in order  to synthesize a CUDA kernel
-from an scan annotated  OpenMP kernel.}
+As a future work, we intend to extend this approach in order  to synthesize a CUDA kernel
+from an scan annotated  OpenMP kernel.
 
 % As referências:
 \bibliographystyle{plain}
