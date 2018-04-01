@@ -1219,18 +1219,25 @@ $CGM.operation1.MPtoGPURuntime().operation2$. The algorithm retrieves the scan
 parameters and makes an initial configuration of OpenCL. For instance, Line $16$ computes
 the number of threads per block and the number of blocks. That will be used to
 call the sub-routines of the parallel scan algorithm. This is a very important
-step becausem, as mentioned before, the algorithm only works for input sizes that
-are powers of 2 ($2^{k}$). So when the size is not a power of two, it is
+step because, as mentioned before, the algorithm only works for input sizes that
+are powers of 2 ($2^{k}$). So, when the size is not a power of two, it is
 impossible to solve the problem. Hence, to fix it,
 higher number that is a product of two powers of two is founded. Let us represent the
 number of blocks as $B$ and the number of threads per block as $T$.
 
-For example, if the size of the input data is $12$, the closest number with the
+\rem{For example, if the size of the input data is $12$, the closest number with the
 properties mentioned before is $16$, where we found more of one solution such
 as ($B$:1 - $T$:16), ($B$:2 - $T$:8), ($B$:4 - $T$:4) and so on.  To do this one should
 be careful as in some cases it is possible to find some solution with $T$ bigger than the threads
 provided by the architecture used.  Thus, $T$ is limited according of the  features of the
-used architecture, similarly for $B$.
+used architecture, similarly for $B$.}
+\new{For example, if the size of the input data is 12, the closest number with
+the previously mentioned properties is 16. However, the algorithm produces more
+than one solution. In the example, the solutions are (B: 1 - T: 16), (B: 2 - T:
+8), and (B: 4 - T: 4). This is important because, in some cases, it is possible
+to find some solution with T greater than the threads provided by the
+architecture used. Thus, T must be limited according to the characteristics of
+the architecture used; similarly for B.}
 
 Therefore, the maximum size to compute the scan algorithm is limited by the
 resources provided in the architecture. Later in \rcap{Conclusion} it will be shown
@@ -1243,8 +1250,8 @@ clauses (see example in \rlst{pol}).
 Line $10$ finds the operator that the programmer defined to use in the scan
 algorithm. This operator should be a binary associative operator to be used
 by the scan algorithm; the most common operators are: ($+$, $*$, $\&$, $||$,
-$max$, $min$). In the case that a new variable was defined it is mandatory
-to define an operator for this variable (See example in \rlst{pol}).
+$max$, $min$). In the case that a new variable \new{type} was defined, it is \new{also} mandatory
+to define an \new{associative} operator for this \rem{variable}\new{type} (See example in \rlst{pol}).
 
 Line $18$ does a needed step to execute the scan algorithm. It creates an
 auxiliary buffer (as shown in \rfig{scheme} ~\ding{183}).  Lines $19$ to $25$
@@ -1305,23 +1312,32 @@ to $36$ analyze if the programmer defined a new type of variable with its
 respective operator. If is true, that information is placed immediately after
 the header mentioned before.
 
-Lines $37$ to $46$ define the neutral value according to the operation defined by the programmer.
-A neutral value is defined by the operation ($a$ = $a$ $\oplus$ $neutralValue$)
-where $a$ is any variable and $\oplus$ an operator that
-operates any variable with the neutral. For example, for the sum operation, the
-neutral value is $0$, for the multiplication is $1$ and so on. This information
-is necessary because the scan algorithm needs it. When scan runs  with a basic C/C++
-primitive  operator, the neutral  element is set by default internally in the OpenMP runtime. However when
-the programmer defines a new type of variable, the OpenMP standard enforces  the programmer  to define
-neutral value in the section "omp declare target".
+Lines $37$ to $46$ define the neutral value according to the operation defined
+by the programmer.  A neutral value is defined by the operation ($a$ = $a$
+$\oplus$ $neutralValue$) where $a$ is any variable and $\oplus$ an operator
+that operates any variable with the neutral. For example, for the sum
+operation, the neutral value is $0$, for the multiplication is $1$ and so on.
+\rem{This information is necessary because the scan algorithm needs it.} When
+scan runs  with a basic C/C++ primitive  operator, the neutral  element is set
+by default internally in the \rem{OpenMP runtime}\new{compiler}. However when
+the programmer defines a new type of variable, the OpenMP standard enforces
+the programmer  to define neutral value in the section "omp declare target".
 
-Line $48$ defines the word $dataType$; it represents the type of variable that
+\rem{Line $48$ defines the word $dataType$; it represents the type of variable that
 is used by the programmer. Finally, line $49$ closes the file that will
 perform the scan parallel algorithm. Remember, the describe code and its  discussion  is a small
 glimpse of the total process OpenCL code generation process. Our goal was to show
 only the mainly components, in the hope that they could work as a guide to the
 understanding of the translation process from the omp clause
-to OpenCL code. Much information has been left aside for the sake of simplicity.
+to OpenCL code. Much information has been left aside for the sake of simplicity.}
+\new{Line $48$ defines the keyword $\_dataType\_$; it represents the type of
+variable used by the programmer. Finally, line $49$ closes the template that
+will perform the scan parallel algorithm. The code describe here and its
+discussion is a small glimpse of the final OpenCL code generation process. Our
+goal was to show only the mainly components, in the hope that they could work
+as a guide to the understanding of the translation process from the omp clause
+to OpenCL code. Much information has been left aside for the sake of
+simplicity.}
 To see a final version of the template for one example see \rcap{ScanUse}.
 
 %%HERE
