@@ -1721,11 +1721,11 @@ construct is necessary to solve the problem.
 \rlst{polkernel} shows the header and signatures of the kernel
 functions  generated  by  the  compiler  for  the  example  showed  in
 \rlst{pol} (Polynomial evaluation). As  shown in~\rlst{polkernel}, the first lines (1 -- 11) is the information
-about the structure and operator used. The lines (16 -- 20) kernel\_0 represents the first step of the algorithm
+about the structure and operator used. The lines (15 -- 19) kernel\_0 represents the first step of the algorithm
 which applies the scan operator to the whole problem into blocks,
-Lines (22 -- 25) kernel\_1 represent the second step of the algorithm   which  applies the scan operator
+Lines (21 -- 24) kernel\_1 represent the second step of the algorithm   which  applies the scan operator
 over the vector filled in the previous step to get the cumulative sums for all the blocks.
-Lines (27 -- 31) kernel\_2 is the final step which fixes cumulative sums
+Lines (26 -- 30) kernel\_2 is the final step which fixes cumulative sums
 for every element to get the final vector.
 
 \begin{figure}[t]
