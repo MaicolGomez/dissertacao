@@ -1110,8 +1110,7 @@ array of scanned values is obtained.
 
 	CLOS << "\n#define _dataType_ " << scanVarType.substr(0, scanVarType.find_last_of(' ')) << "\n";
 	CLOS.close();
-
-
+    /* Build the kernel File */
 	\end{lstlisting}
 \end{figure}
 
@@ -1309,13 +1308,13 @@ by the programmer.  A neutral value is defined by the operation ($a$ = $a$
 $\oplus$ $neutralValue$) where $a$ is any variable and $\oplus$ an operator
 that operates any variable with the neutral. For example, for the sum
 operation, the neutral value is $0$, for the multiplication is $1$ and so on.
-When scan runs  with a basic C/C++ primitive  operator, the neutral  element is set
-by default internally in the compiler. However when
-the programmer defines a new type of variable, the OpenMP standard enforces
-the programmer  to define neutral value in the section "omp declare target".
-Line $48$ defines the keyword $\_dataType\_$; it represents the type of
-variable used by the programmer. Finally, line $49$ closes the template that
-will perform the scan parallel algorithm. The code describes here and its
+When scan runs  with a basic C/C++ primitive  operator, the neutral  element is
+set by default internally in the compiler. However when the programmer defines
+a new type of variable, the OpenMP standard enforces the programmer  to define
+neutral value in the section "omp declare target".  Line $48$ defines the
+keyword $\_dataType\_$; it represents the type of variable used by the
+programmer. Finally, line $49-50$ closes the template and build the kernel file
+that will perform the scan parallel algorithm. The code describes here and its
 discussion is a small glimpse of the final OpenCL code generation process. Our
 goal was to show only the mainly components, in the hope that they could work
 as a guide to the understanding of the translation process from the omp clause
@@ -1323,7 +1322,6 @@ to OpenCL code. Much information has been left aside for the sake of
 simplicity.
 To see a final version of the template for one example see \rcap{ScanUse}.
 
-%%HERE
 \chapter{Using Scan}
 \label{cap:ScanUse}
 
@@ -1399,23 +1397,37 @@ Lines $6$ to $10$ show the kernel that performs steps ~\ding{182} and ~\ding{183
 	#pragma OPENCL EXTENSION cl_khr_fp64 : enable
 
 	#define _initializer 0
+    #define _dataType_ int
 
+	__kernel void kernel_0 (__global _dataType_ *input,
+	                        __global _dataType_ *S,
+	                        const int n) {
+      int tid = get_local_id(0);
+      int bid = get_group_id(0);
+	    int size = get_local_size(0);
+	    int offset = 1;
+ 	    /* Cache the computational window in shared memory */
+ 	    __local _dataType_ block [1024];
 
-	__kernel void kernel_0 (__global int *input,
-	__global int *S,
-	const int n) {
-	...
+ 	    block[tid] = input[tid + 2*size*bid];
+ 	    block[tid + n/2] = input[tid + n/2 + 2*size*bid];
+ 	    /* build the sum in place up the tree */
+    ...
+        /* clear the last element */
+	    barrier(CLK_LOCAL_MEM_FENCE | CLK_GLOBAL_MEM_FENCE);
+	    if (tid == 0) block[n - 1] = _initializer;
+	    /* traverse down the tree building the scan in the place */
+    ...
 	}
 
-	__kernel void kernel_1 (__global int *input,
-	const int n) {
-
-	...
+	__kernel void kernel_1 (__global _dataType_ *input,
+	                        const int n) {
+	    ...
 	}
 
-	__kernel void kernel_2(__global int *outpu, __global int *input,
-	__global int *S) {
-	...
+	__kernel void kernel_2(__global _dataType_ *output,
+                           __global _dataType_ *S) {
+	    ...
 	}
 	\end{lstlisting}
 \end{figure}
@@ -1552,20 +1564,40 @@ The kernel has three main components which were detailed before.
 	\begin{lstlisting}[label=lst:radkernel, caption={Fragment of Radix Sort
 	kernel generated}, escapeinside={(*}{*)}]
 	__kernel void kernel_0 (__global unsigned int *input,
-	__global unsigned int *S,
-	const int n) {
+	                        __global unsigned int *S,
+	                        const int n) {
 		...
 	}
 
 	__kernel void kernel_1 (__global unsigned int *input,
-	const int n) {
-
-		...
+	                        const int n) {
+    ...
+ 	    /* Cache the computational window in shared memory */
+ 	    __local _dataType_ block [1024];
+    ...
+	    /* clear the last element */
+	    barrier(CLK_LOCAL_MEM_FENCE | CLK_GLOBAL_MEM_FENCE);
+	    if (tid == 0) block[n - 1] = _initializer;
+	    /* traverse down the tree building the scan in the place */
+	    for (int d = 1; d < n ; d *= 2) {
+		    offset >>= 1;
+		    barrier (CLK_LOCAL_MEM_FENCE);
+		    if (tid < d) {
+			    int ai = offset * (2 * tid + 1) - 1;
+			    int bi = offset * (2 * tid + 2) - 1;
+			    _dataType_ t = block[ai];
+			    block[ai] = block[bi];
+			    block[bi] = block[bi] + t;
+		    }
+	    }
+	    barrier (CLK_LOCAL_MEM_FENCE);
+	    input[tid + 2*size*bid] = block[tid];
+	    input[tid + n/2 + 2*size*bid] = block[tid + n/2];
 	}
 
 	__kernel void kernel_2(__global unsigned int *input,
-	__global unsigned int *S) {
-		...
+	                       __global unsigned int *S) {
+    ...
 	}
 	\end{lstlisting}
 \end{figure}
@@ -1666,9 +1698,9 @@ construct is necessary to solve the problem.
 	}
 	#pragma omp end declare target
 
-	#pragma omp declare scan(op                           \
+	#pragma omp declare scan(op                          \
 	: Pair                                               \
-	: omp_out = op(omp_out, omp_in))                      \
+	: omp_out = op(omp_out, omp_in))                     \
 	initializer(omp_priv = (Pair){0, 1})
 
 	int main() {
@@ -1712,23 +1744,22 @@ for every element to get the final vector.
 		return ans;
 	}
 
-
 	#define omp_priv (Pair){ 0, 1 }
 
 	__kernel void kernel_0 (__global Pair *input,
-	__global Pair *S,
-	const int n) {
+	                        __global Pair *S,
+	                        const int n) {
 		...
 	}
 
 	__kernel void kernel_1 (__global Pair *input,
-	const int n) {
+	                        const int n) {
 		...
 	}
 
 	__kernel void kernel_2(__global Pair *output,
-	__global Pair *input,
-	__global Pair *S) {
+	                       __global Pair *input,
+	                       __global Pair *S) {
 		...
 	}
 	\end{lstlisting}
